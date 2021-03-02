@@ -1,35 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@wbeltran777 
-PerigonGames
-/
-Party-Parkade
-Private
-2
-20
-Code
-Issues
-Pull requests
-Actions
-Projects
-Security
-Insights
-Party-Parkade/.gitignore
-@m4rtint
-m4rtint Timer Shown on InGame (#337)
-…
-Latest commit 7522be1 on Aug 8, 2020
- History
- 4 contributors
-@m4rtint@mikeslgoh@Gursaanj@DJSteins
-65 lines (55 sloc)  1.12 KB
-  
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
@@ -95,15 +63,3 @@ Assets/Doozy/Engine/Resources/DoozySettings.asset.meta
 Assets/SoundManagerPro/Scripts/Extensions/*.meta
 ProjectSettings/Packages/com.unity.probuilder/Settings.json
 ProjectSettings/Packages/com.unity.progrids/Settings.json
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
