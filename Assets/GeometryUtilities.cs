@@ -5,6 +5,8 @@ namespace Laz
 {
     public static class GeometryUtilities
     {
+        private static const ArbritaryLargeFloat = 999999f;
+            
         /*
          * https://www.geeksforgeeks.org/how-to-check-if-a-given-point-lies-inside-a-polygon/
          */
@@ -54,7 +56,7 @@ namespace Laz
 
             // For some reason - float.infinite does not work, probably calculations issues
             // If this some how bugs - you just need to find some arbitrary large random point
-            Vector3 extreme = new Vector3(999999f, 0, point.z);
+            Vector3 extreme = new Vector3(ArbritaryLargeFloat, 0, point.z);
             int count = 0;
             int i = 0;
             do
