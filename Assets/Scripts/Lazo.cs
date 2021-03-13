@@ -6,11 +6,10 @@ namespace Laz
 {
     public class Lazo
     {
-        private List<Vector3> _listOfPositions = new List<Vector3>();
+        private List<LazoPosition> _listOfPositions = new List<LazoPosition>();
         private ILazoProperties _lazoProperties = null;
 
         private bool _isLazoing = false;
-        private float _lifeTimePerPointTimerElapsed = 0;
         private float _rateOfRecordingTimerElapsed = 0;
 
         public bool IsLazoing
@@ -31,7 +30,6 @@ namespace Laz
         public Lazo(ILazoProperties properties)
         {
             _lazoProperties = properties;
-            ResetLifeTimePerPointTimerElapsed();
         }
 
         /// <summary>
@@ -41,26 +39,27 @@ namespace Laz
         public void RunLazoIfAble(Vector3 position, float deltaTime)
         {
             _rateOfRecordingTimerElapsed -= deltaTime;
-            _lifeTimePerPointTimerElapsed -= deltaTime;
             if (_rateOfRecordingTimerElapsed < 0)
             {
                 RunLazo(position);
-                RemoveOldestPointIfNeeded();
                 ResetRateOfRecordingTimeElapsed();
-                // Debug
-                DebugCreateCubeAt(position);
             }
+
+            RemoveOldestPointIfNeeded(deltaTime);
         }
 
-        private void RemoveOldestPointIfNeeded()
+        private void RemoveOldestPointIfNeeded(float deltaTime)
         {
-
-            if (_lifeTimePerPointTimerElapsed < 0)
+            _listOfPositions = _listOfPositions.Select(lazoPosition =>
             {
-                RemoveOldestPosition();
+                lazoPosition.TimeToLive -= deltaTime;
                 // Debug
-                DebugDestroyLastCubeOnList();
-            }
+                if (lazoPosition.TimeToLive < 0)
+                {
+                    DebugDestroyLastCubeOnList();
+                }
+                return lazoPosition;
+            }).Where(lazoPosition => lazoPosition.TimeToLive > 0).ToList();
         }
 
 
@@ -68,12 +67,17 @@ namespace Laz
         private void RunLazo(Vector3 position)
         {
             if (_listOfPositions.Count > 0 &&
-                _listOfPositions.Last() == position)
+                _listOfPositions.Last().Position == position)
             {
                 return;
             }
 
-            _listOfPositions.Add(position);
+            Debug.Log("Number of Position: " + _listOfPositions.Count);
+            var lazoPosition = new LazoPosition(_lazoProperties.TimeToLivePerPoint, position);
+            _listOfPositions.Add(lazoPosition);
+
+            // Debug
+            DebugCreateCubeAt(position);
         }
 
         /// <summary>
@@ -83,23 +87,6 @@ namespace Laz
         {
             _rateOfRecordingTimerElapsed = 0;
             _listOfPositions.Clear();
-            ResetLifeTimePerPointTimerElapsed();
-        }
-
-        /// <summary>
-        /// Remove oldest position
-        /// </summary>
-        private void RemoveOldestPosition()
-        {
-            if (_listOfPositions.Count > 0)
-            {
-                _listOfPositions.RemoveAt(0);
-            }
-        }
-
-        private void ResetLifeTimePerPointTimerElapsed()
-        {
-            _lifeTimePerPointTimerElapsed = _lazoProperties.LifeTimePerPoint;
         }
 
         private void ResetRateOfRecordingTimeElapsed()
@@ -115,17 +102,20 @@ namespace Laz
         private List<GameObject> _listOfDebugCubes = new List<GameObject>();
         private void DebugCreateCubeAt(Vector3 position)
         {
+            Debug.Log("Number of Cube: "+ _listOfDebugCubes.Count);
             var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            var temp = GameObject.Instantiate(cube, position, Quaternion.identity);
-            _listOfDebugCubes.Add(temp);
+            cube.transform.position = position;
+            _listOfDebugCubes.Add(cube);
         }
 
         private void DebugDestroyLastCubeOnList()
         {
-            Debug.Log("Destroy Cube");
-            var cube = _listOfDebugCubes[0];
-            _listOfDebugCubes.RemoveAt(0);
-            GameObject.Destroy(cube);
+            if (_listOfDebugCubes.Count > 0)
+            {
+                var cube = _listOfDebugCubes[0];
+                _listOfDebugCubes.RemoveAt(0);
+                GameObject.Destroy(cube);
+            }
         }
 
         private void DebugClearListOfCubes()

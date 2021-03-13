@@ -4,7 +4,7 @@ namespace Laz
 {
     public interface ILazoProperties
     {
-        float LifeTimePerPoint { get; }
+        float TimeToLivePerPoint { get; }
         float RateOfRecordingPosition { get; }
     }
 
@@ -12,11 +12,11 @@ namespace Laz
     public class LazoPropertiesScriptableObject : ScriptableObject, ILazoProperties
     {
         [SerializeField]
-        private float _lifeTimePerPoint = 5f;
+        private float _timeToLivePerPoint = 5f;
         [SerializeField]
         private float _rateOfRecordingPosition = 0.5f;
 
-        public float LifeTimePerPoint => _lifeTimePerPoint;
+        public float TimeToLivePerPoint => _timeToLivePerPoint;
         public float RateOfRecordingPosition => _rateOfRecordingPosition;
     }
 }

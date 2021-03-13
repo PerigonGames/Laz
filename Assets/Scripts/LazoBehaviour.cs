@@ -27,7 +27,7 @@ namespace Laz
         private void OnEnable()
         {
             _lazo = new Lazo(properties);
-            _trail.time = properties.LifeTimePerPoint;
+            _trail.time = properties.TimeToLivePerPoint;
         }
 
         private void OnDisable()
