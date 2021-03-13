@@ -57,7 +57,7 @@ namespace Laz
 
             // For some reason - float.infinite does not work, probably calculations issues
             // If this some how bugs - you just need to find some arbitrary large random point
-            Vector3 extreme = new Vector3(999999f, 0, point.z);
+            Vector3 extreme = new Vector3(ArbitraryLargeFloat, 0, point.z);
             int count = 0;
             int i = 0;
             do
