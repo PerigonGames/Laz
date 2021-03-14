@@ -5,13 +5,14 @@ namespace Laz
 {
     public static class GeometryUtilities
     {
-        private static const ArbritaryLargeFloat = 999999f;
-            
+        private static readonly float ArbitraryLargeFloat = 999999f;
+
         /*
          * https://www.geeksforgeeks.org/how-to-check-if-a-given-point-lies-inside-a-polygon/
          */
         public static bool IsIntersecting(Vector3 p1, Vector3 q1, Vector3 p2, Vector3 q2)
         {
+
             var o1 = Orientation(p1, q1, p2);
             var o2 = Orientation(p1, q1, q2);
             var o3 = Orientation(p2, q2, p1);
@@ -56,7 +57,7 @@ namespace Laz
 
             // For some reason - float.infinite does not work, probably calculations issues
             // If this some how bugs - you just need to find some arbitrary large random point
-            Vector3 extreme = new Vector3(ArbritaryLargeFloat, 0, point.z);
+            Vector3 extreme = new Vector3(ArbitraryLargeFloat, 0, point.z);
             int count = 0;
             int i = 0;
             do
