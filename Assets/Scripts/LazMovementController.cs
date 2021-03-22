@@ -9,8 +9,6 @@ namespace Laz
 {
     public class LazMovementController : MonoBehaviour
     {
-        private event Action OnLazoActivate;
-
         private Rigidbody _rigidbody;
 
         private Vector2 _inputDirection;
