@@ -8,7 +8,7 @@ namespace Laz
         float RateOfRecordingPosition { get; }
     }
 
-    [CreateAssetMenu(fileName = "Lazo Properties", menuName = "Laz/Laz Properties", order = 1)]
+    [CreateAssetMenu(fileName = "Lazo Properties", menuName = "Laz/Lazo Properties", order = 1)]
     public class LazoPropertiesScriptableObject : ScriptableObject, ILazoProperties
     {
         [SerializeField]
