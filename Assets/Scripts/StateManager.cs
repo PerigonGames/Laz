@@ -22,7 +22,7 @@ namespace Laz
     /// <summary>
     /// The 'Singleton' class
     /// </summary>
-    public class StateManager
+    public class StateManager: IStateManager
     {
         private static readonly StateManager _instance = new StateManager();
 
