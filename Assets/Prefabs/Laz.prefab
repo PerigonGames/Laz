@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6610365341234808043}
   - component: {fileID: 6610365341234808041}
   - component: {fileID: 6610365341234808040}
+  - component: {fileID: 199378475}
   m_Layer: 0
   m_Name: Laz
   m_TagString: Untagged
@@ -83,6 +84,18 @@ MonoBehaviour:
   _baseMaxSpeed: 10
   _LazoMaxSpeed: 20
   _curvatureRate: 0.06
+--- !u!114 &199378475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6610365341234808044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5184fc6710afe1344a491019f7af2dc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6610365341511648457
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,8 +351,8 @@ MonoBehaviour:
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6610365341234808040}
-        m_TargetAssemblyTypeName: LazMovementController, Assembly-CSharp
+      - m_Target: {fileID: 199378475}
+        m_TargetAssemblyTypeName: Laz.PlayerLazoController, Assembly-CSharp
         m_MethodName: LazoTrigger
         m_Mode: 0
         m_Arguments:
