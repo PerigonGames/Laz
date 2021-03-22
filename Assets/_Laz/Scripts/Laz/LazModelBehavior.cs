@@ -10,7 +10,7 @@ namespace Laz
 
         private void Awake()
         {
-            _movementController = GetComponentInParent<LazMovementController>();
+            _movementController = GetComponent<LazMovementController>();
         }
 
         private void FixedUpdate()
