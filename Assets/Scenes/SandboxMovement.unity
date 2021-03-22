@@ -296,37 +296,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laz
       objectReference: {fileID: 0}
-    - target: {fileID: 6610365341821826268, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 199378475}
-    - target: {fileID: 6610365341821826268, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LazoTrigger
-      objectReference: {fileID: 0}
-    - target: {fileID: 6610365341821826268, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Laz.PlayerLazoController, Assembly-CSharp
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
---- !u!1 &199378474 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6610365341234808044, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
+--- !u!4 &199378479 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6610365341234808042, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
   m_PrefabInstance: {fileID: 199378473}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &199378475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 199378474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5184fc6710afe1344a491019f7af2dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &466057817
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -592,7 +568,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 0}
+  m_Follow: {fileID: 199378479}
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 5
