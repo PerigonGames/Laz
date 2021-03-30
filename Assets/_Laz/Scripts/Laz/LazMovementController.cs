@@ -24,7 +24,7 @@ namespace Laz
         [SerializeField]
         private float _LazoMaxSpeed = 10f;
         [SerializeField]
-        [Range(0, 1)]
+        [Range(0.005f, 0.1f)]
         private float _curvatureRate = 0.1f;
 
         private bool _isMovementPressed = false;
@@ -34,6 +34,14 @@ namespace Laz
         private Vector3 _currentDirection = Vector3.zero;
 
         private float _turnProgress = 0;
+
+        public Vector3 GetCurrentDirection
+        {
+            get
+            {
+                return _currentDirection;
+            }
+        }
 
         private void Awake()
         {
