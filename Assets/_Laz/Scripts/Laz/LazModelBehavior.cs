@@ -1,22 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Laz
 {
     public class LazModelBehavior : MonoBehaviour
     {
-        private LazMovementController _movementController;
+        private LazMovementBehaviour _movementBehaviour;
 
-        private void Awake()
+        public void Initialize(LazMovementBehaviour movementBehaviour)
         {
-            _movementController = GetComponent<LazMovementController>();
+            _movementBehaviour = movementBehaviour;
         }
 
         private void FixedUpdate()
         {
-            if (_movementController.GetCurrentDirection.magnitude != 0)
-                transform.rotation = Quaternion.LookRotation(_movementController.GetCurrentDirection, Vector3.up);
+            if (_movementBehaviour.GetCurrentDirection.magnitude != 0)
+                transform.rotation = Quaternion.LookRotation(_movementBehaviour.GetCurrentDirection, Vector3.up);
         }
     }
 }

@@ -5,22 +5,13 @@ namespace Laz
     public class WorldManager : MonoBehaviour
     {
         [SerializeField]
-        private PlayerManagerBehaviour playerManagerBehaviour = null;
+        private LazCoordinatorBehaviour _lazCoordinator = null;
 
         private void Awake()
         {
-            playerManagerBehaviour.Initialize();
+            _lazCoordinator.Initialize();
         }
     }
 }
-
-/*
- * Initialize - Connect stuff
- *
- * Restart - Set values to initial values
- * CleanUp - Set Values to nil/0
- *
- * OnDestroy - Disconnect stuff
- */
 
 

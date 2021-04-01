@@ -22,7 +22,7 @@ namespace Laz
                 {
                     Clear();
                     // Debug
-                    DebugClearListOfCubes();
+                    //DebugClearListOfCubes();
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace Laz
                 // Debug
                 if (lazoPosition.TimeToLive < 0)
                 {
-                    DebugDestroyLastCubeOnList();
+                    //DebugDestroyLastCubeOnList();
                 }
                 return lazoPosition;
             }).Where(lazoPosition => lazoPosition.TimeToLive > 0).ToList();
@@ -77,7 +77,7 @@ namespace Laz
             _listOfPositions.Add(lazoPosition);
 
             // Debug
-            DebugCreateCubeAt(position);
+            //DebugCreateCubeAt(position);
         }
 
         /// <summary>

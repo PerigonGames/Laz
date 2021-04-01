@@ -1,33 +1,54 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Laz
 {
     public class LazoBehaviour : MonoBehaviour
     {
         private Lazo _lazo;
-        private TrailRenderer _trail = null;
+        [SerializeField] private TrailRenderer _trail = null;
         
-        [SerializeField] private LazoPropertiesScriptableObject properties;
-
-
+        [SerializeField] private LazoPropertiesScriptableObject _properties = null;
+        private LazMovementBehaviour _movementBehaviour = null;
+        
+        public void Initialize(LazMovementBehaviour _movement)
+        {
+            _movementBehaviour = _movement;
+        }
+        
         /// <summary>
         /// Turns Lazoing on or off
         /// </summary>
         /// <param name="isOn">is On</param>
-        public void TurnLazoing(bool isOn)
+        private void TurnLazoing(bool isOn)
         {
             _lazo.IsLazoing = isOn;
         }
-
-        private void Awake()
+        
+        /// <summary>
+        /// USED IN INSPECTOR
+        /// Fire from player input in the Inspector
+        /// </summary>
+        /// <param name="context"></param>
+        public void LazoTrigger(InputAction.CallbackContext context)
         {
-            _trail = GetComponent<TrailRenderer>();
+            if (context.started)
+            {
+                TurnLazoing(true);
+                _movementBehaviour.LazoBoostActivated();
+            } 
+            
+            if (context.canceled)
+            {
+                TurnLazoing(false);
+                _movementBehaviour.LazoBoostDeactivated();
+            }
         }
 
         private void OnEnable()
         {
-            _lazo = new Lazo(properties);
-            _trail.time = properties.TimeToLivePerPoint;
+            _lazo = new Lazo(_properties);
+            _trail.time = _properties.TimeToLivePerPoint;
         }
 
         private void OnDisable()
