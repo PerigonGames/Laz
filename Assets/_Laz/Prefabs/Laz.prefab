@@ -245,6 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _trail: {fileID: 8248419958067807380}
+  TurnOnDebug: 0
   _properties: {fileID: 11400000, guid: a07c0c312e58f624ab49166c5b206dcd, type: 2}
 --- !u!114 &636070730102409017
 MonoBehaviour:

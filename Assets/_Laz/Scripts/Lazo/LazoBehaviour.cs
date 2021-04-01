@@ -7,6 +7,7 @@ namespace Laz
     {
         private Lazo _lazo;
         [SerializeField] private TrailRenderer _trail = null;
+        [SerializeField] private bool TurnOnDebug = false;
         
         [SerializeField] private LazoPropertiesScriptableObject _properties = null;
         private LazMovementBehaviour _movementBehaviour = null;
@@ -47,7 +48,7 @@ namespace Laz
 
         private void OnEnable()
         {
-            _lazo = new Lazo(_properties);
+            _lazo = new Lazo(_properties, TurnOnDebug);
             _trail.time = _properties.TimeToLivePerPoint;
         }
 
