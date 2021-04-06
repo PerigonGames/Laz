@@ -52,10 +52,14 @@ namespace Laz
         {
             _lazo = new Lazo(_properties, _objectsOfInterest, TurnOnDebug);
             _trail.time = _properties.TimeToLivePerPoint;
+            _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
+            _lazo.OnLoopClosed += HandleOnLoopClosed;
         }
 
         private void OnDisable()
         {
+            _lazo.OnLazoLimitReached -= HandleOnLazoLimitReached;
+            _lazo.OnLoopClosed -= HandleOnLoopClosed;
             _lazo = null;
         }
 
@@ -68,9 +72,22 @@ namespace Laz
                 return;
             }
 
+            _lazo.DidLazoLimitReached(transform.position);
             _lazo.RunLazoIfAble(transform.position, Time.deltaTime);
         }
+        
+        #region Delegate
 
+        private void HandleOnLoopClosed()
+        {
+            _trail.Clear();
+        }
+
+        private void HandleOnLazoLimitReached()
+        {
+            _trail.Clear();
+        }
+        #endregion
 
     }
 }
