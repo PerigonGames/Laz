@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PerigonGames;
@@ -10,6 +9,7 @@ namespace Laz
     public class Lazo
     {
         public event Action OnLoopClosed;
+        public event Action OnLazoLimitReached;
         
         private List<LazoPosition> _listOfPositions = new List<LazoPosition>();
         private ILazoProperties _lazoProperties = null;
@@ -18,6 +18,8 @@ namespace Laz
         private bool _isDebugging = false;
         private bool _isLazoing = false;
         private float _rateOfRecordingTimerElapsed = 0;
+        private float _travelledDistance = 0;
+        private Vector3? _lastPosition = null;
 
         public bool IsLazoing
         {
@@ -39,6 +41,7 @@ namespace Laz
             _objectOfInterests = objectOfInterests ?? new IObjectOfInterest[]{};
             _lazoProperties = properties;
             _isDebugging = isDebugging;
+            IsLazoing = false;
         }
 
         /// <summary>
@@ -56,6 +59,25 @@ namespace Laz
 
             RemoveOldestPointIfNeeded(deltaTime);
         }
+
+        public void DidLazoLimitReached(Vector3 position)
+        {
+            if (_lastPosition == null)
+            {
+                _lastPosition = position;
+                return;
+            }
+            
+            _travelledDistance -= DistanceBetweenV3ToV2((Vector3)_lastPosition, position);
+            if (_travelledDistance <= 0)
+            {
+                IsLazoing = false;
+                if (OnLazoLimitReached != null)
+                {
+                    OnLazoLimitReached();
+                }
+            }
+        }
         
         private void RunLazo(Vector3 position)
         {
@@ -67,7 +89,7 @@ namespace Laz
 
             var lazoPosition = new LazoPosition(_lazoProperties.TimeToLivePerPoint, position);
             _listOfPositions.Add(lazoPosition);
-            
+
             if (IsClosedLoop(out var closedOffPosition))
             {
                 if (OnLoopClosed != null)
@@ -87,7 +109,7 @@ namespace Laz
                     }
                 }
 
-                Clear();
+                IsLazoing = false;
             }
             
             
@@ -119,6 +141,8 @@ namespace Laz
         {
             _rateOfRecordingTimerElapsed = 0;
             _listOfPositions.Clear();
+            _travelledDistance = _lazoProperties.DistanceLimitOfLazo;
+            _lastPosition = null;
         }
 
         private void ResetRateOfRecordingTimeElapsed()
@@ -168,6 +192,13 @@ namespace Laz
             }
         
             return listOfObjects.ToArray();
+        }
+
+        private float DistanceBetweenV3ToV2(Vector3 positionA, Vector3 positionB)
+        {
+            var posA = new Vector2(positionA.x, positionA.z);
+            var posB = new Vector2(positionB.x, positionB.z);
+            return Vector2.Distance(posA, posB);
         }
         #endregion
 
