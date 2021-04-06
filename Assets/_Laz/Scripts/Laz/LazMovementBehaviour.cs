@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace Laz
 {
-    public class LazMovementController : MonoBehaviour
+    public class LazMovementBehaviour : MonoBehaviour
     {
         private Rigidbody _rigidbody;
 
@@ -35,13 +35,7 @@ namespace Laz
 
         private float _turnProgress = 0;
 
-        public Vector3 GetCurrentDirection
-        {
-            get
-            {
-                return _currentDirection;
-            }
-        }
+        public Vector3 GetCurrentDirection => _currentDirection;
 
         private void Awake()
         {
@@ -58,7 +52,7 @@ namespace Laz
 
         private void DirectionComponent()
         {
-            if (_isMovementPressed == true)
+            if (_isMovementPressed)
             {
                 Vector3 rigidbodyDirection = _rigidbody.velocity.normalized;
                 Vector3 targetDirection = new Vector3(_inputDirection.x, 0, _inputDirection.y);
@@ -71,7 +65,7 @@ namespace Laz
 
         private void SetSpeedComponent()
         {
-            if (_isMovementPressed == true)
+            if (_isMovementPressed)
             {
                 _speed = Math.Min(_acceleration + _speed, _currentMaxSpeed);
             }

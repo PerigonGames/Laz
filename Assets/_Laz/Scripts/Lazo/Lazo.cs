@@ -9,6 +9,7 @@ namespace Laz
         private List<LazoPosition> _listOfPositions = new List<LazoPosition>();
         private ILazoProperties _lazoProperties = null;
 
+        private bool _isDebugging = false;
         private bool _isLazoing = false;
         private float _rateOfRecordingTimerElapsed = 0;
 
@@ -27,9 +28,10 @@ namespace Laz
             }
         }
 
-        public Lazo(ILazoProperties properties)
+        public Lazo(ILazoProperties properties, bool isDebugging)
         {
             _lazoProperties = properties;
+            _isDebugging = isDebugging;
         }
 
         /// <summary>
@@ -102,14 +104,17 @@ namespace Laz
         private List<GameObject> _listOfDebugCubes = new List<GameObject>();
         private void DebugCreateCubeAt(Vector3 position)
         {
+            if (!_isDebugging) return;
             Debug.Log("Number of Cube: "+ _listOfDebugCubes.Count);
             var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cube.transform.position = position;
+            cube.GetComponent<BoxCollider>().enabled = false;
             _listOfDebugCubes.Add(cube);
         }
 
         private void DebugDestroyLastCubeOnList()
         {
+            if (!_isDebugging) return;
             if (_listOfDebugCubes.Count > 0)
             {
                 var cube = _listOfDebugCubes[0];
@@ -120,6 +125,7 @@ namespace Laz
 
         private void DebugClearListOfCubes()
         {
+            if (!_isDebugging) return;
             if (_listOfDebugCubes.Count > 0)
             {
                 foreach (var cube in _listOfDebugCubes)
