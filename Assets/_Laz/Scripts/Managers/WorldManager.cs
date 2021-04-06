@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace Laz
@@ -9,7 +10,14 @@ namespace Laz
 
         private void Awake()
         {
-            _lazCoordinator.Initialize();
+            var interests = GameObject.FindGameObjectsWithTag(Tags.LazoInterest);
+            var objectsOfInterest = GenerateObjectOfInterest(interests);
+            _lazCoordinator.Initialize(objectsOfInterest);
+        }
+
+        private IObjectOfInterest[] GenerateObjectOfInterest(GameObject[] interests)
+        {
+            return interests.Select(x => x.GetComponent<IObjectOfInterest>()).ToArray();
         }
     }
 }

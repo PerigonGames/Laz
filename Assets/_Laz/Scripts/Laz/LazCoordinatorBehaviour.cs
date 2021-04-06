@@ -8,13 +8,7 @@ namespace Laz
         private LazoBehaviour _lazoBehaviour = null;
         private LazModelBehavior _modelBehaviour = null;
 
-        private void Awake()
-        {
-            //DEBUG - PLACEHOLDER until we get a world manager
-            Initialize();
-        }
-
-        public void Initialize()
+        public void Initialize(IObjectOfInterest[] objectsOfInterest)
         {
             if (!TryGetComponent(out _movementBehaviour))
             {
@@ -31,7 +25,7 @@ namespace Laz
                 Debug.LogError("Laz missing LazModelBehavior");
             }
             
-            _lazoBehaviour.Initialize(_movementBehaviour);
+            _lazoBehaviour.Initialize(_movementBehaviour, objectsOfInterest);
             _modelBehaviour.Initialize(_movementBehaviour);
         }
     }

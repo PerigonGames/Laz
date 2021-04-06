@@ -11,9 +11,11 @@ namespace Laz
         
         [SerializeField] private LazoPropertiesScriptableObject _properties = null;
         private LazMovementBehaviour _movementBehaviour = null;
+        private IObjectOfInterest[] _objectsOfInterest = null;
         
-        public void Initialize(LazMovementBehaviour _movement)
+        public void Initialize(LazMovementBehaviour _movement, IObjectOfInterest[] objectsOfInterest)
         {
+            _objectsOfInterest = objectsOfInterest;
             _movementBehaviour = _movement;
         }
         
@@ -48,7 +50,7 @@ namespace Laz
 
         private void OnEnable()
         {
-            _lazo = new Lazo(_properties, TurnOnDebug);
+            _lazo = new Lazo(_properties, _objectsOfInterest, TurnOnDebug);
             _trail.time = _properties.TimeToLivePerPoint;
         }
 
