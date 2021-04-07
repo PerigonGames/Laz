@@ -146,7 +146,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5649099572315790319}
         m_TargetAssemblyTypeName: Laz.LazoBehaviour, Assembly-CSharp
-        m_MethodName: LazoTrigger
+        m_MethodName: OnLazoPressed
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

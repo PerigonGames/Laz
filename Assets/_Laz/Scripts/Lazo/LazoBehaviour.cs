@@ -31,17 +31,12 @@ namespace Laz
         /// Fire from player input in the Inspector
         /// </summary>
         /// <param name="context"></param>
-        public void LazoTrigger(InputAction.CallbackContext context)
+        public void OnLazoPressed(InputAction.CallbackContext context)
         {
-            if (context.started)
+            if (context.performed)
             {
                 TurnLazoing(true);
             } 
-            
-            if (context.canceled)
-            {
-                TurnLazoing(false);
-            }
         }
 
         private void OnEnable()
