@@ -9,22 +9,39 @@ namespace Laz
 
         private float _elapsedBoostTime = 0;
         private bool _isBoostActivated = false;
-        
+
+        public bool IsBoostActivated
+        {
+            get => _isBoostActivated;
+            set
+            {
+                _isBoostActivated = value;
+                if (_isBoostActivated)
+                {
+                    ActivateBoost();
+                }
+                else
+                {
+                    DeactivateBoost();
+                    ResetBoostTime();
+                }
+            }
+        }
+
         private void Awake()
         {
-            ResetBoost();
+            ResetBoostTime();
             _lazMovementProperty.CurrentMaxSpeed = _lazMovementProperty.BaseMaxSpeed;
         }
 
         private void Update()
         {
-            if (_isBoostActivated)
+            if (IsBoostActivated)
             {
                 _elapsedBoostTime -= Time.deltaTime;
                 if (_elapsedBoostTime <= 0)
                 {
-                    DeactivateBoost();
-                    ResetBoost();
+                    IsBoostActivated = false;
                 }
             }
         }
@@ -39,9 +56,8 @@ namespace Laz
             _lazMovementProperty.CurrentMaxSpeed = _lazMovementProperty.BaseMaxSpeed;
         }
 
-        private void ResetBoost()
+        private void ResetBoostTime()
         {
-            _isBoostActivated = false;
             _elapsedBoostTime = _lazMovementProperty.BoostTimeLimit;
         }
 
@@ -51,10 +67,9 @@ namespace Laz
         /// <param name="context">Data with input information</param>
         public void OnBoostPressed(InputAction.CallbackContext context)
         {
-            if (context.performed && !_isBoostActivated)
+            if (context.performed && !IsBoostActivated)
             {
-                _isBoostActivated = true;
-                ActivateBoost();
+                IsBoostActivated = true;
             }
         }
     }
