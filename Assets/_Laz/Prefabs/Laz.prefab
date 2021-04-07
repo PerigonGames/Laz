@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 6610365341234808040}
   - component: {fileID: 5649099572315790319}
   - component: {fileID: 636070730102409017}
+  - component: {fileID: 4221787615549672760}
   m_Layer: 0
   m_Name: Laz
   m_TagString: Untagged
@@ -197,6 +198,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 872970bf-033d-4624-88e9-4e47a6860a2c
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4221787615549672760}
+        m_TargetAssemblyTypeName: Laz.LazBoostBehaviour, Assembly-CSharp
+        m_MethodName: OnBoostPressed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5f76b499-3e11-445f-9d4e-b1e3e251c7b1
+    m_ActionName: Player/Lazo1[/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -226,12 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07618322a0f67324b841bc6432f9b291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 0
-  _acceleration: 0.5
-  _deceleration: 1.35
-  _baseMaxSpeed: 10
-  _LazoMaxSpeed: 20
-  _curvatureRate: 0.026
+  _lazMovementProperty: {fileID: 11400000, guid: bc8236426564215428efc6b63f0d2852, type: 2}
 --- !u!114 &5649099572315790319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +271,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a34b485d22b944da3afec711bef9e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4221787615549672760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6610365341234808044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72c3fa38e48f50441bd261c48be435f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lazMovementProperty: {fileID: 11400000, guid: bc8236426564215428efc6b63f0d2852, type: 2}
 --- !u!1 &6610365341511648457
 GameObject:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ namespace Laz
                 Debug.LogError("Laz missing LazModelBehavior");
             }
             
-            _lazoBehaviour.Initialize(_movementBehaviour, objectsOfInterest);
+            _lazoBehaviour.Initialize(objectsOfInterest);
             _modelBehaviour.Initialize(_movementBehaviour);
         }
     }

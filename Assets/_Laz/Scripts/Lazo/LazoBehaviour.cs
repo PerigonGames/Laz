@@ -10,13 +10,11 @@ namespace Laz
         [SerializeField] private bool TurnOnDebug = false;
         
         [SerializeField] private LazoPropertiesScriptableObject _properties = null;
-        private LazMovementBehaviour _movementBehaviour = null;
         private IObjectOfInterest[] _objectsOfInterest = null;
         
-        public void Initialize(LazMovementBehaviour _movement, IObjectOfInterest[] objectsOfInterest)
+        public void Initialize(IObjectOfInterest[] objectsOfInterest)
         {
             _objectsOfInterest = objectsOfInterest;
-            _movementBehaviour = _movement;
         }
         
         /// <summary>
@@ -38,13 +36,11 @@ namespace Laz
             if (context.started)
             {
                 TurnLazoing(true);
-                _movementBehaviour.LazoBoostActivated();
             } 
             
             if (context.canceled)
             {
                 TurnLazoing(false);
-                _movementBehaviour.LazoBoostDeactivated();
             }
         }
 
