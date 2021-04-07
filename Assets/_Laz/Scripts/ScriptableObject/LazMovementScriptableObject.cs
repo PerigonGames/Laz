@@ -2,8 +2,19 @@ using UnityEngine;
 
 namespace Laz
 {
+    public interface ILazMovement
+    {
+        float Acceleration { get; }
+        float Deceleration { get; }
+        float BaseMaxSpeed { get; }
+        float BoostSpeed { get; }
+        float CurvatureRate { get; }
+        float BoostTimeLimit { get; }
+        
+        float CurrentMaxSpeed { get; set; }
+    }
     [CreateAssetMenu(fileName = "Laz Movement", menuName = "Laz/Movement", order = 1)]
-    public class LazMovementScriptableObject : ScriptableObject
+    public class LazMovementScriptableObject : ScriptableObject, ILazMovement
     {
         [SerializeField]
         private float _acceleration = 1f;

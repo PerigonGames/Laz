@@ -9,15 +9,15 @@ namespace Laz
         [SerializeField] private TrailRenderer _trail = null;
         [SerializeField] private bool TurnOnDebug = false;
         
-        [SerializeField] private LazoPropertiesScriptableObject _boostProperties = null;
+        private ILazoProperties _lazoProperties = null;
         private IObjectOfInterest[] _objectsOfInterest = null;
-        
         private IBoost _boost = null;
 
         private float _elapsedCoolDown = 0;
         
-        public void Initialize(IObjectOfInterest[] objectsOfInterest, IBoost boost)
+        public void Initialize(ILazoProperties lazoProperties, IObjectOfInterest[] objectsOfInterest, IBoost boost)
         {
+            _lazoProperties = lazoProperties;
             _boost = boost;
             _objectsOfInterest = objectsOfInterest;
         }
@@ -47,8 +47,8 @@ namespace Laz
 
         private void OnEnable()
         {
-            _lazo = new Lazo(_boostProperties, _objectsOfInterest, TurnOnDebug);
-            _trail.time = _boostProperties.TimeToLivePerPoint;
+            _lazo = new Lazo(_lazoProperties, _objectsOfInterest, TurnOnDebug);
+            _trail.time = _lazoProperties.TimeToLivePerPoint;
             _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
             _lazo.OnLoopClosed += HandleOnLoopClosed;
         }
@@ -78,7 +78,7 @@ namespace Laz
 
         private bool CanActivateLaz()
         {
-            return _elapsedCoolDown >= _boostProperties.CoolDown;
+            return _elapsedCoolDown >= _lazoProperties.CoolDown;
         }
         
         #region Delegate

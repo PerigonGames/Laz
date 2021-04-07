@@ -9,8 +9,7 @@ namespace Laz
     
     public class LazBoostBehaviour : MonoBehaviour, IBoost
     {
-        [SerializeField] private LazMovementScriptableObject _lazMovementProperty = null;
-
+        private ILazMovement _lazMovementProperty = null;
         private float _elapsedBoostTime = 0;
         private bool _isBoostActivated = false;
 
@@ -31,7 +30,13 @@ namespace Laz
                 }
             }
         }
-        
+
+        public void Initialize(ILazMovement movement)
+        {
+            _lazMovementProperty = movement;
+            ResetBoostTime();
+            _lazMovementProperty.CurrentMaxSpeed = _lazMovementProperty.BaseMaxSpeed;
+        }
         
         /// <summary>
         /// Resets the amount of boost time
@@ -40,13 +45,7 @@ namespace Laz
         {
             _elapsedBoostTime = _lazMovementProperty.BoostTimeLimit;
         }
-
-        private void Awake()
-        {
-            ResetBoostTime();
-            _lazMovementProperty.CurrentMaxSpeed = _lazMovementProperty.BaseMaxSpeed;
-        }
-
+        
         private void Update()
         {
             if (IsBoostActivated)

@@ -4,10 +4,16 @@ namespace Laz
 {
     public class LazCoordinatorBehaviour : MonoBehaviour
     {
+        [Header("Scriptable Objects")] 
+        [SerializeField]
+        private LazMovementScriptableObject _movementScriptableObject = null;
+        [SerializeField] 
+        private LazoPropertiesScriptableObject _lazoScriptableObject = null;
+        
         private LazMovementBehaviour _movementBehaviour = null;
         private LazoBehaviour _lazoBehaviour = null;
         private LazModelBehavior _modelBehaviour = null;
-        private IBoost _boostBehaviour = null;
+        private LazBoostBehaviour _boostBehaviour = null;
 
         public void Initialize(IObjectOfInterest[] objectsOfInterest)
         {
@@ -31,7 +37,9 @@ namespace Laz
                 Debug.LogError("Laz missing LazBoostBehaviour");
             }
             
-            _lazoBehaviour.Initialize(objectsOfInterest, _boostBehaviour);
+            _movementBehaviour.Initialize(_movementScriptableObject);
+            _boostBehaviour.Initialize(_movementScriptableObject);
+            _lazoBehaviour.Initialize(_lazoScriptableObject, objectsOfInterest, _boostBehaviour);
             _modelBehaviour.Initialize(_movementBehaviour);
         }
     }

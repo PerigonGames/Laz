@@ -10,8 +10,7 @@ namespace Laz
     public class LazMovementBehaviour : MonoBehaviour
     {
         private Rigidbody _rigidbody;
-
-        [SerializeField] private LazMovementScriptableObject _lazMovementProperty = null;
+        private ILazMovement _lazMovementProperty = null;
         
         private Vector2 _inputDirection;
         private bool _isMovementPressed = false;
@@ -20,7 +19,11 @@ namespace Laz
         private float _currentSpeed = 0;
 
         public Vector3 GetCurrentDirection => _currentDirection;
-        
+
+        public void Initialize(ILazMovement movement)
+        {
+            _lazMovementProperty = movement;
+        }
         
         private void Awake()
         {
