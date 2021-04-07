@@ -9,11 +9,16 @@ namespace Laz
         [SerializeField] private TrailRenderer _trail = null;
         [SerializeField] private bool TurnOnDebug = false;
         
-        [SerializeField] private LazoPropertiesScriptableObject _properties = null;
+        [SerializeField] private LazoPropertiesScriptableObject _boostProperties = null;
         private IObjectOfInterest[] _objectsOfInterest = null;
         
-        public void Initialize(IObjectOfInterest[] objectsOfInterest)
+        private IBoost _boost = null;
+
+        private float _elapsedCoolDown = 0;
+        
+        public void Initialize(IObjectOfInterest[] objectsOfInterest, IBoost boost)
         {
+            _boost = boost;
             _objectsOfInterest = objectsOfInterest;
         }
         
@@ -33,16 +38,17 @@ namespace Laz
         /// <param name="context"></param>
         public void OnLazoPressed(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.performed && CanActivateLaz())
             {
+                _boost.IsBoostActivated = true;
                 TurnLazoing(true);
             } 
         }
 
         private void OnEnable()
         {
-            _lazo = new Lazo(_properties, _objectsOfInterest, TurnOnDebug);
-            _trail.time = _properties.TimeToLivePerPoint;
+            _lazo = new Lazo(_boostProperties, _objectsOfInterest, TurnOnDebug);
+            _trail.time = _boostProperties.TimeToLivePerPoint;
             _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
             _lazo.OnLoopClosed += HandleOnLoopClosed;
         }
@@ -57,14 +63,22 @@ namespace Laz
         private void Update()
         {
             _trail.emitting = _lazo.IsLazoing;
-            if (!_lazo.IsLazoing)
+            if (_lazo.IsLazoing)
             {
-                _trail.Clear();
-                return;
+                _elapsedCoolDown = 0;
+                _lazo.DidLazoLimitReached(transform.position);
+                _lazo.RunLazoIfAble(transform.position, Time.deltaTime);
             }
+            else
+            {
+                _elapsedCoolDown += Time.deltaTime;
+                _trail.Clear();
+            }
+        }
 
-            _lazo.DidLazoLimitReached(transform.position);
-            _lazo.RunLazoIfAble(transform.position, Time.deltaTime);
+        private bool CanActivateLaz()
+        {
+            return _elapsedCoolDown >= _boostProperties.CoolDown;
         }
         
         #region Delegate

@@ -7,6 +7,7 @@ namespace Laz
         private LazMovementBehaviour _movementBehaviour = null;
         private LazoBehaviour _lazoBehaviour = null;
         private LazModelBehavior _modelBehaviour = null;
+        private IBoost _boostBehaviour = null;
 
         public void Initialize(IObjectOfInterest[] objectsOfInterest)
         {
@@ -25,7 +26,12 @@ namespace Laz
                 Debug.LogError("Laz missing LazModelBehavior");
             }
             
-            _lazoBehaviour.Initialize(objectsOfInterest);
+            if (!TryGetComponent(out _boostBehaviour))
+            {
+                Debug.LogError("Laz missing LazBoostBehaviour");
+            }
+            
+            _lazoBehaviour.Initialize(objectsOfInterest, _boostBehaviour);
             _modelBehaviour.Initialize(_movementBehaviour);
         }
     }

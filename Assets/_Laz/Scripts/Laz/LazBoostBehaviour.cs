@@ -1,16 +1,20 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Laz
 {
-    public class LazBoostBehaviour : MonoBehaviour
+    public interface IBoost
+    {
+        bool IsBoostActivated { get; set; }
+    }
+    
+    public class LazBoostBehaviour : MonoBehaviour, IBoost
     {
         [SerializeField] private LazMovementScriptableObject _lazMovementProperty = null;
 
         private float _elapsedBoostTime = 0;
         private bool _isBoostActivated = false;
 
-        private bool IsBoostActivated
+        public bool IsBoostActivated
         {
             get => _isBoostActivated;
             set
@@ -63,18 +67,6 @@ namespace Laz
         private void DeactivateBoost()
         {
             _lazMovementProperty.CurrentMaxSpeed = _lazMovementProperty.BaseMaxSpeed;
-        }
-        
-        /// <summary>
-        /// Fired from Player Input. Used in Inspecotr
-        /// </summary>
-        /// <param name="context">Data with input information</param>
-        public void OnBoostPressed(InputAction.CallbackContext context)
-        {
-            if (context.performed && !IsBoostActivated)
-            {
-                IsBoostActivated = true;
-            }
         }
     }
 }
