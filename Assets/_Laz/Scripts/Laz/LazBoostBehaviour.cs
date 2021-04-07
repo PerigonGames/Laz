@@ -10,7 +10,7 @@ namespace Laz
         private float _elapsedBoostTime = 0;
         private bool _isBoostActivated = false;
 
-        public bool IsBoostActivated
+        private bool IsBoostActivated
         {
             get => _isBoostActivated;
             set
@@ -26,6 +26,15 @@ namespace Laz
                     ResetBoostTime();
                 }
             }
+        }
+        
+        
+        /// <summary>
+        /// Resets the amount of boost time
+        /// </summary>
+        public void ResetBoostTime()
+        {
+            _elapsedBoostTime = _lazMovementProperty.BoostTimeLimit;
         }
 
         private void Awake()
@@ -55,12 +64,7 @@ namespace Laz
         {
             _lazMovementProperty.CurrentMaxSpeed = _lazMovementProperty.BaseMaxSpeed;
         }
-
-        private void ResetBoostTime()
-        {
-            _elapsedBoostTime = _lazMovementProperty.BoostTimeLimit;
-        }
-
+        
         /// <summary>
         /// Fired from Player Input. Used in Inspecotr
         /// </summary>
