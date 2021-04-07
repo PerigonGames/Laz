@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 6610365341234808040}
   - component: {fileID: 5649099572315790319}
   - component: {fileID: 636070730102409017}
+  - component: {fileID: 4221787615549672760}
   m_Layer: 0
   m_Name: Laz
   m_TagString: Untagged
@@ -145,7 +146,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5649099572315790319}
         m_TargetAssemblyTypeName: Laz.LazoBehaviour, Assembly-CSharp
-        m_MethodName: LazoTrigger
+        m_MethodName: OnLazoPressed
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -226,12 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07618322a0f67324b841bc6432f9b291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 0
-  _acceleration: 0.5
-  _deceleration: 1.35
-  _baseMaxSpeed: 10
-  _LazoMaxSpeed: 20
-  _curvatureRate: 0.026
+  _lazMovementProperty: {fileID: 11400000, guid: bc8236426564215428efc6b63f0d2852, type: 2}
 --- !u!114 &5649099572315790319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,7 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _trail: {fileID: 8248419958067807380}
   TurnOnDebug: 0
-  _properties: {fileID: 11400000, guid: a07c0c312e58f624ab49166c5b206dcd, type: 2}
+  _boostProperties: {fileID: 11400000, guid: a07c0c312e58f624ab49166c5b206dcd, type: 2}
 --- !u!114 &636070730102409017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +255,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a34b485d22b944da3afec711bef9e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4221787615549672760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6610365341234808044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72c3fa38e48f50441bd261c48be435f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lazMovementProperty: {fileID: 11400000, guid: bc8236426564215428efc6b63f0d2852, type: 2}
 --- !u!1 &6610365341511648457
 GameObject:
   m_ObjectHideFlags: 0
