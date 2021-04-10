@@ -96,6 +96,11 @@ namespace Laz
                 }
             }
         }
+
+        public void ResetTravelledDistance()
+        {
+            TravelledDistance = _lazoProperties.DistanceLimitOfLazo;
+        }
         
         private void RunLazo(Vector3 position)
         {
@@ -159,7 +164,7 @@ namespace Laz
         {
             _rateOfRecordingTimerElapsed = 0;
             _listOfPositions.Clear();
-            TravelledDistance = _lazoProperties.DistanceLimitOfLazo;
+            ResetTravelledDistance();
             _lastPosition = null;
         }
 

@@ -12,6 +12,7 @@ namespace Laz
         private IBoost _boost = null;
 
         private float _elapsedCoolDown = 0;
+        public bool IsLazoing => _lazo.IsLazoing;
         
         public void Initialize(Lazo lazo, IBoost boost)
         {
@@ -19,15 +20,12 @@ namespace Laz
             _lazo.IsDebugging = TurnOnDebug;
             _boost = boost;
         }
-        
-        /// <summary>
-        /// Turns Lazoing on or off
-        /// </summary>
-        /// <param name="isOn">is On</param>
-        private void TurnLazoing(bool isOn)
+
+        public void ResetLazoLimit()
         {
-            _lazo.IsLazoing = isOn;
+            _lazo.ResetTravelledDistance();
         }
+
         
         /// <summary>
         /// USED IN INSPECTOR
@@ -43,6 +41,11 @@ namespace Laz
             } 
         }
 
+        private void TurnLazoing(bool isOn)
+        {
+            _lazo.IsLazoing = isOn;
+        }
+        
         private void OnEnable()
         {
             _trail.time = _lazo.TimeToLivePerPoint;
