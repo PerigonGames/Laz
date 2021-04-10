@@ -15,5 +15,6 @@ MonoBehaviour:
   _acceleration: 1
   _deceleration: 1
   _baseMaxSpeed: 5
-  _LazoMaxSpeed: 10
   _curvatureRate: 0.1
+  _boostTimeLimit: 2
+  _boostSpeed: 10

@@ -7,12 +7,15 @@ namespace Laz
     {
         [SerializeField]
         private LazCoordinatorBehaviour _lazCoordinator = null;
-
+    
+        
         private void Awake()
         {
             var interests = GameObject.FindGameObjectsWithTag(Tags.LazoInterest);
             var objectsOfInterest = GenerateObjectOfInterest(interests);
-            _lazCoordinator.Initialize(objectsOfInterest);
+            var laz = new LazPlayer();
+            _lazCoordinator.Initialize(laz, objectsOfInterest);
+            print(laz.Movement.GetCurrentDirection);
         }
 
         private IObjectOfInterest[] GenerateObjectOfInterest(GameObject[] interests)

@@ -9,7 +9,7 @@ namespace Laz
     
     public class LazBoostBehaviour : MonoBehaviour, IBoost
     {
-        private ILazMovement _lazMovementProperty = null;
+        private LazMovement _lazMovement = null;
         private float _elapsedBoostTime = 0;
         private bool _isBoostActivated = false;
 
@@ -21,21 +21,20 @@ namespace Laz
                 _isBoostActivated = value;
                 if (_isBoostActivated)
                 {
-                    ActivateBoost();
+                    _lazMovement.ActivateBoost();
                 }
                 else
                 {
-                    DeactivateBoost();
+                    _lazMovement.DeactivateBoost();
                     ResetBoostTime();
                 }
             }
         }
 
-        public void Initialize(ILazMovement movement)
+        public void Initialize(LazMovement movementProperty)
         {
-            _lazMovementProperty = movement;
+            _lazMovement = movementProperty;
             ResetBoostTime();
-            _lazMovementProperty.CurrentMaxSpeed = _lazMovementProperty.BaseMaxSpeed;
         }
         
         /// <summary>
@@ -43,7 +42,7 @@ namespace Laz
         /// </summary>
         public void ResetBoostTime()
         {
-            _elapsedBoostTime = _lazMovementProperty.BoostTimeLimit;
+            _elapsedBoostTime = _lazMovement.BoostTimeLimit;
         }
         
         private void Update()
@@ -56,16 +55,6 @@ namespace Laz
                     IsBoostActivated = false;
                 }
             }
-        }
-
-        private void ActivateBoost()
-        {
-            _lazMovementProperty.CurrentMaxSpeed = _lazMovementProperty.BoostSpeed;
-        }
-
-        private void DeactivateBoost()
-        {
-            _lazMovementProperty.CurrentMaxSpeed = _lazMovementProperty.BaseMaxSpeed;
         }
     }
 }

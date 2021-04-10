@@ -129,8 +129,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6610365341234808040}
-        m_TargetAssemblyTypeName: LazMovementController, Assembly-CSharp
-        m_MethodName: UpdateMovementDirection
+        m_TargetAssemblyTypeName: Laz.LazMovementBehaviour, Assembly-CSharp
+        m_MethodName: OnMovementPressed
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -215,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c11ff7ec9a4f6374a823f657970fdf70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementScriptableObject: {fileID: 11400000, guid: bc8236426564215428efc6b63f0d2852, type: 2}
+  _movementPropertyScriptableObject: {fileID: 11400000, guid: bc8236426564215428efc6b63f0d2852, type: 2}
   _lazoScriptableObject: {fileID: 11400000, guid: a07c0c312e58f624ab49166c5b206dcd, type: 2}
 --- !u!114 &6610365341234808040
 MonoBehaviour:

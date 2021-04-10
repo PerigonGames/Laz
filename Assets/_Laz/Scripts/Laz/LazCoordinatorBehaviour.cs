@@ -6,7 +6,7 @@ namespace Laz
     {
         [Header("Scriptable Objects")] 
         [SerializeField]
-        private LazMovementScriptableObject _movementScriptableObject = null;
+        private LazMovementPropertyScriptableObject _movementPropertyScriptableObject = null;
         [SerializeField] 
         private LazoPropertiesScriptableObject _lazoScriptableObject = null;
         
@@ -15,7 +15,7 @@ namespace Laz
         private LazModelBehavior _modelBehaviour = null;
         private LazBoostBehaviour _boostBehaviour = null;
 
-        public void Initialize(IObjectOfInterest[] objectsOfInterest)
+        public void Initialize(LazPlayer lazPlayer, IObjectOfInterest[] objectOfInterests)
         {
             if (!TryGetComponent(out _movementBehaviour))
             {
@@ -36,11 +36,14 @@ namespace Laz
             {
                 Debug.LogError("Laz missing LazBoostBehaviour");
             }
+
+            lazPlayer.Set(_lazoScriptableObject, objectOfInterests);
+            lazPlayer.Set(_movementPropertyScriptableObject);
             
-            _movementBehaviour.Initialize(_movementScriptableObject);
-            _boostBehaviour.Initialize(_movementScriptableObject);
-            _lazoBehaviour.Initialize(_lazoScriptableObject, objectsOfInterest, _boostBehaviour);
-            _modelBehaviour.Initialize(_movementBehaviour);
+            _movementBehaviour.Initialize(lazPlayer.Movement);
+            _boostBehaviour.Initialize(lazPlayer.Movement);
+            _lazoBehaviour.Initialize(lazPlayer.LazoTool, _boostBehaviour);
+            _modelBehaviour.Initialize(lazPlayer.Movement);
         }
     }
 }
