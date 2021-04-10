@@ -7,7 +7,9 @@ namespace Laz
     {
         [SerializeField]
         private LazCoordinatorBehaviour _lazCoordinator = null;
-
+        [SerializeField] 
+        private ParticleEffectsObjectPooler _particleEffectsObjectPooler = null;
+        
         [SerializeField]
         private DebugUIBehaviour debugUIBehaviour = null;
 
@@ -21,6 +23,7 @@ namespace Laz
             _interestsManager = new ObjectOfInterestsManager(objectsOfInterest);
             _lazCoordinator.Initialize(laz, objectsOfInterest);
             debugUIBehaviour.Initialize(laz.LazoTool, laz.Movement);
+            _particleEffectsObjectPooler.Initialize(objectsOfInterest.Length);
         }
 
         private IObjectOfInterest[] GenerateObjectOfInterest(GameObject[] interests)
