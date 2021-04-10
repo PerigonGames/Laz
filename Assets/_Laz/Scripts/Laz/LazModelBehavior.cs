@@ -4,17 +4,17 @@ namespace Laz
 {
     public class LazModelBehavior : MonoBehaviour
     {
-        private LazMovementBehaviour _movementBehaviour;
+        private LazMovement _movement;
 
-        public void Initialize(LazMovementBehaviour movementBehaviour)
+        public void Initialize(LazMovement movement)
         {
-            _movementBehaviour = movementBehaviour;
+            _movement = movement;
         }
 
         private void FixedUpdate()
         {
-            if (_movementBehaviour.GetCurrentDirection.magnitude != 0)
-                transform.rotation = Quaternion.LookRotation(_movementBehaviour.GetCurrentDirection, Vector3.up);
+            if (_movement.GetCurrentDirection.magnitude != 0)
+                transform.rotation = Quaternion.LookRotation(_movement.GetCurrentDirection, Vector3.up);
         }
     }
 }

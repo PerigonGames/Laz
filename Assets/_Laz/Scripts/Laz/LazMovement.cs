@@ -1,0 +1,78 @@
+using System;
+using UnityEngine;
+
+namespace Laz
+{
+    public class LazMovement
+    {
+        private readonly ILazMovementProperty _movementProperty = null;
+
+        private Vector2 _inputDirection;
+        private bool _isMovementPressed = false;
+        private Vector3 _currentDirection = Vector3.zero;
+        private float _turnProgress = 0;
+        private float _currentSpeed = 0;
+        private float _currentMaxSpeed = 0;
+
+        public Vector3 GetCurrentDirection => _currentDirection;
+        public Vector3 GetVelocity => _currentSpeed * _currentDirection;
+        public float BoostTimeLimit => _movementProperty.BoostTimeLimit;
+
+        public LazMovement(ILazMovementProperty movementProperty)
+        {
+            _movementProperty = movementProperty;
+            _currentMaxSpeed = _movementProperty.BaseMaxSpeed;
+        }
+
+        public void SetSpeedComponent()
+        {
+            if (_isMovementPressed)
+            {
+                _currentSpeed = Math.Min(_movementProperty.Acceleration + _currentSpeed, _currentMaxSpeed);
+            }
+            else
+            {
+                _currentSpeed = Math.Max(_currentSpeed - _movementProperty.Deceleration, 0);
+            }
+        }
+
+        public void DirectionComponent(Vector3 normalizedVelocity)
+        {
+            if (_isMovementPressed)
+            {
+                Vector3 targetDirection = new Vector3(_inputDirection.x, 0, _inputDirection.y);
+
+                _turnProgress += _movementProperty.CurvatureRate;
+                _currentDirection = Vector3.Lerp(normalizedVelocity, targetDirection, _turnProgress);
+                _turnProgress = Mathf.Clamp01(_turnProgress);
+            }
+        }
+
+        public void ActivateBoost()
+        {
+            _currentMaxSpeed = _movementProperty.BoostSpeed;
+        }
+
+        public void DeactivateBoost()
+        {
+            _currentMaxSpeed = _movementProperty.BaseMaxSpeed;
+        }
+
+        #region Movement
+
+        public void OnMovementPressed(Vector2 direction)
+        {
+            _inputDirection = direction;
+            _isMovementPressed = true;
+            _turnProgress = 0;
+        }
+
+        public void OnMovementCancelled()
+        {
+            _inputDirection = Vector2.zero;
+            _isMovementPressed = false;
+        }
+
+        #endregion
+    }
+}

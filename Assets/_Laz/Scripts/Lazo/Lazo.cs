@@ -8,19 +8,36 @@ namespace Laz
 {
     public class Lazo
     {
-        public event Action OnLoopClosed;
-        public event Action OnLazoLimitReached;
-        
         private List<LazoPosition> _listOfPositions = new List<LazoPosition>();
         private ILazoProperties _lazoProperties = null;
         private IObjectOfInterest[] _objectOfInterests = null;
 
-        private bool _isDebugging = false;
         private bool _isLazoing = false;
         private float _rateOfRecordingTimerElapsed = 0;
         private float _travelledDistance = 0;
         private Vector3? _lastPosition = null;
+        
+        public event Action OnLoopClosed;
+        public event Action OnLazoLimitReached;
+        
+        public float CoolDown => _lazoProperties.CoolDown;
+        public float TimeToLivePerPoint => _lazoProperties.TimeToLivePerPoint;
 
+        private float TravelledDistance
+        {
+            get => _travelledDistance;
+            set
+            {
+                _travelledDistance = value;
+                if (OnLazoLimitChanged != null)
+                {
+                    OnLazoLimitChanged(_travelledDistance / _lazoProperties.DistanceLimitOfLazo);
+                }
+            }
+        }
+
+        public event Action<float> OnLazoLimitChanged; 
+        
         public bool IsLazoing
         {
             get => _isLazoing;
@@ -36,11 +53,10 @@ namespace Laz
             }
         }
 
-        public Lazo(ILazoProperties properties, IObjectOfInterest[] objectOfInterests, bool isDebugging = false)
+        public Lazo(ILazoProperties properties, IObjectOfInterest[] objectOfInterests)
         {
             _objectOfInterests = objectOfInterests ?? new IObjectOfInterest[]{};
             _lazoProperties = properties;
-            _isDebugging = isDebugging;
             IsLazoing = false;
         }
 
@@ -68,8 +84,10 @@ namespace Laz
                 return;
             }
             
-            _travelledDistance -= DistanceBetweenV3ToV2((Vector3)_lastPosition, position);
-            if (_travelledDistance <= 0)
+            TravelledDistance -= DistanceBetweenV3ToV2((Vector3)_lastPosition, position);
+            _lastPosition = position;
+            
+            if (TravelledDistance <= 0)
             {
                 IsLazoing = false;
                 if (OnLazoLimitReached != null)
@@ -141,7 +159,7 @@ namespace Laz
         {
             _rateOfRecordingTimerElapsed = 0;
             _listOfPositions.Clear();
-            _travelledDistance = _lazoProperties.DistanceLimitOfLazo;
+            TravelledDistance = _lazoProperties.DistanceLimitOfLazo;
             _lastPosition = null;
         }
 
@@ -207,9 +225,11 @@ namespace Laz
          * DEBUG
          */
         private List<GameObject> _listOfDebugCubes = new List<GameObject>();
+        
+        public bool IsDebugging { get; set; }
         private void DebugCreateCubeAt(Vector3 position)
         {
-            if (!_isDebugging) return;
+            if (!IsDebugging) return;
             Debug.Log("Number of Cube: "+ _listOfDebugCubes.Count);
             var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cube.transform.position = position;
@@ -219,7 +239,7 @@ namespace Laz
 
         private void DebugDestroyLastCubeOnList()
         {
-            if (!_isDebugging) return;
+            if (!IsDebugging) return;
             if (_listOfDebugCubes.Count > 0)
             {
                 var cube = _listOfDebugCubes[0];
@@ -230,7 +250,7 @@ namespace Laz
 
         private void DebugClearListOfCubes()
         {
-            if (!_isDebugging) return;
+            if (!IsDebugging) return;
             if (_listOfDebugCubes.Count > 0)
             {
                 foreach (var cube in _listOfDebugCubes)
