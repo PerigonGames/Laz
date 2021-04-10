@@ -19,6 +19,7 @@ namespace Laz
             set
             {
                 _isBoostActivated = value;
+                ResetBoostTime();
                 if (_isBoostActivated)
                 {
                     _lazMovement.ActivateBoost();
@@ -26,7 +27,6 @@ namespace Laz
                 else
                 {
                     _lazMovement.DeactivateBoost();
-                    ResetBoostTime();
                 }
             }
         }
@@ -34,7 +34,6 @@ namespace Laz
         public void Initialize(LazMovement movementProperty)
         {
             _lazMovement = movementProperty;
-            ResetBoostTime();
         }
         
         /// <summary>
