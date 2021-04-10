@@ -1499,6 +1499,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 897388874422119429, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
+      propertyPath: _speed
+      value: 5.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 897388874422119429, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: _patrolLocations.Array.size
       value: 3
       objectReference: {fileID: 0}
