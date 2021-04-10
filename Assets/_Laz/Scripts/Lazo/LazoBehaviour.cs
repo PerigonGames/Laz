@@ -62,20 +62,20 @@ namespace Laz
             _trail.emitting = _lazo.IsLazoing;
             if (_lazo.IsLazoing)
             {
-                _elapsedCoolDown = 0;
+                _elapsedCoolDown = _lazo.CoolDown;
                 _lazo.DidLazoLimitReached(transform.position);
                 _lazo.RunLazoIfAble(transform.position, Time.deltaTime);
             }
             else
             {
-                _elapsedCoolDown += Time.deltaTime;
+                _elapsedCoolDown -= Time.deltaTime;
                 _trail.Clear();
             }
         }
 
         private bool CanActivateLaz()
         {
-            return _elapsedCoolDown >= _lazo.CoolDown;
+            return _elapsedCoolDown <= 0;
         }
         
         #region Delegate
