@@ -1,7 +1,7 @@
 using UnityEngine;
 
-namespace Laz {
-
+namespace Laz 
+{
     public class BoosterRingBehaviour : MonoBehaviour
     {
         private void OnTriggerEnter(Collider other)
