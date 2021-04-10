@@ -8,9 +8,6 @@ namespace Laz
 {
     public class Lazo
     {
-        public event Action OnLoopClosed;
-        public event Action OnLazoLimitReached;
-        
         private List<LazoPosition> _listOfPositions = new List<LazoPosition>();
         private ILazoProperties _lazoProperties = null;
         private IObjectOfInterest[] _objectOfInterests = null;
@@ -19,9 +16,27 @@ namespace Laz
         private float _rateOfRecordingTimerElapsed = 0;
         private float _travelledDistance = 0;
         private Vector3? _lastPosition = null;
-
+        
+        public event Action OnLoopClosed;
+        public event Action OnLazoLimitReached;
+        
         public float CoolDown => _lazoProperties.CoolDown;
         public float TimeToLivePerPoint => _lazoProperties.TimeToLivePerPoint;
+
+        private float TravelledDistance
+        {
+            get => _travelledDistance;
+            set
+            {
+                _travelledDistance = value;
+                if (OnLazoLimitChanged != null)
+                {
+                    OnLazoLimitChanged(_travelledDistance / _lazoProperties.DistanceLimitOfLazo);
+                }
+            }
+        }
+
+        public event Action<float> OnLazoLimitChanged; 
         
         public bool IsLazoing
         {
@@ -69,8 +84,10 @@ namespace Laz
                 return;
             }
             
-            _travelledDistance -= DistanceBetweenV3ToV2((Vector3)_lastPosition, position);
-            if (_travelledDistance <= 0)
+            TravelledDistance -= DistanceBetweenV3ToV2((Vector3)_lastPosition, position);
+            _lastPosition = position;
+            
+            if (TravelledDistance <= 0)
             {
                 IsLazoing = false;
                 if (OnLazoLimitReached != null)
@@ -142,7 +159,7 @@ namespace Laz
         {
             _rateOfRecordingTimerElapsed = 0;
             _listOfPositions.Clear();
-            _travelledDistance = _lazoProperties.DistanceLimitOfLazo;
+            TravelledDistance = _lazoProperties.DistanceLimitOfLazo;
             _lastPosition = null;
         }
 
