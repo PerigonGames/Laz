@@ -20,7 +20,7 @@ namespace Laz
             var laz = new LazPlayer();
             _interestsManager = new ObjectOfInterestsManager(objectsOfInterest);
             _lazCoordinator.Initialize(laz, objectsOfInterest);
-            debugUIBehaviour.Initialize(laz.LazoTool);
+            debugUIBehaviour.Initialize(laz.LazoTool, laz.Movement);
         }
 
         private IObjectOfInterest[] GenerateObjectOfInterest(GameObject[] interests)

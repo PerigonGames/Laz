@@ -14,9 +14,23 @@ namespace Laz
         private float _currentSpeed = 0;
         private float _currentMaxSpeed = 0;
 
+        public event Action<float> OnSpeedChanges;
+
         public Vector3 GetCurrentDirection => _currentDirection;
         public Vector3 GetVelocity => _currentSpeed * _currentDirection;
         public float BoostTimeLimit => _movementProperty.BoostTimeLimit;
+
+        private float CurrentSpeed
+        {
+            set
+            {
+                _currentSpeed = value;
+                if (OnSpeedChanges != null)
+                {
+                    OnSpeedChanges(_currentSpeed);
+                }
+            }
+        }
 
         public LazMovement(ILazMovementProperty movementProperty)
         {
@@ -28,11 +42,11 @@ namespace Laz
         {
             if (_isMovementPressed)
             {
-                _currentSpeed = Math.Min(_movementProperty.Acceleration + _currentSpeed, _currentMaxSpeed);
+                CurrentSpeed = Math.Min(_movementProperty.Acceleration + _currentSpeed, _currentMaxSpeed);
             }
             else
             {
-                _currentSpeed = Math.Max(_currentSpeed - _movementProperty.Deceleration, 0);
+                CurrentSpeed = Math.Max(_currentSpeed - _movementProperty.Deceleration, 0);
             }
         }
 
