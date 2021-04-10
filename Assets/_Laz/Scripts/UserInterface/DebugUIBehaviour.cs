@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class LazoUI : MonoBehaviour
+    public class DebugUIBehaviour : MonoBehaviour
     {
         [SerializeField] private TMP_Text _lazoText = null;
 
@@ -16,6 +16,6 @@ namespace Laz
         {
             _lazoText.text = $"Distance Left: {percentage}";
         }
+
     }
 }
-

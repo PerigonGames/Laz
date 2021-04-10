@@ -8,17 +8,19 @@ namespace Laz
         [SerializeField]
         private LazCoordinatorBehaviour _lazCoordinator = null;
 
-        [SerializeField] 
-        private LazoUI _lazoUI = null;
-        
-        
+        [SerializeField]
+        private DebugUIBehaviour debugUIBehaviour = null;
+
+        private ObjectOfInterestsManager _interestsManager = null;
+
         private void Awake()
         {
             var interests = GameObject.FindGameObjectsWithTag(Tags.LazoInterest);
             var objectsOfInterest = GenerateObjectOfInterest(interests);
             var laz = new LazPlayer();
+            _interestsManager = new ObjectOfInterestsManager(objectsOfInterest);
             _lazCoordinator.Initialize(laz, objectsOfInterest);
-            _lazoUI.Initialize(laz.LazoTool);
+            debugUIBehaviour.Initialize(laz.LazoTool);
         }
 
         private IObjectOfInterest[] GenerateObjectOfInterest(GameObject[] interests)
@@ -27,5 +29,3 @@ namespace Laz
         }
     }
 }
-
-

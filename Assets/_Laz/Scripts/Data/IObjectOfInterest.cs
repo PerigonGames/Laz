@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Laz
@@ -6,5 +7,7 @@ namespace Laz
     {
         void OnLazoActivated();
         Vector3 Position { get; }
+
+        event Action OnActivated;
     }
 }

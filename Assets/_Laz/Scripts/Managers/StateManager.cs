@@ -8,6 +8,7 @@ namespace Laz
         Pause,
         Play,
         Death,
+        WinGame,
         EndGame
     }
 
