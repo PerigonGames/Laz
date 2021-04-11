@@ -17,7 +17,7 @@ namespace Laz
         private float _travelledDistance = 0;
         private Vector3? _lastPosition = null;
         
-        public event Action OnLoopClosed;
+        public event Action<LazoPosition[]> OnLoopClosed;
         public event Action OnLazoLimitReached;
         
         public float CoolDown => _lazoProperties.CoolDown;
@@ -115,14 +115,12 @@ namespace Laz
 
             if (IsClosedLoop(out var closedOffPosition))
             {
+                var polygon = GetPolygon(closedOffPosition);
                 if (OnLoopClosed != null)
                 {
-                    OnLoopClosed();
+                    OnLoopClosed(polygon);
                 }
                 
-                var length = _listOfPositions.Count - closedOffPosition;
-                //TODO - This can be bugged, it does not get the intersections of 2 lines(4 points). 
-                var polygon = _listOfPositions.GetRange(closedOffPosition, length - 1).ToArray();
                 var objectOfInterests = GetObjectOfInterestsWithin(polygon);
                 if (!objectOfInterests.IsNullOrEmpty())
                 {
@@ -138,6 +136,26 @@ namespace Laz
             
             // Debug
             DebugCreateCubeAt(position);
+        }
+
+        private LazoPosition[] GetPolygon(int closedOffPosition)
+        {
+            var polygon = new List<LazoPosition>();
+            var length = _listOfPositions.Count - closedOffPosition;
+
+            var p1 = _listOfPositions[closedOffPosition].Position;
+            var p2 = _listOfPositions[closedOffPosition + 1].Position;
+            var p3 = _listOfPositions[_listOfPositions.Count - 1].Position;
+            var p4 = _listOfPositions[_listOfPositions.Count - 2].Position;
+
+            var centerPoint = GeometryUtilities.CenterPoint(new[] {p1, p2, p3, p4});
+            var centerLazoPoint = new LazoPosition(_lazoProperties.TimeToLivePerPoint, centerPoint);
+            
+            polygon.Add(centerLazoPoint);
+            //TODO - This can be bugged, it does not get the intersections of 2 lines(4 points). 
+            var polygonRange = _listOfPositions.GetRange(closedOffPosition + 1, length - 2);
+            polygon.AddRange(polygonRange);
+            return polygon.ToArray();
         }
 
         private void RemoveOldestPointIfNeeded(float deltaTime)

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Laz
@@ -44,7 +45,13 @@ namespace Laz
             }
 
             return false;
+        }
 
+        public static Vector3 CenterPoint(Vector3[] points)
+        {
+            var xPosition = points.Average(point => point.x);
+            var yPosition = points.Average(point => point.z);
+            return new Vector3(xPosition, 0, yPosition);
         }
 
         public static bool IsInside(Vector3[] points, Vector3 point)

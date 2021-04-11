@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using Shapes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +11,7 @@ namespace Laz
         private Lazo _lazo;
         [SerializeField] private TrailRenderer _trail = null;
         [SerializeField] private bool TurnOnDebug = false;
+        [SerializeField] private Polygon _polygonShape = null;
 
         private IBoost _boost = null;
 
@@ -83,9 +87,19 @@ namespace Laz
         
         #region Delegate
 
-        private void HandleOnLoopClosed()
+        private void HandleOnLoopClosed(LazoPosition[] positions)
         {
-            _trail.Clear();
+            if (TurnOnDebug && _polygonShape != null)
+            {
+                _polygonShape.points.Clear();
+                _polygonShape.meshOutOfDate = true;
+                _trail.Clear();
+                var allPositions = positions.Select(lazoPosition => new Vector2(lazoPosition.Position.x, lazoPosition.Position.z)).ToList();
+                foreach (var position in allPositions)
+                {
+                    _polygonShape.AddPoint(position);
+                }
+            }
         }
 
         private void HandleOnLazoLimitReached()
