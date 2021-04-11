@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae5a25c59eb1f5243bc53cf0e1075e2a, type: 3}
   m_Name: Lazo Properties
   m_EditorClassIdentifier: 
-  _timeToLivePerPoint: 36.6
+  _timeToLivePerPoint: 5
   _rateOfRecordingPosition: 0.25
-  _distanceLimitOfLazo: 325.18
+  _distanceLimitOfLazo: 50
   _coolDown: 2

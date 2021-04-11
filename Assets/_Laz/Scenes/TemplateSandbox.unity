@@ -499,6 +499,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5649099572315790319, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
+      propertyPath: TurnOnDebug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649099572315790319, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
       propertyPath: _polygonShape
       value: 
       objectReference: {fileID: 337468964}
@@ -803,7 +807,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blendMode: 2
   scaleMode: 0
-  color: {r: 0.60898143, g: 0, b: 0.8584906, a: 0.5686275}
+  color: {r: 0.4167302, g: 0, b: 0.85882354, a: 0.5686275}
   detailLevel: 2
   zTest: 4
   zOffsetFactor: 0
