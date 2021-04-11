@@ -152,7 +152,6 @@ namespace Laz
             var centerLazoPoint = new LazoPosition(_lazoProperties.TimeToLivePerPoint, centerPoint);
             
             polygon.Add(centerLazoPoint);
-            //TODO - This can be bugged, it does not get the intersections of 2 lines(4 points). 
             var polygonRange = _listOfPositions.GetRange(closedOffPosition + 1, length - 2);
             polygon.AddRange(polygonRange);
             return polygon.ToArray();
