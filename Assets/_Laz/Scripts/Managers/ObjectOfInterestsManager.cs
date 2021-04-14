@@ -1,9 +1,8 @@
-
 using UnityEngine;
 
 namespace Laz
 {
-    public class ObjectOfInterestsManager
+    public class ObjectOfInterestsManager: ILifeCycle
     {
         private IObjectOfInterest[] _interests = null;
         private int numberOfObjectsToActivate = 0;
@@ -14,7 +13,28 @@ namespace Laz
             _interests = objectOfInterests;
             foreach (var interest in _interests)
             {
+                if (interest is PlanetoidBehaviour planetoid)
+                {
+                    planetoid.Initialize();
+                }
+                
                 interest.OnActivated += HandleOnInterestActivated;
+            }
+        }
+
+        public void CleanUp()
+        {
+            foreach (var interest in _interests)
+            {
+                interest.CleanUp();
+            }
+        }
+
+        public void Reset()
+        {
+            foreach (var interest in _interests)
+            {
+                interest.Reset();
             }
         }
 

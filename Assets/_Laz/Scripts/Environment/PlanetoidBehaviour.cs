@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Laz
@@ -7,14 +8,12 @@ namespace Laz
     public class PlanetoidBehaviour : MonoBehaviour, IObjectOfInterest
     {
         [SerializeField] private Transform[] _patrolLocations = null;
-
         [SerializeField] private float _speed = 5;
-        
+        private Planetoid _planetoid;
+
         public event Action OnActivated;
-        public Vector3 Position => transform.position;
         
-        private readonly Queue<Vector3> _queueOfLocations = new Queue<Vector3>();
-        private Vector3? _currentDestination;
+        public Vector3 Position => transform.position;
         
         public void OnLazoActivated()
         {
@@ -27,23 +26,31 @@ namespace Laz
             gameObject.SetActive(false);
         }
 
-        private void Awake()
+        public void Initialize()
         {
-            SetupLocations();
+            _planetoid = new Planetoid(_speed, transform.position);
+            Reset();
+        }
+        
+        public void Reset()
+        {
+            _planetoid.Restart(_patrolLocations.Select(x => x.position).ToArray());
+            transform.position = _planetoid.OriginalLocation;
+        }
+        
+        public void CleanUp()
+        {
+            transform.position = Vector3.zero;
         }
 
         private void FixedUpdate()
         {
-            if (_currentDestination == null)
+            if (_planetoid.CurrentDestination == null)
             {
                 return;
             }
-            
-            transform.position = Vector3.MoveTowards(transform.position, (Vector3) _currentDestination, _speed * Time.deltaTime);
-            if (transform.position == _currentDestination)
-            {
-                GetNextDestination();
-            }
+
+            transform.position = _planetoid.MoveTowards(transform.position, Time.deltaTime);
         }
 
         private void PlayExplosion()
@@ -53,19 +60,47 @@ namespace Laz
             explosion.transform.position = transform.position;
             explosion.Play();
         }
+    }
 
-        private void SetupLocations()
+    public class Planetoid
+    {
+        private readonly Queue<Vector3> _queueOfLocations = new Queue<Vector3>();
+        private Vector3? _currentDestination;
+        private float _speed;
+        private readonly Vector3 _originalLocation = Vector3.zero;
+
+        public Vector3 OriginalLocation => _originalLocation;
+
+        public Vector3? CurrentDestination => _currentDestination;
+
+        public Planetoid(float speed, Vector3 spawnLocation)
         {
-            foreach (var location in _patrolLocations)
-            {
-                var patrolPosition = location.position;
-                var position = new Vector3(patrolPosition.x, 0, patrolPosition.z);
-                _queueOfLocations.Enqueue(position);
-            }
-
-            GetNextDestination();
+            _originalLocation = spawnLocation;
+            _speed = speed;
         }
 
+        public Vector3 MoveTowards(Vector3 position, float time)
+        {
+            var nextPosition = Vector3.MoveTowards(position, (Vector3) _currentDestination, _speed * time);
+            if (position == _currentDestination)
+            {
+                GetNextDestination();
+            }
+
+            return nextPosition;
+        }
+        
+        public void CleanUp()
+        {
+            _currentDestination = null;
+            _queueOfLocations.Clear();
+        }
+
+        public void Restart(Vector3[] patrolLocations)
+        {
+            SetupLocations(patrolLocations);
+        }
+        
         private void GetNextDestination()
         {
             if (_queueOfLocations.Count > 0)
@@ -74,5 +109,17 @@ namespace Laz
                 _queueOfLocations.Enqueue((Vector3) _currentDestination);
             }
         }
+        private void SetupLocations(Vector3[] patrolLocations)
+        {
+            _queueOfLocations.Clear();
+            foreach (var location in patrolLocations)
+            {
+                var position = new Vector3(location.x, 0, location.z);
+                _queueOfLocations.Enqueue(position);
+            }
+
+            GetNextDestination();
+        }
     }
+    
 }

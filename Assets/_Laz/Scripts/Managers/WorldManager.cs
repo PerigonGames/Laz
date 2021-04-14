@@ -10,11 +10,24 @@ namespace Laz
         [SerializeField] 
         private ParticleEffectsObjectPooler _particleEffectsObjectPooler = null;
         
+        [Header("Debug")]
         [SerializeField]
         private DebugUIBehaviour debugUIBehaviour = null;
 
         private ObjectOfInterestsManager _interestsManager = null;
 
+        public void CleanUp()
+        {
+            _interestsManager.CleanUp();
+            _lazCoordinator.CleanUp();
+        }
+        
+        public void Reset()
+        {
+            _interestsManager.Reset();
+            _lazCoordinator.Reset();
+        }
+        
         private void Awake()
         {
             var interests = GameObject.FindGameObjectsWithTag(Tags.LazoInterest);
@@ -28,7 +41,7 @@ namespace Laz
 
         private IObjectOfInterest[] GenerateObjectOfInterest(GameObject[] interests)
         {
-            return interests.Select(x => x.GetComponent<IObjectOfInterest>()).ToArray();
+            return interests.Select(x => x.GetComponent<PlanetoidBehaviour>()).ToArray();
         }
     }
 }

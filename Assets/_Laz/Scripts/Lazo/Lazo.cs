@@ -46,7 +46,7 @@ namespace Laz
                 _isLazoing = value;
                 if (!_isLazoing)
                 {
-                    Clear();
+                    Reset();
                     // Debug
                     DebugClearListOfCubes();
                 }
@@ -57,7 +57,25 @@ namespace Laz
         {
             _objectOfInterests = objectOfInterests ?? new IObjectOfInterest[]{};
             _lazoProperties = properties;
-            IsLazoing = false;
+            Reset();
+        }
+
+        public void CleanUp()
+        {
+            _isLazoing = false;
+            _rateOfRecordingTimerElapsed = 0;
+            _travelledDistance = 0;
+            _lastPosition = null;
+            DebugClearListOfCubes();
+        }
+
+        public void Reset()
+        {
+            _isLazoing = false;
+            _rateOfRecordingTimerElapsed = 0;
+            _listOfPositions.Clear();
+            ResetTravelledDistance();
+            _lastPosition = null;
         }
 
         /// <summary>
@@ -90,6 +108,7 @@ namespace Laz
             if (TravelledDistance <= 0)
             {
                 IsLazoing = false;
+                _lastPosition = null;
                 if (OnLazoLimitReached != null)
                 {
                     OnLazoLimitReached();
@@ -173,17 +192,6 @@ namespace Laz
 
 
         #region Helper
-
-        /// <summary>
-        /// Resets all values
-        /// </summary>
-        private void Clear()
-        {
-            _rateOfRecordingTimerElapsed = 0;
-            _listOfPositions.Clear();
-            ResetTravelledDistance();
-            _lastPosition = null;
-        }
 
         private void ResetRateOfRecordingTimeElapsed()
         {

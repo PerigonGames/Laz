@@ -35,6 +35,17 @@ namespace Laz
         {
             _lazMovement = movementProperty;
         }
+
+        public void CleanUp()
+        {
+            _elapsedBoostTime = 0;
+            _isBoostActivated = false;
+        }
+
+        public void Reset()
+        {
+            ResetBoostTime();
+        }
         
         /// <summary>
         /// Resets the amount of boost time
