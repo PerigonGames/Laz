@@ -10,7 +10,7 @@ namespace Laz
     {
         private List<LazoPosition> _listOfPositions = new List<LazoPosition>();
         private ILazoProperties _lazoProperties = null;
-        private IObjectOfInterest[] _objectOfInterests = null;
+        private ILazoWrapped[] _objectOfInterests = null;
 
         private bool _isLazoing = false;
         private float _rateOfRecordingTimerElapsed = 0;
@@ -53,9 +53,9 @@ namespace Laz
             }
         }
 
-        public Lazo(ILazoProperties properties, IObjectOfInterest[] objectOfInterests)
+        public Lazo(ILazoProperties properties, ILazoWrapped[] objectOfInterests)
         {
-            _objectOfInterests = objectOfInterests ?? new IObjectOfInterest[]{};
+            _objectOfInterests = objectOfInterests ?? new ILazoWrapped[]{};
             _lazoProperties = properties;
             Reset();
         }
@@ -145,7 +145,7 @@ namespace Laz
                 {
                     foreach (var interest in objectOfInterests)
                     {
-                        interest.OnLazoActivated();
+                        interest.ActivateLazo();
                     }
                 }
 
@@ -227,9 +227,9 @@ namespace Laz
             return false;
         }
 
-        private IObjectOfInterest[] GetObjectOfInterestsWithin(LazoPosition[] polygon)
+        private ILazoWrapped[] GetObjectOfInterestsWithin(LazoPosition[] polygon)
         {
-            List<IObjectOfInterest> listOfObjects = new List<IObjectOfInterest>();
+            List<ILazoWrapped> listOfObjects = new List<ILazoWrapped>();
             Vector3[] arrayOfLazoPositions = polygon.Select(position => position.Position).ToArray();
             foreach (var piece in _objectOfInterests)
             {

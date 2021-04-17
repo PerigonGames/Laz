@@ -18,7 +18,7 @@ namespace Laz
             _lazMovement = new LazMovement(movementProperty);
         }
 
-        public void Set(ILazoProperties lazoProperties, IObjectOfInterest[] objectOfInterest)
+        public void Set(ILazoProperties lazoProperties, ILazoWrapped[] objectOfInterest)
         {
             _lazo = new Lazo(lazoProperties, objectOfInterest);
         }

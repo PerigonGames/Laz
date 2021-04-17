@@ -16,7 +16,7 @@ namespace Laz
         private LazModelBehavior _modelBehaviour = null;
         private LazBoostBehaviour _boostBehaviour = null;
 
-        public void Initialize(LazPlayer lazPlayer, IObjectOfInterest[] objectOfInterests)
+        public void Initialize(LazPlayer lazPlayer, ILazoWrapped[] objectOfInterests)
         {
             _lazPlayer = lazPlayer;
             
