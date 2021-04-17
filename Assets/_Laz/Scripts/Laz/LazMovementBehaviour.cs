@@ -12,6 +12,16 @@ namespace Laz
         {
             _movement = movement;
         }
+
+        public void CleanUp()
+        {
+            _movement.CleanUp();
+        }
+
+        public void Reset()
+        {
+            _movement.Reset();
+        }
         
         private void Awake()
         {

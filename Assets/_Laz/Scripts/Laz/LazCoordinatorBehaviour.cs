@@ -9,14 +9,17 @@ namespace Laz
         private LazMovementPropertyScriptableObject _movementPropertyScriptableObject = null;
         [SerializeField] 
         private LazoPropertiesScriptableObject _lazoScriptableObject = null;
-        
+
+        private LazPlayer _lazPlayer = null;
         private LazMovementBehaviour _movementBehaviour = null;
         private LazoBehaviour _lazoBehaviour = null;
         private LazModelBehavior _modelBehaviour = null;
         private LazBoostBehaviour _boostBehaviour = null;
 
-        public void Initialize(LazPlayer lazPlayer, IObjectOfInterest[] objectOfInterests)
+        public void Initialize(LazPlayer lazPlayer, ILazoWrapped[] objectOfInterests)
         {
+            _lazPlayer = lazPlayer;
+            
             if (!TryGetComponent(out _movementBehaviour))
             {
                 Debug.LogError("Laz missing LazMovementBehaviour");
@@ -37,6 +40,7 @@ namespace Laz
                 Debug.LogError("Laz missing LazBoostBehaviour");
             }
 
+            lazPlayer.SetSpawn(transform.position);
             lazPlayer.Set(_lazoScriptableObject, objectOfInterests);
             lazPlayer.Set(_movementPropertyScriptableObject);
             
@@ -44,6 +48,20 @@ namespace Laz
             _boostBehaviour.Initialize(lazPlayer.Movement);
             _lazoBehaviour.Initialize(lazPlayer.LazoTool, _boostBehaviour);
             _modelBehaviour.Initialize(lazPlayer.Movement);
+        }
+
+        public void CleanUp()
+        {
+            _movementBehaviour.CleanUp();
+            _lazoBehaviour.CleanUp();
+            transform.position = Vector3.zero;
+        }
+
+        public void Reset()
+        {
+            _movementBehaviour.Reset();
+            _lazoBehaviour.Reset();
+            transform.position = _lazPlayer.SpawnPosition;
         }
     }
 }

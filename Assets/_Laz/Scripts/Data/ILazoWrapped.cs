@@ -3,11 +3,10 @@ using UnityEngine;
 
 namespace Laz
 {
-    public interface IObjectOfInterest
+    public interface ILazoWrapped
     {
-        void OnLazoActivated();
+        void ActivateLazo();
         Vector3 Position { get; }
-
         event Action OnActivated;
     }
 }

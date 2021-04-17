@@ -1,49 +1,50 @@
-using System;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Laz
 {
-    public class PlanetoidBehaviour : MonoBehaviour, IObjectOfInterest
+    public class PlanetoidBehaviour : MonoBehaviour
     {
         [SerializeField] private Transform[] _patrolLocations = null;
-
         [SerializeField] private float _speed = 5;
         
-        public event Action OnActivated;
-        public Vector3 Position => transform.position;
+        public Planetoid PlanetoidModel => _planetoid;
+
+        private Planetoid _planetoid;
         
-        private readonly Queue<Vector3> _queueOfLocations = new Queue<Vector3>();
-        private Vector3? _currentDestination;
+        public void Initialize()
+        {
+            var locations = _patrolLocations.Select(t => t.position).ToArray();
+            _planetoid = new Planetoid(this, locations, _speed);
+            Reset();
+        }
+
+        public void CleanUp()
+        {
+            transform.position = Vector3.zero;
+            gameObject.SetActive(false);
+        }
+
+        public void Reset()
+        {
+            transform.position = _planetoid.OriginalLocation;
+            gameObject.SetActive(true);
+        }
         
         public void OnLazoActivated()
         {
             PlayExplosion();
-            if (OnActivated != null)
-            {
-                OnActivated();
-            }
-            
             gameObject.SetActive(false);
         }
-
-        private void Awake()
-        {
-            SetupLocations();
-        }
-
+        
         private void FixedUpdate()
         {
-            if (_currentDestination == null)
+            if (_planetoid.CurrentDestination == null)
             {
                 return;
             }
-            
-            transform.position = Vector3.MoveTowards(transform.position, (Vector3) _currentDestination, _speed * Time.deltaTime);
-            if (transform.position == _currentDestination)
-            {
-                GetNextDestination();
-            }
+
+            transform.position = _planetoid.MoveTowards(transform.position, Time.deltaTime);
         }
 
         private void PlayExplosion()
@@ -52,27 +53,6 @@ namespace Laz
             explosion.gameObject.SetActive(true);
             explosion.transform.position = transform.position;
             explosion.Play();
-        }
-
-        private void SetupLocations()
-        {
-            foreach (var location in _patrolLocations)
-            {
-                var patrolPosition = location.position;
-                var position = new Vector3(patrolPosition.x, 0, patrolPosition.z);
-                _queueOfLocations.Enqueue(position);
-            }
-
-            GetNextDestination();
-        }
-
-        private void GetNextDestination()
-        {
-            if (_queueOfLocations.Count > 0)
-            {
-                _currentDestination = _queueOfLocations.Dequeue();
-                _queueOfLocations.Enqueue((Vector3) _currentDestination);
-            }
         }
     }
 }

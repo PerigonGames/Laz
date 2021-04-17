@@ -10,7 +10,7 @@ namespace Laz
     {
         private List<LazoPosition> _listOfPositions = new List<LazoPosition>();
         private ILazoProperties _lazoProperties = null;
-        private IObjectOfInterest[] _objectOfInterests = null;
+        private ILazoWrapped[] _objectOfInterests = null;
 
         private bool _isLazoing = false;
         private float _rateOfRecordingTimerElapsed = 0;
@@ -46,18 +46,36 @@ namespace Laz
                 _isLazoing = value;
                 if (!_isLazoing)
                 {
-                    Clear();
+                    Reset();
                     // Debug
                     DebugClearListOfCubes();
                 }
             }
         }
 
-        public Lazo(ILazoProperties properties, IObjectOfInterest[] objectOfInterests)
+        public Lazo(ILazoProperties properties, ILazoWrapped[] objectOfInterests)
         {
-            _objectOfInterests = objectOfInterests ?? new IObjectOfInterest[]{};
+            _objectOfInterests = objectOfInterests ?? new ILazoWrapped[]{};
             _lazoProperties = properties;
-            IsLazoing = false;
+            Reset();
+        }
+
+        public void CleanUp()
+        {
+            _isLazoing = false;
+            _rateOfRecordingTimerElapsed = 0;
+            _travelledDistance = 0;
+            _lastPosition = null;
+            DebugClearListOfCubes();
+        }
+
+        public void Reset()
+        {
+            _isLazoing = false;
+            _rateOfRecordingTimerElapsed = 0;
+            _listOfPositions.Clear();
+            ResetTravelledDistance();
+            _lastPosition = null;
         }
 
         /// <summary>
@@ -90,6 +108,7 @@ namespace Laz
             if (TravelledDistance <= 0)
             {
                 IsLazoing = false;
+                _lastPosition = null;
                 if (OnLazoLimitReached != null)
                 {
                     OnLazoLimitReached();
@@ -126,7 +145,7 @@ namespace Laz
                 {
                     foreach (var interest in objectOfInterests)
                     {
-                        interest.OnLazoActivated();
+                        interest.ActivateLazo();
                     }
                 }
 
@@ -174,17 +193,6 @@ namespace Laz
 
         #region Helper
 
-        /// <summary>
-        /// Resets all values
-        /// </summary>
-        private void Clear()
-        {
-            _rateOfRecordingTimerElapsed = 0;
-            _listOfPositions.Clear();
-            ResetTravelledDistance();
-            _lastPosition = null;
-        }
-
         private void ResetRateOfRecordingTimeElapsed()
         {
             _rateOfRecordingTimerElapsed = _lazoProperties.RateOfRecordingPosition;
@@ -219,9 +227,9 @@ namespace Laz
             return false;
         }
 
-        private IObjectOfInterest[] GetObjectOfInterestsWithin(LazoPosition[] polygon)
+        private ILazoWrapped[] GetObjectOfInterestsWithin(LazoPosition[] polygon)
         {
-            List<IObjectOfInterest> listOfObjects = new List<IObjectOfInterest>();
+            List<ILazoWrapped> listOfObjects = new List<ILazoWrapped>();
             Vector3[] arrayOfLazoPositions = polygon.Select(position => position.Position).ToArray();
             foreach (var piece in _objectOfInterests)
             {

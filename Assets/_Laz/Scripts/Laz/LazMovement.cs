@@ -35,6 +35,21 @@ namespace Laz
         public LazMovement(ILazMovementProperty movementProperty)
         {
             _movementProperty = movementProperty;
+            Reset();
+        }
+
+        public void CleanUp()
+        {
+            _inputDirection = Vector3.zero;
+            _isMovementPressed = false;
+            _currentDirection = Vector3.zero;
+            _turnProgress = 0;
+            _currentSpeed = 0;
+            _currentMaxSpeed = 0;
+        }
+
+        public void Reset()
+        {
             _currentMaxSpeed = _movementProperty.BaseMaxSpeed;
         }
 

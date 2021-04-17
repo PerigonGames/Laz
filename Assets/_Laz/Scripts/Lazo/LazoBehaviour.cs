@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Shapes;
 using UnityEngine;
@@ -30,6 +29,16 @@ namespace Laz
             _lazo.ResetTravelledDistance();
         }
 
+        public void CleanUp()
+        {
+            _lazo.CleanUp();
+            _elapsedCoolDown = 0;
+        }
+
+        public void Reset()
+        {
+            _lazo.Reset();
+        }
         
         /// <summary>
         /// USED IN INSPECTOR
