@@ -35,12 +35,12 @@ namespace Laz
 
         public void ActivateLazo()
         {
+            _isActivated = true;
+            _planetoidBehaviour.OnLazoActivated();
             if (OnActivated != null)
             {
                 OnActivated();
             }
-            _planetoidBehaviour.OnLazoActivated();
-            _isActivated = true;
         }
         
         public Vector3 MoveTowards(Vector3 position, float time)
