@@ -8,7 +8,7 @@ namespace Laz
     {
         private readonly Queue<Vector3> _queueOfLocations = new Queue<Vector3>();
         private readonly Vector3[] _arrayOfLocations = new Vector3[] { };
-        private readonly PlanetoidBehaviour _planetoidBehaviour = null;
+        private readonly IPlanetoidBehaviour _planetoidBehaviour = null;
 
         private Vector3? _currentDestination = null;
         private readonly float _speed = 0;
@@ -16,7 +16,7 @@ namespace Laz
 
         public event Action OnActivated;
 
-        public Vector3 Position => _planetoidBehaviour.transform.position;
+        public Vector3 Position => _planetoidBehaviour.Position;
 
         public Vector3 OriginalLocation { get; } = Vector3.zero;
 
@@ -27,7 +27,7 @@ namespace Laz
         public Planetoid(PlanetoidBehaviour planetoidBehaviour, Vector3[] patrolLocations, float speed = 0f)
         {
             _planetoidBehaviour = planetoidBehaviour;
-            OriginalLocation = _planetoidBehaviour.transform.position;
+            OriginalLocation = _planetoidBehaviour.Position;
             _arrayOfLocations = patrolLocations;
             _speed = speed;
             SetupLocations();

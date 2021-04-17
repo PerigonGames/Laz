@@ -39,9 +39,9 @@ namespace Laz
             _particleEffectsObjectPooler.Initialize(objectsOfInterest.Length);
         }
 
-        private PlanetoidBehaviour[] GenerateObjectOfInterest(GameObject[] interests)
+        private IPlanetoidBehaviour[] GenerateObjectOfInterest(GameObject[] interests)
         {
-            return interests.Select(x => x.GetComponent<PlanetoidBehaviour>()).ToArray();
+            return interests.Select(x => x.GetComponent<IPlanetoidBehaviour>()).ToArray();
         }
     }
 }
