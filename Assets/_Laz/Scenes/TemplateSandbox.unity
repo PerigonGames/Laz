@@ -1085,6 +1085,7 @@ GameObject:
   - component: {fileID: 716077168}
   - component: {fileID: 716077170}
   - component: {fileID: 716077169}
+  - component: {fileID: 716077171}
   m_Layer: 0
   m_Name: Panel
   m_TagString: Untagged
@@ -1101,7 +1102,7 @@ RectTransform:
   m_GameObject: {fileID: 716077167}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 786532616}
   - {fileID: 1187400495}
@@ -1151,6 +1152,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 716077167}
   m_CullTransparentMesh: 1
+--- !u!114 &716077171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716077167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa06d2415c901f4993f64326623837f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _reset: {fileID: 1187400496}
 --- !u!1001 &728937324
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1209,6 +1223,10 @@ PrefabInstance:
     - target: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 897388874422119429, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
+      propertyPath: _speed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 897388874422119430, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_Name
@@ -2236,7 +2254,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 897388874422119429, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: _speed
-      value: 5.06
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 897388874422119429, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: _patrolLocations.Array.size
@@ -2476,6 +2494,10 @@ PrefabInstance:
     - target: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 897388874422119429, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
+      propertyPath: _speed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 897388874422119430, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_Name

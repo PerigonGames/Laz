@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -9,22 +10,23 @@ namespace Laz
         private LazCoordinatorBehaviour _lazCoordinator = null;
         [SerializeField] 
         private ParticleEffectsObjectPooler _particleEffectsObjectPooler = null;
+        private StateManager StateManagerInstance => StateManager.Instance;
         
         [Header("Debug")]
         [SerializeField]
         private DebugUIBehaviour debugUIBehaviour = null;
 
-        private LazoWrappableManager _interestsManager = null;
+        private LazoWrappableManager _wrappableManager = null;
 
         public void CleanUp()
         {
-            _interestsManager.CleanUp();
+            _wrappableManager.CleanUp();
             _lazCoordinator.CleanUp();
         }
         
         public void Reset()
         {
-            _interestsManager.Reset();
+            _wrappableManager.Reset();
             _lazCoordinator.Reset();
         }
         
@@ -33,15 +35,38 @@ namespace Laz
             var interests = GameObject.FindGameObjectsWithTag(Tags.LazoInterest);
             var objectsOfInterest = GenerateObjectOfInterest(interests);
             var laz = new LazPlayer();
-            _interestsManager = new LazoWrappableManager(objectsOfInterest);
-            _lazCoordinator.Initialize(laz, _interestsManager.WrappableObjects);
+            
+            StateManagerInstance.OnStateChanged += HandleOnStateChanged;
+            
+            _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManagerInstance);
+            _lazCoordinator.Initialize(laz, _wrappableManager.WrappableObjects);
             debugUIBehaviour.Initialize(laz.LazoTool, laz.Movement);
             _particleEffectsObjectPooler.Initialize(objectsOfInterest.Length);
+            
+        }
+
+        private void OnDestroy()
+        {
+            StateManagerInstance.OnStateChanged -= HandleOnStateChanged;
         }
 
         private IPlanetoidBehaviour[] GenerateObjectOfInterest(GameObject[] interests)
         {
             return interests.Select(x => x.GetComponent<IPlanetoidBehaviour>()).ToArray();
+        }
+
+        private void HandleOnStateChanged(State state)
+        {
+            if (state == State.PreGame)
+            {
+                CleanUp(); 
+                StateManagerInstance.SetState(State.Play);
+            }
+
+            if (state == State.Play)
+            {
+                Reset();
+            }
         }
     }
 }
