@@ -4,14 +4,15 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class LazoWrappableManager
+    public class LazoWrappableManager: ILifeCycle
     {
         private readonly List<Planetoid> _listOfPlanetoids = new List<Planetoid>();
-
+        private readonly IStateManager _stateManager = null;
         public ILazoWrapped[] WrappableObjects { get; } = null;
 
-        public LazoWrappableManager(PlanetoidBehaviour[] planetoids)
+        public LazoWrappableManager(IPlanetoidBehaviour[] planetoids, IStateManager stateManager)
         {
+            _stateManager = stateManager;
             SetupPlanetoids(planetoids);
             WrappableObjects = _listOfPlanetoids.ToArray();
         }
@@ -32,7 +33,7 @@ namespace Laz
             }
         }
 
-        private void SetupPlanetoids(PlanetoidBehaviour[] planetoids)
+        private void SetupPlanetoids(IPlanetoidBehaviour[] planetoids)
         {
             foreach (var planetoidBehaviour in planetoids)
             {
@@ -47,7 +48,7 @@ namespace Laz
         {
             if (_listOfPlanetoids.All(p => p.IsActivated))
             {
-                Debug.Log("You Won");
+                _stateManager.SetState(State.WinGame);
             }
         }
     }

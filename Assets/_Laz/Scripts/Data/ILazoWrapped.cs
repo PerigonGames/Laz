@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Laz
 {
-    public interface ILazoWrapped
+    public interface ILazoWrapped: ILifeCycle
     {
         void ActivateLazo();
         Vector3 Position { get; }

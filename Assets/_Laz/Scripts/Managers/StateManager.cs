@@ -1,10 +1,10 @@
 using System;
-using UnityEngine;
 
 namespace Laz
 {
     public enum State
     {
+        PreGame,
         Pause,
         Play,
         Death,

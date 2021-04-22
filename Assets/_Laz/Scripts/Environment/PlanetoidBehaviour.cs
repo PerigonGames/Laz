@@ -3,12 +3,21 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class PlanetoidBehaviour : MonoBehaviour
+    public interface IPlanetoidBehaviour: ILifeCycle
+    {
+        public Planetoid PlanetoidModel { get; }
+        public void Initialize();
+        public void OnLazoActivated();
+        public Vector3 Position { get; }
+    }
+    
+    public class PlanetoidBehaviour : MonoBehaviour, IPlanetoidBehaviour
     {
         [SerializeField] private Transform[] _patrolLocations = null;
         [SerializeField] private float _speed = 5;
         
         public Planetoid PlanetoidModel => _planetoid;
+        public Vector3 Position => transform.position;
 
         private Planetoid _planetoid;
         
