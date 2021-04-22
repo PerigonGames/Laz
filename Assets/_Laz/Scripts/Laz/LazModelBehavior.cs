@@ -4,6 +4,7 @@ namespace Laz
 {
     public class LazModelBehavior : MonoBehaviour
     {
+        private const string GlidingAnimationKey = "is_gliding";
         [SerializeField] private Animator _animator = null;
         private LazMovement _movement;
 
@@ -13,22 +14,23 @@ namespace Laz
             _movement.OnSpeedChanges += HandleOnSpeedChanges;
         }
 
+        private void OnDestroy()
+        {
+            _movement.OnSpeedChanges -= HandleOnSpeedChanges;
+        }
+
         private void FixedUpdate()
         {
             if (_movement.GetCurrentDirection.magnitude != 0)
+            {
                 transform.rotation = Quaternion.LookRotation(_movement.GetCurrentDirection, Vector3.up);
+            }
         }
 
         private void HandleOnSpeedChanges(float speed)
         {
-            if (speed > 0f)
-            {
-                _animator.SetBool("is_gliding", true);
-            }
-            else
-            {
-                _animator.SetBool("is_gliding", false);
-            }
+            var isGliding = speed > 0f;
+            _animator.SetBool(GlidingAnimationKey, isGliding);
         }
     }
 }
