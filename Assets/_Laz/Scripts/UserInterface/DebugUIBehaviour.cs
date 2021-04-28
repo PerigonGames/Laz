@@ -5,7 +5,6 @@ namespace Laz
 {
     public class DebugUIBehaviour : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _lazoText = null;
         [SerializeField] private TMP_Text _lazoVelocity = null;
         
         private LazMovement _movement = null;
