@@ -43,7 +43,7 @@ namespace Laz
             _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManagerInstance);
             _lazCoordinator.Initialize(laz, _wrappableManager.WrappableObjects);
             _particleEffectsObjectPooler.Initialize(objectsOfInterest.Length);
-            _puzzleManager.Initialize(_wrappableManager.WrappableObjects);
+            _puzzleManager.Initialize(_wrappableManager);
             
             // User Interface
             debugUIBehaviour.Initialize(laz.LazoTool, laz.Movement);

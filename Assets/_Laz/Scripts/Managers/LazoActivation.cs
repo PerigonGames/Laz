@@ -5,24 +5,20 @@ namespace Laz
     [System.Serializable]
     public struct LazoActivation
     {
-        public string[] PuzzleTags;
+        public BaseWrappableBehaviour[] PuzzleWrappableItems;
         public BasePuzzleActivateBehaviour OnLazoWrappedItem;
 
-        public void ActivateWrapItemIfNeeded(ILazoWrapped[] listOfItems)
+        public void ActivateWrapItemIfNeeded()
         {
-            if (ArePuzzleTagsActivated(listOfItems))
+            if (ArePuzzleTagsActivated())
             {
                 ActivatePuzzleItem();
             }
         }
 
-        private bool ArePuzzleTagsActivated(ILazoWrapped[] listOfItems)
+        private bool ArePuzzleTagsActivated()
         {
-            return PuzzleTags.All(tag =>
-            {
-                var items = listOfItems.Where(item => item.PuzzleTag.Equals(tag)).ToArray();
-                return items.All(item => item.IsActivated);
-            });
+            return PuzzleWrappableItems.All(wrappable => wrappable.IsActivated);
         }
 
         public void ActivatePuzzleItem()

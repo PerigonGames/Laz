@@ -6,14 +6,14 @@ namespace Laz
     {
         [SerializeField] 
         private LazoActivation[] _puzzleItems = null;
+
+        private LazoWrappableManager _lazoWrappableManager = null;
         
-        private ILazoWrapped[] _listOfLazoWrappedItems = null;
-        
-        public void Initialize(ILazoWrapped[] lazoWrapped)
+        public void Initialize(LazoWrappableManager wrappableManager)
         {
-            _listOfLazoWrappedItems = lazoWrapped;
+            _lazoWrappableManager = wrappableManager;
+            _lazoWrappableManager.OnWrappableActivated += HandleOnLazoWrappedItemActivated;
             SetupPuzzleItems();
-            SetupLazoWrappedItemsActivation();
         }
 
         public void Reset()
@@ -24,6 +24,11 @@ namespace Laz
             }
         }
 
+        private void OnDestroy()
+        {
+            _lazoWrappableManager.OnWrappableActivated -= HandleOnLazoWrappedItemActivated;
+        }
+
         private void SetupPuzzleItems()
         {
             foreach (var item in _puzzleItems)
@@ -32,21 +37,13 @@ namespace Laz
             }
         }
 
-        private void SetupLazoWrappedItemsActivation()
-        {
-            foreach (var item in _listOfLazoWrappedItems)
-            {
-                item.OnActivated += HandleOnLazoWrappedItemActivated;
-            }
-        }
-        
         #region Delegate
 
         private void HandleOnLazoWrappedItemActivated()
         {
             foreach (var puzzleItem in _puzzleItems)
             {
-                puzzleItem.ActivateWrapItemIfNeeded(_listOfLazoWrappedItems);
+                puzzleItem.ActivateWrapItemIfNeeded();
             }
         }
         #endregion
