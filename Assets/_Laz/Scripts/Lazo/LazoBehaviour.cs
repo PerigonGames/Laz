@@ -18,10 +18,16 @@ namespace Laz
         public bool IsLazoing => _lazo.IsLazoing;
         
         public void Initialize(Lazo lazo, IBoost boost)
-        {
+        {            
+            _boost = boost;
+            
             _lazo = lazo;
             _lazo.IsDebugging = TurnOnDebug;
-            _boost = boost;
+            _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
+            _lazo.OnLoopClosed += HandleOnLoopClosed;
+            
+            _trail.time = _lazo.TimeToLivePerPoint;
+
         }
 
         public void ResetLazoLimit()
@@ -59,14 +65,7 @@ namespace Laz
             _lazo.IsLazoing = isOn;
         }
         
-        private void OnEnable()
-        {
-            _trail.time = _lazo.TimeToLivePerPoint;
-            _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
-            _lazo.OnLoopClosed += HandleOnLoopClosed;
-        }
-
-        private void OnDisable()
+        private void OnDestroy()
         {
             _lazo.OnLazoLimitReached -= HandleOnLazoLimitReached;
             _lazo.OnLoopClosed -= HandleOnLoopClosed;
