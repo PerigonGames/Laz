@@ -24,7 +24,7 @@ namespace Laz
 
         public bool IsActivated => _isActivated;
 
-        public Planetoid(PlanetoidBehaviour planetoidBehaviour, Vector3[] patrolLocations, float speed = 0f)
+        public Planetoid(IPlanetoidBehaviour planetoidBehaviour, Vector3[] patrolLocations, float speed = 0f)
         {
             _planetoidBehaviour = planetoidBehaviour;
             OriginalLocation = _planetoidBehaviour.Position;
@@ -36,7 +36,7 @@ namespace Laz
         public void ActivateLazo()
         {
             _isActivated = true;
-            _planetoidBehaviour.OnLazoActivated();
+            _planetoidBehaviour.LazoActivated();
             if (OnActivated != null)
             {
                 OnActivated();

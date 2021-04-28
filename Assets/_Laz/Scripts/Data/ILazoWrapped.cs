@@ -8,5 +8,6 @@ namespace Laz
         void ActivateLazo();
         Vector3 Position { get; }
         event Action OnActivated;
+        bool IsActivated { get; }
     }
 }

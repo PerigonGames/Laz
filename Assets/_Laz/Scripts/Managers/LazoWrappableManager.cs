@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Laz
 {
@@ -9,6 +9,8 @@ namespace Laz
         private readonly List<Planetoid> _listOfPlanetoids = new List<Planetoid>();
         private readonly IStateManager _stateManager = null;
         public ILazoWrapped[] WrappableObjects { get; } = null;
+
+        public event Action OnWrappableActivated;
 
         public LazoWrappableManager(IPlanetoidBehaviour[] planetoids, IStateManager stateManager)
         {
@@ -40,15 +42,20 @@ namespace Laz
                 planetoidBehaviour.Initialize();
                 var planetoid = planetoidBehaviour.PlanetoidModel;
                 _listOfPlanetoids.Add(planetoid);
-                planetoid.OnActivated += HandleOnInterestActivated;
+                planetoid.OnActivated += HandleOnWrappableActivated;
             }
         }
 
-        private void HandleOnInterestActivated()
+        private void HandleOnWrappableActivated()
         {
             if (_listOfPlanetoids.All(p => p.IsActivated))
             {
                 _stateManager.SetState(State.WinGame);
+            }
+
+            if (OnWrappableActivated != null)
+            {
+                OnWrappableActivated();
             }
         }
     }
