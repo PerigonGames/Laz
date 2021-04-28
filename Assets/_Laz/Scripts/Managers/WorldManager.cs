@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using UnityEngine;
 
@@ -10,6 +9,8 @@ namespace Laz
         private LazCoordinatorBehaviour _lazCoordinator = null;
         [SerializeField] 
         private ParticleEffectsObjectPooler _particleEffectsObjectPooler = null;
+        [SerializeField] 
+        private PuzzleManager _puzzleManager = null;
         private StateManager StateManagerInstance => StateManager.Instance;
         
         [Header("Debug")]
@@ -28,6 +29,7 @@ namespace Laz
         {
             _wrappableManager.Reset();
             _lazCoordinator.Reset();
+            _puzzleManager.Reset();
         }
         
         private void Awake()
@@ -40,9 +42,11 @@ namespace Laz
             
             _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManagerInstance);
             _lazCoordinator.Initialize(laz, _wrappableManager.WrappableObjects);
-            debugUIBehaviour.Initialize(laz.LazoTool, laz.Movement);
             _particleEffectsObjectPooler.Initialize(objectsOfInterest.Length);
+            _puzzleManager.Initialize(_wrappableManager.WrappableObjects);
             
+            // User Interface
+            debugUIBehaviour.Initialize(laz.LazoTool, laz.Movement);
         }
 
         private void OnDestroy()

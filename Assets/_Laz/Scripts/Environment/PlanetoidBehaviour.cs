@@ -16,6 +16,9 @@ namespace Laz
         [SerializeField] private Transform[] _patrolLocations = null;
         [SerializeField] private float _speed = 5;
         
+        [Header("Puzzle")] 
+        [SerializeField] private string _puzzleTag = "";
+        
         public Planetoid PlanetoidModel => _planetoid;
         public Vector3 Position => transform.position;
 
@@ -24,7 +27,7 @@ namespace Laz
         public void Initialize()
         {
             var locations = _patrolLocations.Select(t => t.position).ToArray();
-            _planetoid = new Planetoid(this, locations, _speed);
+            _planetoid = new Planetoid(this, locations, _speed, _puzzleTag);
             Reset();
         }
 
