@@ -5,7 +5,6 @@ namespace Laz
 {
     public class LazoMeterBehaviour : MonoBehaviour
     {
-        private const float TopBottomMargin = 10f;
         private const float SideMargin = 16f;
         
         [SerializeField] 
