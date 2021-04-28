@@ -6,7 +6,7 @@ namespace Laz
     public struct LazoActivation
     {
         public string[] PuzzleTags;
-        public BasePuzzleActivateBehaviour LazoWrappedItem;
+        public BasePuzzleActivateBehaviour OnLazoWrappedItem;
 
         public void ActivateWrapItemIfNeeded(ILazoWrapped[] listOfItems)
         {
@@ -27,7 +27,7 @@ namespace Laz
 
         public void ActivatePuzzleItem()
         {
-            LazoWrappedItem.OnActivated();
+            OnLazoWrappedItem.OnActivated();
         }
     }
 }

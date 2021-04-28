@@ -1039,11 +1039,11 @@ MonoBehaviour:
   _puzzleItems:
   - PuzzleTags:
     - A
-    LazoWrappedItem: {fileID: 911506148}
+    OnLazoWrappedItem: {fileID: 911506148}
   - PuzzleTags:
     - A
     - B
-    LazoWrappedItem: {fileID: 898375014}
+    OnLazoWrappedItem: {fileID: 898375014}
 --- !u!4 &669554699
 Transform:
   m_ObjectHideFlags: 0

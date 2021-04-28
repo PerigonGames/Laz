@@ -20,7 +20,7 @@ namespace Laz
         {
             foreach (var item in _puzzleItems)
             {
-                item.LazoWrappedItem.Reset();
+                item.OnLazoWrappedItem.Reset();
             }
         }
 
@@ -28,7 +28,7 @@ namespace Laz
         {
             foreach (var item in _puzzleItems)
             {
-                item.LazoWrappedItem.Initialize();
+                item.OnLazoWrappedItem.Initialize();
             }
         }
 
