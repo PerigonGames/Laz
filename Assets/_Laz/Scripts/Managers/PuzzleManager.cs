@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace Laz
@@ -33,6 +34,11 @@ namespace Laz
         {
             foreach (var item in _puzzleItems)
             {
+                if (item.PuzzleWrappableItems.Contains(null))
+                {
+                    Debug.LogError("Empty Puzzle Wrappable items Within the Puzzle Manager");
+                }
+
                 item.OnLazoWrappedItem.Initialize();
             }
         }
