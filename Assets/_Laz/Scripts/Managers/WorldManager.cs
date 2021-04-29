@@ -12,6 +12,10 @@ namespace Laz
         [SerializeField] 
         private PuzzleManager _puzzleManager = null;
         private StateManager StateManagerInstance => StateManager.Instance;
+
+        [Header("User Interface")] 
+        [SerializeField]
+        private LazoMeterBehaviour _lazoMeter = null;
         
         [Header("Debug")]
         [SerializeField]
@@ -46,7 +50,8 @@ namespace Laz
             _puzzleManager.Initialize(_wrappableManager);
             
             // User Interface
-            debugUIBehaviour.Initialize(laz.LazoTool, laz.Movement);
+            _lazoMeter.Initialize(laz.LazoTool);
+            debugUIBehaviour.Initialize(laz.Movement);
         }
 
         private void OnDestroy()
