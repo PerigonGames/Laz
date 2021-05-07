@@ -5,6 +5,11 @@ namespace Laz
 {
     public class WorldManager : MonoBehaviour
     {
+        //TODO - Placeholder to get the patrolling doors
+        [Header("Placeholder")]
+        [SerializeField] 
+        private PatrolBehaviour[] _listOfPatrollingWalls = null;
+        [Header("Main Components")]
         [SerializeField]
         private LazCoordinatorBehaviour _lazCoordinator = null;
         [SerializeField] 
@@ -27,6 +32,11 @@ namespace Laz
         {
             _wrappableManager.CleanUp();
             _lazCoordinator.CleanUp();
+            //TODO - placeholder on how to handle the Patrolling objects
+            foreach (var patrolItem in _listOfPatrollingWalls)
+            {
+                patrolItem.CleanUp();
+            }
         }
         
         public void Reset()
@@ -34,6 +44,11 @@ namespace Laz
             _wrappableManager.Reset();
             _lazCoordinator.Reset();
             _puzzleManager.Reset();
+            //TODO - placeholder on how to handle the Patrolling objects
+            foreach (var patrolItem in _listOfPatrollingWalls)
+            {
+                patrolItem.Reset();
+            }
         }
         
         private void Awake()
@@ -48,6 +63,12 @@ namespace Laz
             _lazCoordinator.Initialize(laz, _wrappableManager.WrappableObjects);
             _particleEffectsObjectPooler.Initialize(objectsOfInterest.Length);
             _puzzleManager.Initialize(_wrappableManager);
+            
+            //TODO - placeholder on how to handle the Patrolling objects
+            foreach (var patrolItem in _listOfPatrollingWalls)
+            {
+                patrolItem.Initialize();
+            }
             
             // User Interface
             _lazoMeter.Initialize(laz.LazoTool);
