@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -13,31 +14,41 @@ namespace Laz
     
     public class PlanetoidBehaviour : BaseWrappableBehaviour, IPlanetoidBehaviour
     {
-        [SerializeField] private Transform[] _patrolLocations = null;
-        [SerializeField] private float _speed = 5;
+        
+        private Planetoid _planetoid;
+        private PatrolBehaviour _patrolBehaviour = null;
         
         public override bool IsActivated => _planetoid.IsActivated;
         public Planetoid PlanetoidModel => _planetoid;
         public Vector3 Position => transform.position;
-
-        private Planetoid _planetoid;
         
         public void Initialize()
         {
-            var locations = _patrolLocations.Select(t => t.position).ToArray();
-            _planetoid = new Planetoid(this, locations, _speed);
+            _patrolBehaviour = GetComponent<PatrolBehaviour>();
+            if (_patrolBehaviour != null)
+            {
+                _patrolBehaviour.Initialize();
+            }
+            _planetoid = new Planetoid(this);
             Reset();
         }
 
         public void CleanUp()
         {
+            if (_patrolBehaviour != null)
+            {
+                _patrolBehaviour.CleanUp();
+            }
             transform.position = Vector3.zero;
             gameObject.SetActive(false);
         }
 
         public void Reset()
         {
-            transform.position = _planetoid.OriginalLocation;
+            if (_patrolBehaviour != null)
+            {
+                _patrolBehaviour.Reset();
+            }
             gameObject.SetActive(true);
         }
         
@@ -45,16 +56,6 @@ namespace Laz
         {
             PlayExplosion();
             gameObject.SetActive(false);
-        }
-        
-        private void FixedUpdate()
-        {
-            if (_planetoid.CurrentDestination == null)
-            {
-                return;
-            }
-
-            transform.position = _planetoid.MoveTowards(transform.position, Time.deltaTime);
         }
 
         private void PlayExplosion()

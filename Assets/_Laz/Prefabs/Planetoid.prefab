@@ -102,6 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 897388874422119428}
   - component: {fileID: 897388874422119429}
+  - component: {fileID: 7959790425013479012}
   m_Layer: 0
   m_Name: Planetoid
   m_TagString: LazoInterest
@@ -137,11 +138,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9241753bb244b4644b9bf32f21dced7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionParticles: {fileID: 0}
+--- !u!114 &7959790425013479012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897388874422119430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22fb0ce06ca9943efa633d170f3990f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _patrolLocations:
   - {fileID: 897388874226933257}
   - {fileID: 897388873580357071}
-  _speed: 0.98
+  _speed: 5
 --- !u!1 &897388875184113828
 GameObject:
   m_ObjectHideFlags: 0
