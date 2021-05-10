@@ -148,11 +148,7 @@ namespace Laz
                         interest.ActivateLazo();
                     }
                 }
-
-                IsLazoing = false;
             }
-            
-            
             // Debug
             DebugCreateCubeAt(position);
         }

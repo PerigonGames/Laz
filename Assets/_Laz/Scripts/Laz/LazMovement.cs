@@ -13,6 +13,7 @@ namespace Laz
         private float _turnProgress = 0;
         private float _currentSpeed = 0;
         private float _currentMaxSpeed = 0;
+        private Lazo _lazo;
 
         public event Action<float> OnSpeedChanges;
 
@@ -32,9 +33,12 @@ namespace Laz
             }
         }
 
-        public LazMovement(ILazMovementProperty movementProperty)
+        public LazMovement(ILazMovementProperty movementProperty, Lazo lazo)
         {
             _movementProperty = movementProperty;
+            LazoBehaviour.OnLazoDeactivated += LazoDeactivate;
+            _lazo = lazo;
+            _lazo.OnLazoLimitReached += LazoDeactivate;
             Reset();
         }
 
@@ -84,7 +88,22 @@ namespace Laz
 
         public void DeactivateBoost()
         {
-            _currentMaxSpeed = _movementProperty.BaseMaxSpeed;
+            if (_lazo.IsLazoing == true)
+            {
+                _currentMaxSpeed = _movementProperty.LazoMaxSpeed;
+            }
+            else
+            {
+                _currentMaxSpeed = _movementProperty.BaseMaxSpeed;
+            }
+        }
+
+        public void LazoDeactivate()
+        {
+            if (_currentMaxSpeed == _movementProperty.LazoMaxSpeed)
+            {
+                _currentMaxSpeed = _movementProperty.BaseMaxSpeed;
+            }
         }
 
         #region Movement
@@ -101,7 +120,7 @@ namespace Laz
             _inputDirection = Vector2.zero;
             _isMovementPressed = false;
         }
-
+        
         #endregion
     }
 }

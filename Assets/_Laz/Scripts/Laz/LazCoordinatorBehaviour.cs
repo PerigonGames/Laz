@@ -42,7 +42,7 @@ namespace Laz
 
             lazPlayer.SetSpawn(transform.position);
             lazPlayer.Set(_lazoScriptableObject, objectOfInterests);
-            lazPlayer.Set(_movementPropertyScriptableObject);
+            lazPlayer.Set(_movementPropertyScriptableObject,lazPlayer.LazoTool);
             
             _movementBehaviour.Initialize(lazPlayer.Movement);
             _boostBehaviour.Initialize(lazPlayer.Movement);
