@@ -16,9 +16,6 @@ namespace Laz
 
         private float _elapsedCoolDown = 0;
 
-        public delegate void LazoDelegate();
-        public static event LazoDelegate OnLazoDeactivated;
-
         public bool IsLazoing => _lazo.IsLazoing;
         
         public void Initialize(Lazo lazo, IBoost boost)
@@ -71,13 +68,6 @@ namespace Laz
         private void TurnLazoing(bool isOn)
         {
             _lazo.IsLazoing = isOn;
-            if (isOn == false)
-            {
-                if (OnLazoDeactivated != null)
-                {
-                    OnLazoDeactivated();
-                }
-            }
         }
         
         private void OnDestroy()

@@ -36,8 +36,8 @@ namespace Laz
         public LazMovement(ILazMovementProperty movementProperty, Lazo lazo)
         {
             _movementProperty = movementProperty;
-            LazoBehaviour.OnLazoDeactivated += SetSpeedToBaseWhenExitingLazo;
             _lazo = lazo;
+            _lazo.OnLazoDeactivated += SetSpeedToBaseWhenExitingLazo;
             _lazo.OnLazoLimitReached += SetSpeedToBaseWhenExitingLazo;
             Reset();
         }

@@ -36,8 +36,9 @@ namespace Laz
             }
         }
 
-        public event Action<float> OnLazoLimitChanged; 
-        
+        public event Action<float> OnLazoLimitChanged;
+        public event Action OnLazoDeactivated;
+
         public bool IsLazoing
         {
             get => _isLazoing;
@@ -47,6 +48,7 @@ namespace Laz
                 if (!_isLazoing)
                 {
                     Reset();
+                    OnLazoDeactivated();
                     // Debug
                     DebugClearListOfCubes();
                 }
