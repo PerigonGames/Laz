@@ -36,9 +36,9 @@ namespace Laz
         public LazMovement(ILazMovementProperty movementProperty, Lazo lazo)
         {
             _movementProperty = movementProperty;
-            LazoBehaviour.OnLazoDeactivated += LazoDeactivate;
+            LazoBehaviour.OnLazoDeactivated += SetSpeedToBaseWhenExitingLazo;
             _lazo = lazo;
-            _lazo.OnLazoLimitReached += LazoDeactivate;
+            _lazo.OnLazoLimitReached += SetSpeedToBaseWhenExitingLazo;
             Reset();
         }
 
@@ -98,7 +98,7 @@ namespace Laz
             }
         }
 
-        public void LazoDeactivate()
+        public void SetSpeedToBaseWhenExitingLazo()
         {
             if (_currentMaxSpeed == _movementProperty.LazoMaxSpeed)
             {
