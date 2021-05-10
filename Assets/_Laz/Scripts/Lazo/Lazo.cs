@@ -48,7 +48,10 @@ namespace Laz
                 if (!_isLazoing)
                 {
                     Reset();
-                    OnLazoDeactivated();
+                    if (OnLazoDeactivated != null)
+                    {
+                        OnLazoDeactivated();
+                    }
                     // Debug
                     DebugClearListOfCubes();
                 }

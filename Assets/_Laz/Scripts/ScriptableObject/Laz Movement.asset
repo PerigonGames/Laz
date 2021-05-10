@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _acceleration: 3.1
   _deceleration: 0.58
-  _baseMaxSpeed: 5
+  _baseMaxSpeed: 7
   _curvatureRate: 0.049
   _lazMaxSpeed: 13
   _boostTimeLimit: 0.7
