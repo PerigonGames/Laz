@@ -4,16 +4,17 @@ namespace Laz
 {
     public class DoorPuzzleActivateBehaviour : BasePuzzleActivateBehaviour
     {
-        private readonly Vector3 InitializeSize = new Vector3(14, 1, 1);
+        private Vector3 _initializeSize;
         
         public override void Initialize()
         {
+            _initializeSize = transform.localScale;
             Reset();
         }
 
         public override void Reset()
         {
-            transform.localScale = InitializeSize;
+            transform.localScale = _initializeSize;
         }
 
         public override void OnActivated()
