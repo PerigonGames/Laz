@@ -8,6 +8,7 @@ namespace Laz
         float Deceleration { get; }
         float BaseMaxSpeed { get; }
         float BoostSpeed { get; }
+        float LazoMaxSpeed { get; }
         float CurvatureRate { get; }
         float BoostTimeLimit { get; }
     }
@@ -23,12 +24,14 @@ namespace Laz
         [SerializeField]
         [Range(0.005f, 0.1f)]
         private float _curvatureRate = 0.1f;
+        [SerializeField]
+        private float _lazMaxSpeed = 10f;
 
         [Header("Boost Properties")] 
         [SerializeField]
         private float _boostTimeLimit = 2f;
         [SerializeField]
-        private float _boostSpeed = 10f;
+        private float _boostSpeed = 20f;
         
         public float Acceleration => _acceleration;
         public float Deceleration => _deceleration;
@@ -36,5 +39,6 @@ namespace Laz
         public float BoostSpeed => _boostSpeed;
         public float CurvatureRate => _curvatureRate;
         public float BoostTimeLimit => _boostTimeLimit;
+        public float LazoMaxSpeed => _lazMaxSpeed;
     }
 }

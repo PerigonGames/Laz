@@ -15,6 +15,7 @@ namespace Laz
         private IBoost _boost = null;
 
         private float _elapsedCoolDown = 0;
+
         public bool IsLazoing => _lazo.IsLazoing;
         
         public void Initialize(Lazo lazo, IBoost boost)
@@ -57,7 +58,11 @@ namespace Laz
             {
                 _boost.IsBoostActivated = true;
                 TurnLazoing(true);
-            } 
+            }
+            else if (context.canceled && !CanActivateLaz())
+            {
+                TurnLazoing(false);
+            }
         }
 
         private void TurnLazoing(bool isOn)
