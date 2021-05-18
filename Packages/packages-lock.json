@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.perigongames.perigon-tools": {
+      "version": "https://github.com/PerigonGames/PerigonTools.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "d718eeef8ce8ad253772da13ba73efe61fb54dbe"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
