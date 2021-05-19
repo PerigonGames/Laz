@@ -1,3 +1,4 @@
+using PerigonGames;
 using UnityEngine;
 
 namespace Laz
@@ -11,7 +12,7 @@ namespace Laz
 
         public override void OnActivated()
         {
-            transform.localScale = Vector3.one;
+            transform.ResetScale();
         }
 
         public override void Reset()
