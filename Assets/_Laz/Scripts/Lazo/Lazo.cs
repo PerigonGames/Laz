@@ -40,28 +40,9 @@ namespace Laz
         public event Action<float> OnLazoLimitChanged;
         public event Action OnLazoDeactivated;
 
-        public bool IsLazoing
-        {
-            get => _isLazoing;
-            set
-            {
-                _isLazoing = value;
-                if (_isLazoing)
-                {
-                    _boost.IsBoostActivated = true;
-                }
-                else
-                {
-                    Reset();
-                    if (OnLazoDeactivated != null)
-                    {
-                        OnLazoDeactivated();
-                    }
-                    // Debug
-                    DebugClearListOfCubes();
-                }
-            }
-        }
+        public bool IsLazoing => _isLazoing;
+
+
 
         public Lazo(ILazoProperties properties, ILazoWrapped[] wrappableObjects, IBoost boost)
         {
@@ -104,8 +85,27 @@ namespace Laz
 
             RemoveOldestPointIfNeeded(deltaTime);
         }
+        
+        public void SetLazoActive(bool activate)
+        {
+            _isLazoing = activate;
+            if (_isLazoing)
+            {
+                _boost.IsBoostActivated = activate;
+            }
+            else
+            {
+                Reset();
+                if (OnLazoDeactivated != null)
+                {
+                    OnLazoDeactivated();
+                }
+                // Debug
+                DebugClearListOfCubes();
+            }
+        }
 
-        public void DidLazoLimitReached(Vector3 position)
+        public void HandleIfLazoLimitReached(Vector3 position)
         {
             if (_lastPosition == null)
             {
@@ -118,7 +118,7 @@ namespace Laz
             
             if (TravelledDistance <= 0)
             {
-                IsLazoing = false;
+                SetLazoActive(false);
                 _lastPosition = null;
                 if (OnLazoLimitReached != null)
                 {

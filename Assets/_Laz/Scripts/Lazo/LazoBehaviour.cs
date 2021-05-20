@@ -11,9 +11,7 @@ namespace Laz
         [SerializeField] private TrailRenderer _trail = null;
         [SerializeField] private bool TurnOnDebug = false;
         [SerializeField] private Polygon _polygonShape = null;
-
-        private LazMovement _movement = null;
-
+        
         private float _elapsedCoolDown = 0;
 
         public bool IsLazoing => _lazo.IsLazoing;
@@ -61,9 +59,9 @@ namespace Laz
             }
         }
 
-        private void TurnLazoing(bool isOn)
+        private void TurnLazoing(bool active)
         {
-            _lazo.IsLazoing = isOn;
+            _lazo.SetLazoActive(active);
         }
         
         private void OnDestroy()
@@ -79,7 +77,7 @@ namespace Laz
             if (_lazo.IsLazoing)
             {
                 _elapsedCoolDown = _lazo.CoolDown;
-                _lazo.DidLazoLimitReached(transform.position);
+                _lazo.HandleIfLazoLimitReached(transform.position);
                 _lazo.RunLazoIfAble(transform.position, Time.deltaTime);
             }
             else
