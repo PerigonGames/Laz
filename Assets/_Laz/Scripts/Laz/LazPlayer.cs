@@ -13,14 +13,14 @@ namespace Laz
 
         public Vector3 SpawnPosition => _spawnPosition;
 
-        public void Set(ILazMovementProperty movementProperty, Lazo lazo)
+        public void SetMovement(ILazMovementProperty movementProperty, Lazo lazo)
         {
             _lazMovement = new LazMovement(movementProperty, lazo);
         }
 
-        public void Set(ILazoProperties lazoProperties, ILazoWrapped[] objectOfInterest)
+        public void SetLazo(ILazoProperties lazoProperties, ILazoWrapped[] objectOfInterest, IBoost boost)
         {
-            _lazo = new Lazo(lazoProperties, objectOfInterest);
+            _lazo = new Lazo(lazoProperties, objectOfInterest, boost);
         }
 
         public void SetSpawn(Vector3 spawnPosition)

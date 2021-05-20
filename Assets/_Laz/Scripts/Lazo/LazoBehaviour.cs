@@ -12,21 +12,18 @@ namespace Laz
         [SerializeField] private bool TurnOnDebug = false;
         [SerializeField] private Polygon _polygonShape = null;
 
-        private IBoost _boost = null;
+        private LazMovement _movement = null;
 
         private float _elapsedCoolDown = 0;
 
         public bool IsLazoing => _lazo.IsLazoing;
         
-        public void Initialize(Lazo lazo, IBoost boost)
+        public void Initialize(Lazo lazo)
         {            
-            _boost = boost;
-            
             _lazo = lazo;
             _lazo.IsDebugging = TurnOnDebug;
             _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
             _lazo.OnLoopClosed += HandleOnLoopClosed;
-            
             _trail.time = _lazo.TimeToLivePerPoint;
 
         }
@@ -56,7 +53,6 @@ namespace Laz
         {
             if (context.performed && CanActivateLaz())
             {
-                _boost.IsBoostActivated = true;
                 TurnLazoing(true);
             }
             else if (context.canceled && !CanActivateLaz())
