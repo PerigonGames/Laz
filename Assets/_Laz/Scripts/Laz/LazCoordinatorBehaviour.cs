@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Laz
@@ -54,6 +55,7 @@ namespace Laz
         {
             _movementBehaviour.CleanUp();
             _lazoBehaviour.CleanUp();
+            _boostBehaviour.CleanUp();
             transform.position = Vector3.zero;
         }
 
@@ -61,6 +63,7 @@ namespace Laz
         {
             _movementBehaviour.Reset();
             _lazoBehaviour.Reset();
+            _boostBehaviour.Reset();
             transform.position = _lazPlayer.SpawnPosition;
         }
     }

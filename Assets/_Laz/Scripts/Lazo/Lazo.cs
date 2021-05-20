@@ -10,7 +10,7 @@ namespace Laz
     {
         private List<LazoPosition> _listOfPositions = new List<LazoPosition>();
         private ILazoProperties _lazoProperties = null;
-        private ILazoWrapped[] _objectOfInterests = null;
+        private ILazoWrapped[] _wrappableObjects = null;
         private IBoost _boost = null;
         
         private bool _isLazoing = false;
@@ -46,7 +46,7 @@ namespace Laz
 
         public Lazo(ILazoProperties properties, ILazoWrapped[] wrappableObjects, IBoost boost)
         {
-            _objectOfInterests = wrappableObjects ?? new ILazoWrapped[]{};
+            _wrappableObjects = wrappableObjects ?? new ILazoWrapped[]{};
             _lazoProperties = properties;
             _boost = boost;
             Reset();
@@ -91,7 +91,7 @@ namespace Laz
             _isLazoing = activate;
             if (_isLazoing)
             {
-                _boost.IsBoostActivated = activate;
+                _boost.SetBoostActive(activate);
             }
             else
             {
@@ -159,7 +159,7 @@ namespace Laz
                         interest.ActivateLazo();
                     }
                     ResetTravelledDistance();
-                    _boost.IsBoostActivated = true;
+                    _boost.SetBoostActive(true);
                 }
             }
             // Debug
@@ -235,18 +235,19 @@ namespace Laz
             return false;
         }
 
-        private ILazoWrapped[] GetObjectOfInterestsWithin(LazoPosition[] polygon)
+        private ILazoWrapped[] GetObjectOfInterestsWithin(LazoPosition[] lazoPolygon)
         {
             List<ILazoWrapped> listOfObjects = new List<ILazoWrapped>();
-            Vector3[] arrayOfLazoPositions = polygon.Select(position => position.Position).ToArray();
-            foreach (var piece in _objectOfInterests)
+            Vector3[] arrayOfLazoPositions = lazoPolygon.Select(position => position.Position).ToArray();
+            var inactiveWrappableObjects = _wrappableObjects.Where(wrappable => !wrappable.IsActivated);
+            foreach (var piece in inactiveWrappableObjects)
             {
                 if (GeometryUtilities.IsInside(arrayOfLazoPositions, piece.Position))
                 {
                     listOfObjects.Add(piece);
                 }
             }
-        
+
             return listOfObjects.ToArray();
         }
 

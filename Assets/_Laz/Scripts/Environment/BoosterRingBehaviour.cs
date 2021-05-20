@@ -13,7 +13,7 @@ namespace Laz
                 if (laz.IsLazoing)
                 {
                     laz.ResetLazoLimit();
-                    boost.IsBoostActivated = true;
+                    boost.SetBoostActive(true);
                 }
             }
         }
