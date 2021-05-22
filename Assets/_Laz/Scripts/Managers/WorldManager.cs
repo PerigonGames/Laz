@@ -61,8 +61,15 @@ namespace Laz
             
             _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManagerInstance);
             _lazCoordinator.Initialize(laz, _wrappableManager.WrappableObjects);
-            _particleEffectsObjectPooler.Initialize(objectsOfInterest.Length);
-            _puzzleManager.Initialize(_wrappableManager);
+            if (_particleEffectsObjectPooler != null)
+            {
+                _particleEffectsObjectPooler.Initialize(objectsOfInterest.Length);
+            }
+
+            if (_puzzleManager != null)
+            {
+                _puzzleManager.Initialize(_wrappableManager);
+            }
             
             //TODO - placeholder on how to handle the Patrolling objects
             foreach (var patrolItem in _listOfPatrollingWalls)
@@ -71,8 +78,15 @@ namespace Laz
             }
             
             // User Interface
-            _lazoMeter.Initialize(laz.LazoTool);
-            debugUIBehaviour.Initialize(laz.Movement);
+            if (_lazoMeter != null)
+            {
+                _lazoMeter.Initialize(laz.LazoTool);
+            }
+
+            if (debugUIBehaviour != null)
+            {
+                debugUIBehaviour.Initialize(laz.Movement);
+            }
         }
 
         private void OnDestroy()
