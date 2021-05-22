@@ -4,7 +4,8 @@ namespace Laz
 {
     public interface IBoost
     {
-        bool IsBoostActivated { get; set; }
+        bool IsBoostActivated { get; }
+        void SetBoostActive(bool activate);
     }
     
     public class LazBoostBehaviour : MonoBehaviour, IBoost
@@ -13,23 +14,7 @@ namespace Laz
         private float _elapsedBoostTime = 0;
         private bool _isBoostActivated = false;
 
-        public bool IsBoostActivated
-        {
-            get => _isBoostActivated;
-            set
-            {
-                _isBoostActivated = value;
-                ResetBoostTime();
-                if (_isBoostActivated)
-                {
-                    _lazMovement.ActivateBoost();
-                }
-                else
-                {
-                    _lazMovement.DeactivateBoost();
-                }
-            }
-        }
+        public bool IsBoostActivated => _isBoostActivated;
 
         public void Initialize(LazMovement movementProperty)
         {
@@ -46,11 +31,22 @@ namespace Laz
         {
             ResetBoostTime();
         }
+
+        public void SetBoostActive(bool activate)
+        {
+            _isBoostActivated = activate;
+            if (_isBoostActivated)
+            {
+                ResetBoostTime();
+                _lazMovement.ActivateBoost();
+            }
+            else
+            {
+                _lazMovement.DeactivateBoost();
+            }
+        }
         
-        /// <summary>
-        /// Resets the amount of boost time
-        /// </summary>
-        public void ResetBoostTime()
+        private void ResetBoostTime()
         {
             _elapsedBoostTime = _lazMovement.BoostTimeLimit;
         }
@@ -62,7 +58,7 @@ namespace Laz
                 _elapsedBoostTime -= Time.deltaTime;
                 if (_elapsedBoostTime <= 0)
                 {
-                    IsBoostActivated = false;
+                    SetBoostActive(false);
                 }
             }
         }
