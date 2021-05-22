@@ -209,6 +209,17 @@
                     "action": "Lazo",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d24f4131-2fd9-44ab-884f-ddc366fffa26",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Lazo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

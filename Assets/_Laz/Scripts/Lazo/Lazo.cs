@@ -6,12 +6,13 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class Lazo
+    public partial class Lazo
     {
         private List<LazoPosition> _listOfPositions = new List<LazoPosition>();
         private ILazoProperties _lazoProperties = null;
-        private ILazoWrapped[] _objectOfInterests = null;
-
+        private ILazoWrapped[] _wrappableObjects = null;
+        private IBoost _boost = null;
+        
         private bool _isLazoing = false;
         private float _rateOfRecordingTimerElapsed = 0;
         private float _travelledDistance = 0;
@@ -39,29 +40,15 @@ namespace Laz
         public event Action<float> OnLazoLimitChanged;
         public event Action OnLazoDeactivated;
 
-        public bool IsLazoing
-        {
-            get => _isLazoing;
-            set
-            {
-                _isLazoing = value;
-                if (!_isLazoing)
-                {
-                    Reset();
-                    if (OnLazoDeactivated != null)
-                    {
-                        OnLazoDeactivated();
-                    }
-                    // Debug
-                    DebugClearListOfCubes();
-                }
-            }
-        }
+        public bool IsLazoing => _isLazoing;
 
-        public Lazo(ILazoProperties properties, ILazoWrapped[] objectOfInterests)
+
+
+        public Lazo(ILazoProperties properties, ILazoWrapped[] wrappableObjects, IBoost boost)
         {
-            _objectOfInterests = objectOfInterests ?? new ILazoWrapped[]{};
+            _wrappableObjects = wrappableObjects ?? new ILazoWrapped[]{};
             _lazoProperties = properties;
+            _boost = boost;
             Reset();
         }
 
@@ -98,8 +85,27 @@ namespace Laz
 
             RemoveOldestPointIfNeeded(deltaTime);
         }
+        
+        public void SetLazoActive(bool activate)
+        {
+            _isLazoing = activate;
+            if (_isLazoing)
+            {
+                _boost.SetBoostActive(activate);
+            }
+            else
+            {
+                Reset();
+                if (OnLazoDeactivated != null)
+                {
+                    OnLazoDeactivated();
+                }
+                // Debug
+                DebugClearListOfCubes();
+            }
+        }
 
-        public void DidLazoLimitReached(Vector3 position)
+        public void HandleIfLazoLimitReached(Vector3 position)
         {
             if (_lastPosition == null)
             {
@@ -112,7 +118,7 @@ namespace Laz
             
             if (TravelledDistance <= 0)
             {
-                IsLazoing = false;
+                SetLazoActive(false);
                 _lastPosition = null;
                 if (OnLazoLimitReached != null)
                 {
@@ -139,26 +145,28 @@ namespace Laz
 
             if (IsClosedLoop(out var closedOffPosition))
             {
-                var polygon = GetPolygon(closedOffPosition);
+                var closedLoopPolygon = GetClosedLoopPolygon(closedOffPosition);
                 if (OnLoopClosed != null)
                 {
-                    OnLoopClosed(polygon);
+                    OnLoopClosed(closedLoopPolygon);
                 }
                 
-                var objectOfInterests = GetObjectOfInterestsWithin(polygon);
+                var objectOfInterests = GetObjectOfInterestsWithin(closedLoopPolygon);
                 if (!objectOfInterests.IsNullOrEmpty())
                 {
                     foreach (var interest in objectOfInterests)
                     {
                         interest.ActivateLazo();
                     }
+                    ResetTravelledDistance();
+                    _boost.SetBoostActive(true);
                 }
             }
             // Debug
             DebugCreateCubeAt(position);
         }
 
-        private LazoPosition[] GetPolygon(int closedOffPosition)
+        private LazoPosition[] GetClosedLoopPolygon(int closedOffPosition)
         {
             var polygon = new List<LazoPosition>();
             var length = _listOfPositions.Count - closedOffPosition;
@@ -190,8 +198,7 @@ namespace Laz
                 return lazoPosition;
             }).Where(lazoPosition => lazoPosition.TimeToLive > 0).ToList();
         }
-
-
+        
         #region Helper
 
         private void ResetRateOfRecordingTimeElapsed()
@@ -228,18 +235,19 @@ namespace Laz
             return false;
         }
 
-        private ILazoWrapped[] GetObjectOfInterestsWithin(LazoPosition[] polygon)
+        private ILazoWrapped[] GetObjectOfInterestsWithin(LazoPosition[] lazoPolygon)
         {
             List<ILazoWrapped> listOfObjects = new List<ILazoWrapped>();
-            Vector3[] arrayOfLazoPositions = polygon.Select(position => position.Position).ToArray();
-            foreach (var piece in _objectOfInterests)
+            Vector3[] arrayOfLazoPositions = lazoPolygon.Select(position => position.Position).ToArray();
+            var inactiveWrappableObjects = _wrappableObjects.Where(wrappable => !wrappable.IsActivated);
+            foreach (var piece in inactiveWrappableObjects)
             {
                 if (GeometryUtilities.IsInside(arrayOfLazoPositions, piece.Position))
                 {
                     listOfObjects.Add(piece);
                 }
             }
-        
+
             return listOfObjects.ToArray();
         }
 
@@ -249,50 +257,6 @@ namespace Laz
             var posB = new Vector2(positionB.x, positionB.z);
             return Vector2.Distance(posA, posB);
         }
-        #endregion
-
-        #region Debug
-        /*
-         * DEBUG
-         */
-        private List<GameObject> _listOfDebugCubes = new List<GameObject>();
-        
-        public bool IsDebugging { get; set; }
-        private void DebugCreateCubeAt(Vector3 position)
-        {
-            if (!IsDebugging) return;
-            Debug.Log("Number of Cube: "+ _listOfDebugCubes.Count);
-            var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position = position;
-            cube.GetComponent<BoxCollider>().enabled = false;
-            _listOfDebugCubes.Add(cube);
-        }
-
-        private void DebugDestroyLastCubeOnList()
-        {
-            if (!IsDebugging) return;
-            if (_listOfDebugCubes.Count > 0)
-            {
-                var cube = _listOfDebugCubes[0];
-                _listOfDebugCubes.RemoveAt(0);
-                GameObject.Destroy(cube);
-            }
-        }
-
-        private void DebugClearListOfCubes()
-        {
-            if (!IsDebugging) return;
-            if (_listOfDebugCubes.Count > 0)
-            {
-                foreach (var cube in _listOfDebugCubes)
-                {
-                    GameObject.Destroy(cube);
-                }
-
-                _listOfDebugCubes.Clear();
-            }
-        }
-
         #endregion
     }
 }

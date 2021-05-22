@@ -11,22 +11,17 @@ namespace Laz
         [SerializeField] private TrailRenderer _trail = null;
         [SerializeField] private bool TurnOnDebug = false;
         [SerializeField] private Polygon _polygonShape = null;
-
-        private IBoost _boost = null;
-
+        
         private float _elapsedCoolDown = 0;
 
         public bool IsLazoing => _lazo.IsLazoing;
         
-        public void Initialize(Lazo lazo, IBoost boost)
+        public void Initialize(Lazo lazo)
         {            
-            _boost = boost;
-            
             _lazo = lazo;
             _lazo.IsDebugging = TurnOnDebug;
             _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
             _lazo.OnLoopClosed += HandleOnLoopClosed;
-            
             _trail.time = _lazo.TimeToLivePerPoint;
 
         }
@@ -56,7 +51,6 @@ namespace Laz
         {
             if (context.performed && CanActivateLaz())
             {
-                _boost.IsBoostActivated = true;
                 TurnLazoing(true);
             }
             else if (context.canceled && !CanActivateLaz())
@@ -65,9 +59,9 @@ namespace Laz
             }
         }
 
-        private void TurnLazoing(bool isOn)
+        private void TurnLazoing(bool active)
         {
-            _lazo.IsLazoing = isOn;
+            _lazo.SetLazoActive(active);
         }
         
         private void OnDestroy()
@@ -83,7 +77,7 @@ namespace Laz
             if (_lazo.IsLazoing)
             {
                 _elapsedCoolDown = _lazo.CoolDown;
-                _lazo.DidLazoLimitReached(transform.position);
+                _lazo.HandleIfLazoLimitReached(transform.position);
                 _lazo.RunLazoIfAble(transform.position, Time.deltaTime);
             }
             else
