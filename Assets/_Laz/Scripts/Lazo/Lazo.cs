@@ -41,9 +41,7 @@ namespace Laz
         public event Action OnLazoDeactivated;
 
         public bool IsLazoing => _isLazoing;
-
-
-
+        
         public Lazo(ILazoProperties properties, ILazoWrapped[] wrappableObjects, IBoost boost)
         {
             _wrappableObjects = wrappableObjects ?? new ILazoWrapped[]{};

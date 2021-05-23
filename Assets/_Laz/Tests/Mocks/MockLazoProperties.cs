@@ -16,10 +16,10 @@ namespace Tests
             CoolDown = coolDown;
         }
 
-        public float TimeToLivePerPoint { get; }
-        public float RateOfRecordingPosition { get; }
-        public float DistanceLimitOfLazo { get; }
-        public float CoolDown { get; }
+        public float TimeToLivePerPoint { get; set; }
+        public float RateOfRecordingPosition { get; set; }
+        public float DistanceLimitOfLazo { get; set; }
+        public float CoolDown { get; set; }
     }
 }
 

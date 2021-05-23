@@ -14,8 +14,8 @@ namespace Tests
         private LazPlayer _player = new LazPlayer();           
         private ILazoWrapped[] _dummyWrappableObjects = { };
         private LazCoordinatorBehaviour _lazCoordinatorBehaviour = null;
-        private ILazMovementProperty _mockMovement = new MockLazMovement();
-        private ILazoProperties _lazoProperties = new MockLazoProperties();
+        private MockLazMovement _mockMovement = new MockLazMovement();
+        private MockLazoProperties _lazoProperties = new MockLazoProperties();
 
         private Keyboard _keyboard = null;
         
@@ -38,7 +38,7 @@ namespace Tests
             _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
             var originalPosition = Vector3.zero;
             _lazCoordinatorBehaviour.gameObject.transform.position = originalPosition;
-            _player.Set(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects));
+            _player.SetMovement(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects, new MockBoost()));
             _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects);
             Press(_keyboard.aKey);
 
@@ -59,7 +59,7 @@ namespace Tests
             _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
             var originalPosition = Vector3.zero;
             _lazCoordinatorBehaviour.gameObject.transform.position = originalPosition;
-            _player.Set(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects));
+            _player.SetMovement(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects, new MockBoost()));
             _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects);
             
             // When
@@ -82,7 +82,7 @@ namespace Tests
             _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
             var originalPosition = Vector3.zero;
             _lazCoordinatorBehaviour.gameObject.transform.position = originalPosition;
-            _player.Set(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects));
+            _player.SetMovement(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects, new MockBoost()));
             _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects);
             
             // When
@@ -105,7 +105,7 @@ namespace Tests
             _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
             var originalPosition = Vector3.zero;
             _lazCoordinatorBehaviour.gameObject.transform.position = originalPosition;
-            _player.Set(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects));
+            _player.SetMovement(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects, new MockBoost()));
             _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects);
             
             // When
@@ -114,6 +114,33 @@ namespace Tests
             
             // Then
             Assert.Less(_lazCoordinatorBehaviour.gameObject.transform.position.z, originalPosition.z, "Position should be on the left hand side when pressing a");
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_LazMovement_BaseSpeed()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
+            // Given
+            var maxBaseSpeed = 12f;            
+            var originalPosition = Vector3.zero;
+            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
+            _lazCoordinatorBehaviour.gameObject.transform.position = originalPosition;
+            _mockMovement.BaseMaxSpeed = maxBaseSpeed;
+            _player.SetMovement(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects, new MockBoost()));
+            _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects);
+            
+            // When
+            Press(_keyboard.aKey);
+            yield return new WaitForSeconds(0.5f);
+            
+            var actualBaseSpeed = Mathf.Abs(_lazCoordinatorBehaviour.GetComponent<Rigidbody>().velocity.x);
+
+            // Then
+            Assert.AreEqual(actualBaseSpeed, maxBaseSpeed, "Base speed should be 12f");
         }
         
         [UnityTest]
@@ -128,7 +155,7 @@ namespace Tests
             _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
             var originalPosition = Vector3.zero;
             _lazCoordinatorBehaviour.gameObject.transform.position = originalPosition;
-            _player.Set(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects));
+            _player.SetMovement(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects, new MockBoost()));
             _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects);
             
             // When
