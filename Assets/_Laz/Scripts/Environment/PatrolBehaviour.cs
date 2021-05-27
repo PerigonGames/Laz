@@ -18,11 +18,13 @@ namespace Laz
         public void CleanUp()
         {
             transform.position = Vector3.zero;
+            _patrol.CleanUp();
         }
         
         public void Reset()
         {
             transform.position = _patrol.StartingLocation;
+            _patrol.Reset();
         }
 
         private void FixedUpdate()

@@ -25,7 +25,7 @@ namespace Laz
         public Vector3 MoveTowards(Vector3 position, float time)
         {
             var nextPosition = Vector3.MoveTowards(position, (Vector3) _currentDestination, _speed * time);
-            if (position == _currentDestination)
+            if (nextPosition == _currentDestination)
             {
                 GetNextDestination();
             }
