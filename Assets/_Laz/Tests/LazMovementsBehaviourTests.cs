@@ -9,7 +9,7 @@ using UnityEngine.TestTools;
 
 namespace Tests
 {
-    public class LazMovementsTests : InputTestFixture
+    public class LazMovementsBehaviourTests : InputTestFixture
     {
         private LazPlayer _player = new LazPlayer();           
         private ILazoWrapped[] _dummyWrappableObjects = { };

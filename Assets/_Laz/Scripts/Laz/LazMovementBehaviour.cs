@@ -31,7 +31,7 @@ namespace Laz
         private void FixedUpdate()
         {
             _movement.SetSpeedComponent();
-            _movement.DirectionComponent(_rigidbody.velocity.normalized);
+            _movement.UpdateLazTurning(_rigidbody.velocity.normalized);
             UpdateRigidBody();
         }
 

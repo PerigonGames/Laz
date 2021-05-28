@@ -69,7 +69,7 @@ namespace Laz
             }
         }
 
-        public void DirectionComponent(Vector3 normalizedVelocity)
+        public void UpdateLazTurning(Vector3 normalizedVelocity)
         {
             if (_isMovementPressed)
             {
@@ -98,9 +98,9 @@ namespace Laz
             }
         }
 
-        public void SetSpeedToBaseWhenExitingLazo()
+        private void SetSpeedToBaseWhenExitingLazo()
         {
-            if (_currentMaxSpeed == _movementProperty.LazoMaxSpeed)
+            if (Math.Abs(_currentMaxSpeed - _movementProperty.LazoMaxSpeed) < 0.01f)
             {
                 _currentMaxSpeed = _movementProperty.BaseMaxSpeed;
             }
