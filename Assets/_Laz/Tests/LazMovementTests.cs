@@ -179,6 +179,29 @@ namespace Tests
         }
         
         [Test]
+        public void Test_GetVelocity_Upwards_TurnOffLazo_MaxBaseSpeedOf20()
+        {
+            // Arrange
+            var up = new Vector3(0, 0, 1);
+            var expectedBaseMaxSpeed = 20;
+            _mockLazMovement.CurvatureRate = 1f;
+            _mockLazMovement.Acceleration = 100f;
+            _mockLazMovement.BaseMaxSpeed = expectedBaseMaxSpeed;
+            _mockLazMovement.LazoMaxSpeed = 90;
+            _lazo.SetLazoActive(false);
+            var lazMovement = new LazMovement(_mockLazMovement, _lazo);
+            lazMovement.OnMovementPressed(new Vector2(0, 1));
+            lazMovement.UpdateLazTurning(up);
+            
+            // Act
+            lazMovement.DeactivateBoost();
+            lazMovement.SetSpeedComponent();
+            
+            //Assert
+            Assert.AreEqual(new Vector3(0, 0, expectedBaseMaxSpeed), lazMovement.GetVelocity, "Laz should NOT be Lazoing, and at base speed of 20");
+        }
+        
+        [Test]
         public void Test_GetVelocity_Reset()
         {
             // Arrange
@@ -201,6 +224,31 @@ namespace Tests
             
             //Assert
             Assert.AreEqual(new Vector3(0, 0, expectedBaseSpeed), lazMovement.GetVelocity, "Laz Reset should have base max speed");
+        }
+        
+        [Test]
+        public void Test_GetVelocity_CleanUp()
+        {
+            // Arrange
+            var up = new Vector3(0, 0, 1);
+            var expectedBaseSpeed = 20;
+            _mockLazMovement.CurvatureRate = 1f;
+            _mockLazMovement.Acceleration = 100f;
+            _mockLazMovement.BaseMaxSpeed = expectedBaseSpeed;
+            _mockLazMovement.LazoMaxSpeed = 50f;
+            _lazo.SetLazoActive(true);
+            var lazMovement = new LazMovement(_mockLazMovement, _lazo);
+            lazMovement.OnMovementPressed(new Vector2(0, 1));
+            lazMovement.UpdateLazTurning(up);
+            lazMovement.DeactivateBoost();
+            lazMovement.SetSpeedComponent();
+            
+            // Act
+            lazMovement.CleanUp();
+            
+            //Assert
+            Assert.AreEqual(Vector3.zero, lazMovement.GetVelocity, "Clean Up should make Velocity 0 out");
+            Assert.AreEqual(Vector3.zero, lazMovement.GetCurrentDirection, "Clean Up should Current Direction 0");
         }
         
         [Test]
