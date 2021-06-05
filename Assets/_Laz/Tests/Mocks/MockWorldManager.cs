@@ -7,6 +7,10 @@ namespace Tests
     {
         [SerializeField] private LazCoordinatorBehaviour _coordinatorBehaviour = null;
         [SerializeField] private PatrolBehaviour _patrolBehaviour = null;
+        [SerializeField] private PlanetoidBehaviour _planetoidBehaviour = null;
+
+        public ILazoWrapped Wrappable => _planetoidBehaviour.PlanetoidModel;
+        
         private void Awake()
         {
             var player = new LazPlayer();
@@ -19,7 +23,11 @@ namespace Tests
             {
                 _patrolBehaviour.Initialize();
             }
-            
+
+            if (_planetoidBehaviour != null)
+            {
+                _planetoidBehaviour.Initialize();
+            }
         }
     }
 

@@ -60,10 +60,14 @@ namespace Laz
 
         private void PlayExplosion()
         {
-            var explosion = ParticleEffectsObjectPooler.Instance.PopPooledObject(ParticleSystemObjectPoolTag.PlanetoidExplosion);
-            explosion.gameObject.SetActive(true);
-            explosion.transform.position = transform.position;
-            explosion.Play();
+            if (ParticleEffectsObjectPooler.Instance != null)
+            {
+                var explosion = ParticleEffectsObjectPooler.Instance.PopPooledObject(ParticleSystemObjectPoolTag.PlanetoidExplosion);
+                explosion.gameObject.SetActive(true);
+                explosion.transform.position = transform.position;
+                explosion.Play();
+            }
+            
         }
 
     }
