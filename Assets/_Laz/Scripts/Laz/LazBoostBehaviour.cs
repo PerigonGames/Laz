@@ -34,6 +34,11 @@ namespace Laz
 
         public void SetBoostActive(bool activate)
         {
+            if (_isBoostActivated == activate)
+            {
+                return;
+            }
+            
             _isBoostActivated = activate;
             if (_isBoostActivated)
             {
@@ -53,7 +58,7 @@ namespace Laz
         
         private void Update()
         {
-            if (IsBoostActivated)
+            if (_isBoostActivated)
             {
                 _elapsedBoostTime -= Time.deltaTime;
                 if (_elapsedBoostTime <= 0)
