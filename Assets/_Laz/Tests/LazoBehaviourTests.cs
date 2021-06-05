@@ -51,10 +51,7 @@ namespace Tests
             _mockMovement.BaseMaxSpeed = 20f;
             _mockMovement.LazoMaxSpeed = 20f;
             _mockMovement.BoostSpeed = 20f;
-            _lazCoordinatorBehaviour.Initialize(_player, dummyWrappableObjects);
-            var lazo = new Lazo(_lazoProperties, dummyWrappableObjects, new MockBoost());
-            _player.SetLazo(_lazoProperties, dummyWrappableObjects, new MockBoost());
-            _player.SetMovement(_mockMovement, lazo);
+            _lazCoordinatorBehaviour.Initialize(_player, dummyWrappableObjects, _mockMovement, _lazoProperties);
 
 
             // Then
@@ -73,7 +70,7 @@ namespace Tests
             Release(_keyboard.sKey);
             
             Press(_keyboard.dKey);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.9f);
             Release(_keyboard.dKey);
             
             Press(_keyboard.wKey);
@@ -105,11 +102,7 @@ namespace Tests
             _mockMovement.BaseMaxSpeed = 20f;
             _mockMovement.LazoMaxSpeed = 20f;
             _mockMovement.BoostSpeed = 20f;
-            _lazCoordinatorBehaviour.Initialize(_player, dummyWrappableObjects);
-            var lazo = new Lazo(_lazoProperties, dummyWrappableObjects, new MockBoost());
-            _player.SetLazo(_lazoProperties, dummyWrappableObjects, new MockBoost());
-            _player.SetMovement(_mockMovement, lazo);
-
+            _lazCoordinatorBehaviour.Initialize(_player, dummyWrappableObjects, _mockMovement, _lazoProperties);
 
             // Then
             Press(_keyboard.spaceKey);
@@ -155,15 +148,11 @@ namespace Tests
             _lazCoordinatorBehaviour.gameObject.transform.position = new Vector3(5, 0, 0);
 
             _lazoProperties.DistanceLimitOfLazo = 0.5f;
-            _mockMovement.BaseMaxSpeed = 20f;
-            _mockMovement.LazoMaxSpeed = 20f;
-            _mockMovement.BoostSpeed = 20f;
-            _lazCoordinatorBehaviour.Initialize(_player, dummyWrappableObjects);
-            var lazo = new Lazo(_lazoProperties, dummyWrappableObjects, new MockBoost());
-            _player.SetLazo(_lazoProperties, dummyWrappableObjects, new MockBoost());
-            _player.SetMovement(_mockMovement, lazo);
-
-
+            _mockMovement.BaseMaxSpeed = 1;
+            _mockMovement.LazoMaxSpeed = 1;
+            _mockMovement.BoostSpeed = 1;
+            _lazCoordinatorBehaviour.Initialize(_player, dummyWrappableObjects, _mockMovement, _lazoProperties);
+            
             // Then
             Press(_keyboard.spaceKey);
             
@@ -171,6 +160,47 @@ namespace Tests
             yield return new WaitForSeconds(2f);
             
             Assert.IsFalse(_player.LazoTool.IsLazoing);
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_LazoReset()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
+            // When
+            var worldManager = GameObject.FindObjectOfType<MockWorldManager>();
+            var planetoid = GameObject.FindObjectOfType<PlanetoidBehaviour>();
+
+            var dummyWrappableObjects = new[] { worldManager.Wrappable };
+            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
+            
+            planetoid.gameObject.transform.position = new Vector3(-5, 0, 0);
+            _lazCoordinatorBehaviour.gameObject.transform.position = new Vector3(5, 0, 0);
+
+            _lazoProperties.DistanceLimitOfLazo = 5;
+            _mockMovement.Acceleration = 1f;
+            _lazCoordinatorBehaviour.Initialize(_player, dummyWrappableObjects, _mockMovement, _lazoProperties);
+            var lazoBehaviour = _lazCoordinatorBehaviour.GetComponent<LazoBehaviour>();
+
+
+            // Then
+            Press(_keyboard.spaceKey);
+            
+            Press(_keyboard.wKey);
+            yield return new WaitForSeconds(0.1f);
+            lazoBehaviour.ResetLazoLimit();
+            yield return new WaitForSeconds(0.1f);
+            lazoBehaviour.ResetLazoLimit();
+            yield return new WaitForSeconds(0.1f);
+            lazoBehaviour.ResetLazoLimit();
+            yield return new WaitForSeconds(0.1f);
+            lazoBehaviour.ResetLazoLimit();
+            yield return new WaitForEndOfFrame();
+            
+            Assert.IsTrue(_player.LazoTool.IsLazoing);
         }
     }
     
