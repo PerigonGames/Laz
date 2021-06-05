@@ -65,3 +65,4 @@ Assets/Doozy/Engine/Resources/DoozySettings.asset.meta
 Assets/SoundManagerPro/Scripts/Extensions/*.meta
 ProjectSettings/Packages/com.unity.probuilder/Settings.json
 ProjectSettings/Packages/com.unity.progrids/Settings.json
+CodeCoverage/*

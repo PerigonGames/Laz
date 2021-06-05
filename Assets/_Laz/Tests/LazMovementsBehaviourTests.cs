@@ -130,8 +130,7 @@ namespace Tests
             _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
             _lazCoordinatorBehaviour.gameObject.transform.position = originalPosition;
             _mockMovement.BaseMaxSpeed = maxBaseSpeed;
-            _player.SetMovement(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects, new MockBoost()));
-            _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects);
+            _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects, _mockMovement);
             
             // When
             Press(_keyboard.aKey);
