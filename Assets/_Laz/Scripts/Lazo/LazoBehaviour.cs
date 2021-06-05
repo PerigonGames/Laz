@@ -49,7 +49,7 @@ namespace Laz
         /// <param name="context"></param>
         public void OnLazoPressed(InputAction.CallbackContext context)
         {
-            if (context.performed && CanActivateLaz())
+            if (context.started && CanActivateLaz())
             {
                 TurnLazoing(true);
             }
