@@ -135,6 +135,43 @@ namespace Tests
             
             Assert.IsFalse(planetoid.IsActivated);
         }
+        
+        [UnityTest]
+        public IEnumerator Test_Lazo_IsLazoingLimited()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
+            // When
+            var worldManager = GameObject.FindObjectOfType<MockWorldManager>();
+            var planetoid = GameObject.FindObjectOfType<PlanetoidBehaviour>();
+
+            var dummyWrappableObjects = new[] { worldManager.Wrappable };
+            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
+            
+            planetoid.gameObject.transform.position = new Vector3(-5, 0, 0);
+            _lazCoordinatorBehaviour.gameObject.transform.position = new Vector3(5, 0, 0);
+
+            _lazoProperties.DistanceLimitOfLazo = 0.5f;
+            _mockMovement.BaseMaxSpeed = 20f;
+            _mockMovement.LazoMaxSpeed = 20f;
+            _mockMovement.BoostSpeed = 20f;
+            _lazCoordinatorBehaviour.Initialize(_player, dummyWrappableObjects);
+            var lazo = new Lazo(_lazoProperties, dummyWrappableObjects, new MockBoost());
+            _player.SetLazo(_lazoProperties, dummyWrappableObjects, new MockBoost());
+            _player.SetMovement(_mockMovement, lazo);
+
+
+            // Then
+            Press(_keyboard.spaceKey);
+            
+            Press(_keyboard.wKey);
+            yield return new WaitForSeconds(2f);
+            
+            Assert.IsFalse(_player.LazoTool.IsLazoing);
+        }
     }
     
 
