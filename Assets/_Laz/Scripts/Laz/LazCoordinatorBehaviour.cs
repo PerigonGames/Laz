@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Laz
@@ -11,13 +10,19 @@ namespace Laz
         [SerializeField] 
         private LazoPropertiesScriptableObject _lazoScriptableObject = null;
 
+        private ILazMovementProperty _movementProperties = null;
+        private ILazoProperties _lazoProperties = null;
+        
         private LazPlayer _lazPlayer = null;
         private LazMovementBehaviour _movementBehaviour = null;
         private LazoBehaviour _lazoBehaviour = null;
         private LazModelBehavior _modelBehaviour = null;
         private LazBoostBehaviour _boostBehaviour = null;
 
-        public void Initialize(LazPlayer lazPlayer, ILazoWrapped[] objectOfInterests)
+        public void Initialize(LazPlayer lazPlayer, 
+            ILazoWrapped[] objectOfInterests, 
+            ILazMovementProperty movementProperty = null,
+            ILazoProperties lazoProperties = null)
         {
             _lazPlayer = lazPlayer;
             
@@ -41,17 +46,18 @@ namespace Laz
                 Debug.LogError("Laz missing LazBoostBehaviour");
             }
 
-            lazPlayer.SetSpawn(transform.position);
-            lazPlayer.SetLazo(_lazoScriptableObject, objectOfInterests, _boostBehaviour);
-            if (lazPlayer.Movement == null)
-            {
-                lazPlayer.SetMovement(_movementPropertyScriptableObject, lazPlayer.LazoTool);
-            }
+            _lazPlayer.SetSpawn(transform.position);
+
+            _lazoProperties = lazoProperties ?? _lazoScriptableObject;
+            _lazPlayer.SetLazo(_lazoProperties, objectOfInterests, _boostBehaviour);
+
+            _movementProperties = movementProperty ?? _movementPropertyScriptableObject;
+            _lazPlayer.SetMovement(_movementProperties, lazPlayer.LazoTool);
             
-            _movementBehaviour.Initialize(lazPlayer.Movement);
-            _boostBehaviour.Initialize(lazPlayer.Movement);
-            _lazoBehaviour.Initialize(lazPlayer.LazoTool);
-            _modelBehaviour.Initialize(lazPlayer.Movement);
+            _movementBehaviour.Initialize(_lazPlayer.Movement);
+            _boostBehaviour.Initialize(_lazPlayer.Movement);
+            _lazoBehaviour.Initialize(_lazPlayer.LazoTool);
+            _modelBehaviour.Initialize(_lazPlayer.Movement);
         }
 
         public void CleanUp()

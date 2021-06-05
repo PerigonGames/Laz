@@ -38,14 +38,14 @@ namespace Tests
             }
             var originalPosition = Vector3.zero;
             var expectedBoostSpeed = 30f;
-
+            
             _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
             _lazCoordinatorBehaviour.gameObject.transform.position = originalPosition;
             _mockMovement.BoostSpeed = expectedBoostSpeed;
             _mockMovement.Acceleration = 100f;
             _mockMovement.BoostTimeLimit = 100f;
-            _player.SetMovement(_mockMovement, new Lazo(_lazoProperties, _dummyWrappableObjects, new MockBoost()));
-            _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects);
+            _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects, _mockMovement);
+
             
             Press(_keyboard.aKey);
             Press(_mouse.leftButton);
@@ -71,18 +71,15 @@ namespace Tests
             _mockMovement.BoostTimeLimit = 0.5f;
             _mockMovement.LazoMaxSpeed = expectedLazoSpeed;
             _mockMovement.BaseMaxSpeed = 7f;
-            _lazoProperties.DistanceLimitOfLazo = 10f;
-            var lazo = new Lazo(_lazoProperties, _dummyWrappableObjects, new MockBoost());
-            lazo.SetLazoActive(true);
-            _player.SetMovement(_mockMovement, lazo);
-            _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects);
+            _lazoProperties.DistanceLimitOfLazo = float.MaxValue;
+            _lazCoordinatorBehaviour.Initialize(_player, _dummyWrappableObjects, _mockMovement, _lazoProperties);
             
             Press(_keyboard.aKey);
             Press(_mouse.leftButton);
 
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(2f);
             var actualBoostSpeed = Mathf.Abs(_lazCoordinatorBehaviour.GetComponent<Rigidbody>().velocity.x);
-            Assert.AreEqual(expectedLazoSpeed, actualBoostSpeed);
+            Assert.AreEqual(expectedLazoSpeed, actualBoostSpeed , "Laz's Speed after boost should go back to Lazo max Speed");
         }
     }
 }
