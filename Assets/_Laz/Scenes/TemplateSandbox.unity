@@ -498,10 +498,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5649099572315790319, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
-      propertyPath: TurnOnDebug
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5649099572315790319, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
       propertyPath: _polygonShape
       value: 
       objectReference: {fileID: 337468964}
@@ -2311,7 +2307,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!114 &1624448159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2709,6 +2705,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2802407378405587862, guid: aa407513b5fd34029bb68c154800a4c6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 18c1771d450cf9c4cb7629e4a94f9a40, type: 2}
     - target: {fileID: 3063810068241233573, guid: aa407513b5fd34029bb68c154800a4c6, type: 3}
       propertyPath: _patrolLocations.Array.size
       value: 3
