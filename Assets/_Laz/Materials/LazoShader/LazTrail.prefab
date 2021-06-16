@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 721665432220068399}
   - component: {fileID: 721665432220068398}
   m_Layer: 0
-  m_Name: Laser
+  m_Name: LazTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
