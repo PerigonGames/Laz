@@ -12,7 +12,6 @@ public class BuildScript : MonoBehaviour
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
         // TODO: Update which scenes need to be built
         buildPlayerOptions.scenes = new[] { "Assets/_Laz/Scenes/Gym.unity" };
-        buildPlayerOptions.locationPathName = "windowsBuild";
         buildPlayerOptions.target = BuildTarget.StandaloneWindows64;
         buildPlayerOptions.options = BuildOptions.None;
 
