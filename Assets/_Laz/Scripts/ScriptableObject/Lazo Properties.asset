@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Lazo Properties
   m_EditorClassIdentifier: 
   _timeToLivePerPoint: 15
-  _rateOfRecordingPosition: 0.25
+  _rateOfRecordingPosition: 0.05
   _distanceLimitOfLazo: 50
   _coolDown: 0.36
