@@ -275,7 +275,7 @@ namespace Tests
         [Test]
         public void Test_Fail()
         {
-            Assert.IsFalse(false);
+            Assert.IsFalse(true);
         }
     } 
 }
