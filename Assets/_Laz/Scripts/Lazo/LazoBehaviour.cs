@@ -1,6 +1,5 @@
 using System.Linq;
 using Shapes;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,11 +7,13 @@ namespace Laz
 {
     public class LazoBehaviour : MonoBehaviour
     {
-        private Lazo _lazo;
+        private const string ShaderPropertyAlpha = "_Alpha";
+        
         [SerializeField] private LineRenderer _lazoLineRenderer = null;
         [SerializeField] private bool TurnOnDebug = false;
         [SerializeField] private Polygon _polygonShape = null;
         
+        private Lazo _lazo;
         private float _elapsedCoolDown = 0;
 
         public bool IsLazoing => _lazo.IsLazoing;
@@ -76,7 +77,12 @@ namespace Laz
                 TurnLazoing(false);
             }
         }
-        
+
+        private void Awake()
+        {
+            SetWholeLazoLoopAlpha(1f);
+        }
+
         private void OnDestroy()
         {
             _lazo.OnLazoLimitReached -= HandleOnLazoLimitReached;
@@ -121,12 +127,18 @@ namespace Laz
         private void HandleOnLazoLimitReached()
         {
             ///ClearLineRenderer();
+            
         }
 
         private void HandleOnLazoPositionAdded(Vector3[] positions)
         {
             _lazoLineRenderer.positionCount = positions.Length;
             _lazoLineRenderer.SetPositions(positions);
+        }
+
+        private void SetWholeLazoLoopAlpha(float alpha)
+        {
+            _lazoLineRenderer.material.SetFloat(ShaderPropertyAlpha, alpha);
         }
         #endregion
 

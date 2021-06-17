@@ -36,10 +36,14 @@ namespace Laz
             {
                 if (item.PuzzleWrappableItems.Contains(null))
                 {
-                    Debug.LogError("Empty Puzzle Wrappable items Within the Puzzle Manager");
+                    Debug.LogWarning("Empty Puzzle Wrappable items Within the Puzzle Manager");
                 }
 
-                item.OnLazoWrappedItem.Initialize();
+                var wrappedItem = item.OnLazoWrappedItem;
+                if (wrappedItem != null)
+                {
+                    wrappedItem.Initialize();
+                }
             }
         }
 

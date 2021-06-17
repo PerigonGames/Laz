@@ -746,10 +746,6 @@ PrefabInstance:
       propertyPath: _polygonShape
       value: 
       objectReference: {fileID: 337468964}
-    - target: {fileID: 5649099572315790319, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
-      propertyPath: _lazoLineRenderer
-      value: 
-      objectReference: {fileID: 1000668674}
     - target: {fileID: 6610365341234808042, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -4134,11 +4130,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
   m_PrefabInstance: {fileID: 826169421}
-  m_PrefabAsset: {fileID: 0}
---- !u!120 &1000668674 stripped
-LineRenderer:
-  m_CorrespondingSourceObject: {fileID: 6301279925122541434, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
-  m_PrefabInstance: {fileID: 199378473}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1001906129
 PrefabInstance:
