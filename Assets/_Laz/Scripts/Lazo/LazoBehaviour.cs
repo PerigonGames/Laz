@@ -74,6 +74,7 @@ namespace Laz
             materialTween = _lazoLineRenderer.material.DOFloat(0, ShaderPropertyAlpha, 0.25f);
             materialTween.OnComplete(() =>
             {
+                SetWholeLazoLoopAlpha(1);
                 _lazoLineRenderer.positionCount = 0;
             });
         }
