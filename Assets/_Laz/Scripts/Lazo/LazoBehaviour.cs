@@ -11,6 +11,7 @@ namespace Laz
         private const string ShaderPropertyAlpha = "_Alpha";
         
         [SerializeField] private LineRenderer _lazoLineRenderer = null;
+        [SerializeField] private ParticleSystem _lazoSparkleParticleSystem = null;
         [SerializeField] private bool TurnOnDebug = false;
         [SerializeField] private Polygon _polygonShape = null;
         
@@ -27,7 +28,7 @@ namespace Laz
             _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
             _lazo.OnLoopClosed += HandleOnLoopClosed;
             _lazo.OnListOfLazoPositionsChanged += HandleOnListOfLazoPositionsChanged;
-            ClearLineRenderer();
+            ClearLazoTrail();
         }
 
         public void ResetLazoLimit()
@@ -51,10 +52,11 @@ namespace Laz
             if (active)
             {
                 SetWholeLazoLoopAlpha(1);
+                _lazoSparkleParticleSystem.Play();
             }
             else
             {
-                ClearLineRenderer();
+                ClearLazoTrail();
             }
             
             _lazo.SetLazoActive(active);
@@ -65,9 +67,11 @@ namespace Laz
             return _elapsedCoolDown <= 0;
         }
 
-        private void ClearLineRenderer()
+        private void ClearLazoTrail()
         {
-            materialTween = _lazoLineRenderer.material.DOFloat(0, ShaderPropertyAlpha, 0.5f);
+            _lazoSparkleParticleSystem.Clear();
+            
+            materialTween = _lazoLineRenderer.material.DOFloat(0, ShaderPropertyAlpha, 0.25f);
             materialTween.OnComplete(() =>
             {
                 _lazoLineRenderer.positionCount = 0;
@@ -114,6 +118,7 @@ namespace Laz
             }
             else
             {
+                _lazoSparkleParticleSystem.Clear();
                 _elapsedCoolDown -= Time.deltaTime;
             }
         }
@@ -137,7 +142,7 @@ namespace Laz
             {
                 _polygonShape.points.Clear();
                 _polygonShape.meshOutOfDate = true;
-                ClearLineRenderer();
+                ClearLazoTrail();
                 var allPositions = positions.Select(lazoPosition => new Vector2(lazoPosition.Position.x, lazoPosition.Position.z)).ToList();
                 foreach (var position in allPositions)
                 {
@@ -148,7 +153,7 @@ namespace Laz
 
         private void HandleOnLazoLimitReached()
         {
-            ClearLineRenderer();
+            ClearLazoTrail();
         }
 
         private void HandleOnListOfLazoPositionsChanged(Vector3[] positions)
