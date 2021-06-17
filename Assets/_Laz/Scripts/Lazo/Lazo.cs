@@ -184,6 +184,10 @@ namespace Laz
             return polygon.ToArray();
         }
 
+
+        
+        #region Helper
+        
         private void RemoveOldestPointIfNeeded(float deltaTime)
         {
             _listOfPositions = _listOfPositions.Select(lazoPosition =>
@@ -196,13 +200,17 @@ namespace Laz
                 }
                 return lazoPosition;
             }).Where(lazoPosition => lazoPosition.TimeToLive > 0).ToList();
+            OnLazoPositionsChanged();
         }
-        
-        #region Helper
 
         private void AddToListOfLazoPositions(LazoPosition position)
         {
             _listOfPositions.Add(position);
+            OnLazoPositionsChanged();
+        }
+
+        private void OnLazoPositionsChanged()
+        {
             if (OnLazoPositionAdded != null)
             {
                 OnLazoPositionAdded(_listOfPositions.Select(x => x.Position).Reverse().ToArray());

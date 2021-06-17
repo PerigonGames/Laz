@@ -57,7 +57,7 @@ namespace Laz
 
         private void ClearLineRenderer()
         {
-            _lazoLineRenderer.SetPositions(new Vector3[] { });
+            _lazoLineRenderer.positionCount = 0;
         }
         
         #region Mono
@@ -126,8 +126,7 @@ namespace Laz
 
         private void HandleOnLazoLimitReached()
         {
-            ///ClearLineRenderer();
-            
+            ClearLineRenderer();
         }
 
         private void HandleOnLazoPositionAdded(Vector3[] positions)
