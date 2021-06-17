@@ -1,5 +1,6 @@
 using System.Linq;
 using Shapes;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +9,7 @@ namespace Laz
     public class LazoBehaviour : MonoBehaviour
     {
         private Lazo _lazo;
-        [SerializeField] private TrailRenderer _trail = null;
+        [SerializeField] private LineRenderer _lazoLineRenderer = null;
         [SerializeField] private bool TurnOnDebug = false;
         [SerializeField] private Polygon _polygonShape = null;
         
@@ -22,8 +23,9 @@ namespace Laz
             _lazo.IsDebugging = TurnOnDebug;
             _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
             _lazo.OnLoopClosed += HandleOnLoopClosed;
-            _trail.time = _lazo.TimeToLivePerPoint;
-
+            _lazo.OnLazoPositionAdded += HandleOnLazoPositionAdded;
+            ClearLineRenderer();
+            //_trail.time = _lazo.TimeToLivePerPoint;
         }
 
         public void ResetLazoLimit()
@@ -41,7 +43,23 @@ namespace Laz
         {
             _lazo.Reset();
         }
+
+        private void TurnLazoing(bool active)
+        {
+            _lazo.SetLazoActive(active);
+        }
         
+        private bool CanActivateLaz()
+        {
+            return _elapsedCoolDown <= 0;
+        }
+
+        private void ClearLineRenderer()
+        {
+            _lazoLineRenderer.SetPositions(new Vector3[] { });
+        }
+        
+        #region Mono
         /// <summary>
         /// USED IN INSPECTOR
         /// Fire from player input in the Inspector
@@ -58,11 +76,6 @@ namespace Laz
                 TurnLazoing(false);
             }
         }
-
-        private void TurnLazoing(bool active)
-        {
-            _lazo.SetLazoActive(active);
-        }
         
         private void OnDestroy()
         {
@@ -73,7 +86,7 @@ namespace Laz
 
         private void Update()
         {
-            _trail.emitting = _lazo.IsLazoing;
+            //_trail.emitting = _lazo.IsLazoing;
             if (_lazo.IsLazoing)
             {
                 _elapsedCoolDown = _lazo.CoolDown;
@@ -83,14 +96,10 @@ namespace Laz
             else
             {
                 _elapsedCoolDown -= Time.deltaTime;
-                _trail.Clear();
+                ClearLineRenderer();
             }
         }
-
-        private bool CanActivateLaz()
-        {
-            return _elapsedCoolDown <= 0;
-        }
+        #endregion
         
         #region Delegate
 
@@ -100,7 +109,7 @@ namespace Laz
             {
                 _polygonShape.points.Clear();
                 _polygonShape.meshOutOfDate = true;
-                _trail.Clear();
+                ClearLineRenderer();
                 var allPositions = positions.Select(lazoPosition => new Vector2(lazoPosition.Position.x, lazoPosition.Position.z)).ToList();
                 foreach (var position in allPositions)
                 {
@@ -111,7 +120,13 @@ namespace Laz
 
         private void HandleOnLazoLimitReached()
         {
-            _trail.Clear();
+            ///ClearLineRenderer();
+        }
+
+        private void HandleOnLazoPositionAdded(Vector3[] positions)
+        {
+            _lazoLineRenderer.positionCount = positions.Length;
+            _lazoLineRenderer.SetPositions(positions);
         }
         #endregion
 

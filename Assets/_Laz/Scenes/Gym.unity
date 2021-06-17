@@ -743,13 +743,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5649099572315790319, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
-      propertyPath: TurnOnDebug
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5649099572315790319, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
       propertyPath: _polygonShape
       value: 
       objectReference: {fileID: 337468964}
+    - target: {fileID: 5649099572315790319, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
+      propertyPath: _lazoLineRenderer
+      value: 
+      objectReference: {fileID: 1000668674}
     - target: {fileID: 6610365341234808042, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -2813,10 +2813,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4566986516486138425}
-  - {fileID: 648767639}
-  - {fileID: 1151053891}
-  - {fileID: 1876977967}
-  - {fileID: 60669495}
   - {fileID: 307642954}
   - {fileID: 1585815272}
   - {fileID: 1413500183}
@@ -2844,7 +2840,9 @@ Transform:
   - {fileID: 335126351}
   - {fileID: 216730474}
   - {fileID: 899343921}
+  - {fileID: 119909375}
   - {fileID: 966780113}
+  - {fileID: 648767639}
   - {fileID: 375185933}
   - {fileID: 1707009324}
   - {fileID: 1071999998}
@@ -2852,9 +2850,11 @@ Transform:
   - {fileID: 1961233085}
   - {fileID: 478970893}
   - {fileID: 1638701184}
+  - {fileID: 1151053891}
   - {fileID: 553246984}
+  - {fileID: 1876977967}
   - {fileID: 1018206302}
-  - {fileID: 119909375}
+  - {fileID: 60669495}
   - {fileID: 990589233}
   - {fileID: 658534649}
   m_Father: {fileID: 0}
@@ -4134,6 +4134,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
   m_PrefabInstance: {fileID: 826169421}
+  m_PrefabAsset: {fileID: 0}
+--- !u!120 &1000668674 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 6301279925122541434, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
+  m_PrefabInstance: {fileID: 199378473}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1001906129
 PrefabInstance:

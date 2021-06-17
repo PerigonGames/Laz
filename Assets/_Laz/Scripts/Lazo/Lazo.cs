@@ -36,11 +36,13 @@ namespace Laz
                 }
             }
         }
+        
+        public bool IsLazoing => _isLazoing;
 
         public event Action<float> OnLazoLimitChanged;
         public event Action OnLazoDeactivated;
+        public event Action<Vector3[]> OnLazoPositionAdded;
 
-        public bool IsLazoing => _isLazoing;
         
         public Lazo(ILazoProperties properties, ILazoWrapped[] wrappableObjects, IBoost boost)
         {
@@ -138,8 +140,7 @@ namespace Laz
                 return;
             }
 
-            var lazoPosition = new LazoPosition(_lazoProperties.TimeToLivePerPoint, position);
-            _listOfPositions.Add(lazoPosition);
+            AddToListOfLazoPositions(new LazoPosition(_lazoProperties.TimeToLivePerPoint, position));
 
             if (IsClosedLoop(out var closedOffPosition))
             {
@@ -198,6 +199,15 @@ namespace Laz
         }
         
         #region Helper
+
+        private void AddToListOfLazoPositions(LazoPosition position)
+        {
+            _listOfPositions.Add(position);
+            if (OnLazoPositionAdded != null)
+            {
+                OnLazoPositionAdded(_listOfPositions.Select(x => x.Position).Reverse().ToArray());
+            }
+        }
 
         private void ResetRateOfRecordingTimeElapsed()
         {
