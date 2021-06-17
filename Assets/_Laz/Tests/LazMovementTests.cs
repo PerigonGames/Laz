@@ -271,6 +271,12 @@ namespace Tests
             //Assert
             Assert.AreEqual(Vector3.zero, lazMovement.GetVelocity, "Laz should be moving UP, at speed of 30");
         }
+        
+        [Test]
+        public void Test_Fail()
+        {
+            Assert.IsFalse(false);
+        }
     } 
 }
 
