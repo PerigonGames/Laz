@@ -41,7 +41,7 @@ namespace Laz
 
         public event Action<float> OnLazoLimitChanged;
         public event Action OnLazoDeactivated;
-        public event Action<Vector3[]> OnLazoPositionAdded;
+        public event Action<Vector3[]> OnListOfLazoPositionsChanged;
 
         
         public Lazo(ILazoProperties properties, ILazoWrapped[] wrappableObjects, IBoost boost)
@@ -211,9 +211,9 @@ namespace Laz
 
         private void OnLazoPositionsChanged()
         {
-            if (OnLazoPositionAdded != null)
+            if (OnListOfLazoPositionsChanged != null)
             {
-                OnLazoPositionAdded(_listOfPositions.Select(x => x.Position).Reverse().ToArray());
+                OnListOfLazoPositionsChanged(_listOfPositions.Select(x => x.Position).Reverse().ToArray());
             }
         }
 

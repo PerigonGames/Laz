@@ -1,4 +1,5 @@
 using System.Linq;
+using DG.Tweening;
 using Shapes;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,6 +16,7 @@ namespace Laz
         
         private Lazo _lazo;
         private float _elapsedCoolDown = 0;
+        private Tweener materialTween;
 
         public bool IsLazoing => _lazo.IsLazoing;
         
@@ -24,9 +26,8 @@ namespace Laz
             _lazo.IsDebugging = TurnOnDebug;
             _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
             _lazo.OnLoopClosed += HandleOnLoopClosed;
-            _lazo.OnLazoPositionAdded += HandleOnLazoPositionAdded;
+            _lazo.OnListOfLazoPositionsChanged += HandleOnListOfLazoPositionsChanged;
             ClearLineRenderer();
-            //_trail.time = _lazo.TimeToLivePerPoint;
         }
 
         public void ResetLazoLimit()
@@ -47,6 +48,15 @@ namespace Laz
 
         private void TurnLazoing(bool active)
         {
+            if (active)
+            {
+                SetWholeLazoLoopAlpha(1);
+            }
+            else
+            {
+                ClearLineRenderer();
+            }
+            
             _lazo.SetLazoActive(active);
         }
         
@@ -57,7 +67,11 @@ namespace Laz
 
         private void ClearLineRenderer()
         {
-            _lazoLineRenderer.positionCount = 0;
+            materialTween = _lazoLineRenderer.material.DOFloat(0, ShaderPropertyAlpha, 0.5f);
+            materialTween.OnComplete(() =>
+            {
+                _lazoLineRenderer.positionCount = 0;
+            });
         }
         
         #region Mono
@@ -87,24 +101,32 @@ namespace Laz
         {
             _lazo.OnLazoLimitReached -= HandleOnLazoLimitReached;
             _lazo.OnLoopClosed -= HandleOnLoopClosed;
+            _lazo.OnListOfLazoPositionsChanged -= HandleOnListOfLazoPositionsChanged;
             _lazo = null;
         }
 
         private void Update()
         {
-            //_trail.emitting = _lazo.IsLazoing;
             if (_lazo.IsLazoing)
             {
                 _elapsedCoolDown = _lazo.CoolDown;
                 _lazo.HandleIfLazoLimitReached(transform.position);
-                _lazo.RunLazoIfAble(transform.position, Time.deltaTime);
             }
             else
             {
                 _elapsedCoolDown -= Time.deltaTime;
-                ClearLineRenderer();
             }
         }
+
+        // Late Update is so Lazo can react to Limit Reached.
+        private void LateUpdate()
+        {
+            if (_lazo.IsLazoing)
+            {
+                _lazo.RunLazoIfAble(transform.position, Time.deltaTime);
+            }
+        }
+
         #endregion
         
         #region Delegate
@@ -129,7 +151,7 @@ namespace Laz
             ClearLineRenderer();
         }
 
-        private void HandleOnLazoPositionAdded(Vector3[] positions)
+        private void HandleOnListOfLazoPositionsChanged(Vector3[] positions)
         {
             _lazoLineRenderer.positionCount = positions.Length;
             _lazoLineRenderer.SetPositions(positions);
