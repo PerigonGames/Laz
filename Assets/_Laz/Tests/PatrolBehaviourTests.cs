@@ -66,6 +66,13 @@ namespace Tests
             yield return new WaitForEndOfFrame();
             Assert.AreEqual(Vector3.left, patrollingObject.transform.position, "Patrolling object should have moved");
         }
+
+        [UnityTest]
+        public IEnumerator Test_Fail()
+        {
+            Assert.IsFalse(true);
+            yield return null;
+        }
     }
 }
 
