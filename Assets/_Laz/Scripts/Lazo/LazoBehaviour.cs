@@ -9,6 +9,7 @@ namespace Laz
     public class LazoBehaviour : MonoBehaviour
     {
         private const string ShaderPropertyAlpha = "_Alpha";
+        private const float TrailFadeDuration = 0.25f;
         
         [SerializeField] private LineRenderer _lazoLineRenderer = null;
         [SerializeField] private ParticleSystem _lazoSparkleParticleSystem = null;
@@ -71,7 +72,7 @@ namespace Laz
         {
             _lazoSparkleParticleSystem.Clear();
             
-            materialTween = _lazoLineRenderer.material.DOFloat(0, ShaderPropertyAlpha, 0.25f);
+            materialTween = _lazoLineRenderer.material.DOFloat(0, ShaderPropertyAlpha, TrailFadeDuration);
             materialTween.OnComplete(() =>
             {
                 SetWholeLazoLoopAlpha(1);
