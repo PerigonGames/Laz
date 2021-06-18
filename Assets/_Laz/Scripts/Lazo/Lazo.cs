@@ -58,7 +58,7 @@ namespace Laz
             _rateOfRecordingTimerElapsed = 0;
             _travelledDistance = 0;
             _lastPosition = null;
-            //ClearWall();
+            ClearWall();
         }
 
         public void Reset()
