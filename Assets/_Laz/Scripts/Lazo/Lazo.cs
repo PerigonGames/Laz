@@ -58,14 +58,14 @@ namespace Laz
             _rateOfRecordingTimerElapsed = 0;
             _travelledDistance = 0;
             _lastPosition = null;
-            DebugClearListOfCubes();
+            //ClearWall();
         }
 
         public void Reset()
         {
             _isLazoing = false;
             _rateOfRecordingTimerElapsed = 0;
-            _listOfPositions.Clear();
+            ClearWall();
             ResetTravelledDistance();
             _lastPosition = null;
         }
@@ -100,8 +100,6 @@ namespace Laz
                 {
                     OnLazoDeactivated();
                 }
-                // Debug
-                DebugClearListOfCubes();
             }
         }
 
@@ -161,8 +159,6 @@ namespace Laz
                     _boost.SetBoostActive(true);
                 }
             }
-            // Debug
-            DebugCreateCubeAt(position);
         }
 
         private LazoPosition[] GetClosedLoopPolygon(int closedOffPosition)
@@ -192,20 +188,16 @@ namespace Laz
         {
             _listOfPositions = _listOfPositions.Select(lazoPosition =>
             {
-                lazoPosition.TimeToLive -= deltaTime;
-                // Debug
-                if (lazoPosition.TimeToLive < 0)
-                {
-                    DebugDestroyLastCubeOnList();
-                }
+                lazoPosition.DecrementTimeToLiveBy(deltaTime);
                 return lazoPosition;
-            }).Where(lazoPosition => lazoPosition.TimeToLive > 0).ToList();
+            }).Where(lazoPosition => !lazoPosition.IsTimeBelowZero).ToList();
             OnLazoPositionsChanged();
         }
 
         private void AddToListOfLazoPositions(LazoPosition position)
         {
             _listOfPositions.Add(position);
+            SpawnWall(position);
             OnLazoPositionsChanged();
         }
 

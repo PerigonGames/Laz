@@ -1,4 +1,5 @@
 using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Laz
@@ -6,23 +7,26 @@ namespace Laz
     public class WorldManager : MonoBehaviour
     {
         //TODO - Placeholder to get the patrolling doors
-        [Header("Placeholder")]
+        [Title("Placeholder")]
         [SerializeField] 
         private PatrolBehaviour[] _listOfPatrollingWalls = null;
-        [Header("Main Components")]
+        [Title("Main Components")]
         [SerializeField]
         private LazCoordinatorBehaviour _lazCoordinator = null;
         [SerializeField] 
+        private PuzzleManager _puzzleManager = null;
+        [Title("Object Poolers")]
+        [SerializeField] 
         private ParticleEffectsObjectPooler _particleEffectsObjectPooler = null;
         [SerializeField] 
-        private PuzzleManager _puzzleManager = null;
+        private LazoWallObjectPooler _lazoWallObjectPooler = null;
         private StateManager StateManagerInstance => StateManager.Instance;
 
-        [Header("User Interface")] 
+        [Title("User Interface")] 
         [SerializeField]
         private LazoMeterBehaviour _lazoMeter = null;
         
-        [Header("Debug")]
+        [Title("Debug")]
         [SerializeField]
         private DebugUIBehaviour debugUIBehaviour = null;
 
@@ -61,15 +65,13 @@ namespace Laz
             
             _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManagerInstance);
             _lazCoordinator.Initialize(laz, _wrappableManager.WrappableObjects);
-            if (_particleEffectsObjectPooler != null)
-            {
-                _particleEffectsObjectPooler.Initialize(objectsOfInterest.Length);
-            }
 
             if (_puzzleManager != null)
             {
                 _puzzleManager.Initialize(_wrappableManager);
             }
+
+            SetupObjectPoolers(objectsOfInterest.Length);
             
             //TODO - placeholder on how to handle the Patrolling objects
             foreach (var patrolItem in _listOfPatrollingWalls)
@@ -86,6 +88,19 @@ namespace Laz
             if (debugUIBehaviour != null)
             {
                 debugUIBehaviour.Initialize(laz.Movement);
+            }
+        }
+
+        private void SetupObjectPoolers(int particleEffectsAmount)
+        {
+            if (_particleEffectsObjectPooler != null)
+            {
+                _particleEffectsObjectPooler.Initialize(particleEffectsAmount);
+            }
+            
+            if (_lazoWallObjectPooler != null)
+            {
+                _lazoWallObjectPooler.Initialize();
             }
         }
 
