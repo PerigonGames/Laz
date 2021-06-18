@@ -12,10 +12,10 @@ namespace Laz
         
         [SerializeField] private LazoWallBehaviour _lazoWallPrefab = null;
 
-        public void Initialize()
+        public void Initialize(int amountToSpawn = SizeToSpawn)
         {
             var pooledObjects = new List<PoolingObject<LazoWallBehaviour>>();
-            pooledObjects.Add(CreatePoolingObject(Key, _lazoWallPrefab, SizeToSpawn));
+            pooledObjects.Add(CreatePoolingObject(Key, _lazoWallPrefab, amountToSpawn));
             base.Initialize(pooledObjects);
         }
     }

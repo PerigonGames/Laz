@@ -39,6 +39,7 @@ namespace PerigonGames
         /// <param name="parent">parent object to place in</param>
         protected void Initialize(List<PoolingObject<T>> differentObjectsToSpawn, Transform parent = null)
         {
+            Clear();
             m_poolDictionary = new Dictionary<int, Queue<T>>();
             if (parent == null)
             {
@@ -67,7 +68,7 @@ namespace PerigonGames
                }
            }
         }
-
+        
         /// <summary>
         /// Gets an object from with a stored key
         /// </summary>
@@ -115,6 +116,22 @@ namespace PerigonGames
         protected static PoolingObject<T> CreatePoolingObject(int key, T poolingObject, int size)
         {
             return new PoolingObject<T>(key, poolingObject, size);
+        }
+        
+        private void Clear()
+        {
+            if (m_parent == null)
+            {
+                return;
+            }
+
+            foreach (var pool in m_poolDictionary)
+            {
+                foreach (var queue in pool.Value)
+                {
+                    Destroy(queue.gameObject);
+                }
+            }
         }
     }
 

@@ -202,6 +202,27 @@ namespace Tests
             
             Assert.IsTrue(_player.LazoTool.IsLazoing);
         }
+        
+        [UnityTest]
+        public IEnumerator Test_LazoWallObjectPooler_Initializer()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
+            // When
+            var amountToSpawn = 11;
+            var lazoWallObjectPool = GameObject.FindObjectOfType<LazoWallObjectPooler>();
+            lazoWallObjectPool.Initialize(amountToSpawn);
+            yield return new WaitForEndOfFrame();
+
+            // Then
+            var actualResult = lazoWallObjectPool.gameObject.transform.childCount;
+            
+            //Therefore
+            Assert.AreEqual(11, actualResult, "Amount spawned should be 11");
+        }
     }
     
 
