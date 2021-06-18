@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 53015764}
   - component: {fileID: 53015763}
   m_Layer: 5
-  m_Name: LazoDistance
+  m_Name: WallHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lazoVelocity: {fileID: 1394623958}
-  _genericDebugTextOnWall: {fileID: 0}
+  _genericDebugTextOnWall: {fileID: 53015763}
 --- !u!114 &60719680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1280,14 +1280,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 897388873580357071, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.62
-      objectReference: {fileID: 0}
-    - target: {fileID: 897388874226933257, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -3.97
-      objectReference: {fileID: 0}
     - target: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_RootOrder
       value: 13
@@ -1331,14 +1323,6 @@ PrefabInstance:
     - target: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 897388874422119429, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
-      propertyPath: _speed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 897388874422119429, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
-      propertyPath: _puzzleTag
-      value: C
       objectReference: {fileID: 0}
     - target: {fileID: 897388874422119430, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_Name
@@ -2856,21 +2840,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 474468082, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_RootOrder
       value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2911,14 +2887,6 @@ PrefabInstance:
     - target: {fileID: 897388874422119428, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 897388874422119429, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
-      propertyPath: _speed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 897388874422119429, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
-      propertyPath: _puzzleTag
-      value: A
       objectReference: {fileID: 0}
     - target: {fileID: 897388874422119430, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_Name

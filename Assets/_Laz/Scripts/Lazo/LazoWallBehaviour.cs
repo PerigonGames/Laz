@@ -1,14 +1,12 @@
-using System;
 using UnityEngine;
 
 namespace Laz
 {
     public class LazoWallBehaviour : MonoBehaviour
     {
-        private LazoPosition _lazoPosition;
+        private LazoPosition _lazoPosition = null;
         private Collider _collider = null;
 
-        public event Action OnColliderTriggered;
 
         public void Initialize(LazoPosition lazoPosition)
         {
@@ -17,6 +15,7 @@ namespace Laz
             transform.position = lazoPosition.Position;
         }
         
+        #region Mono
         private void Awake()
         {
             if (TryGetComponent(out Collider objectCollider))
@@ -39,18 +38,23 @@ namespace Laz
                 _lazoPosition = null;
             }
         }
-
-        private void SetColliderTrigger(bool on)
-        {
-            _collider.isTrigger = on;
-        }
         
         private void OnTriggerEnter(Collider other)
         {
-            if (OnColliderTriggered != null)
+            /// TODO -  This will be used in the future, this is placeholder for testing purposes
+            if (_lazoPosition != null && other.CompareTag(Tags.LazoInterest))
             {
-                OnColliderTriggered();
+                _lazoPosition.TriggeredPosition();
+                DebugUIBehaviour.Instance.SetDebugText("Lazo Collided Position: " + _lazoPosition.Position);
             }
+        }
+
+        #endregion
+        
+        
+        private void SetColliderTrigger(bool on)
+        {
+            _collider.isTrigger = on;
         }
 
         private void HandleOnLazWallDeath()

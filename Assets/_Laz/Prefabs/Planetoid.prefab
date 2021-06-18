@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 897388873580357056}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.27, y: 0, z: 0}
+  m_LocalPosition: {x: -7.27, y: 0, z: 2.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 897388874195708890}
@@ -86,7 +86,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 897388874226933258}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.74, y: 0, z: 0}
+  m_LocalPosition: {x: 6.74, y: 0, z: -3.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 897388874195708890}
@@ -103,6 +103,8 @@ GameObject:
   - component: {fileID: 897388874422119428}
   - component: {fileID: 897388874422119429}
   - component: {fileID: 7959790425013479012}
+  - component: {fileID: 80406764619832612}
+  - component: {fileID: 474468082}
   m_Layer: 0
   m_Name: Planetoid
   m_TagString: LazoInterest
@@ -119,7 +121,7 @@ Transform:
   m_GameObject: {fileID: 897388874422119430}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.53, y: 0, z: 3.77}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 897388875184113827}
   - {fileID: 897388874195708890}
@@ -154,6 +156,35 @@ MonoBehaviour:
   - {fileID: 897388874226933257}
   - {fileID: 897388873580357071}
   _speed: 5
+--- !u!135 &80406764619832612
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897388874422119430}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &474468082
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897388874422119430}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1 &897388875184113828
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +196,6 @@ GameObject:
   - component: {fileID: 897388875184113827}
   - component: {fileID: 897388875184113824}
   - component: {fileID: 897388875184113825}
-  - component: {fileID: 897388875184113826}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -236,16 +266,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &897388875184113826
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 897388875184113828}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
