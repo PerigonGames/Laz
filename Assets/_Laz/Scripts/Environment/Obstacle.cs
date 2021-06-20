@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Laz
@@ -12,7 +9,13 @@ namespace Laz
         {
             if (other.collider.CompareTag(Tags.LazPlayer))
             {
-                
+                LazCoordinatorBehaviour behaviour = other.gameObject.GetComponent<LazCoordinatorBehaviour>();
+
+                if (behaviour != null)
+                {
+                    behaviour.KillLaz();
+                }
+
             }
         }
     }

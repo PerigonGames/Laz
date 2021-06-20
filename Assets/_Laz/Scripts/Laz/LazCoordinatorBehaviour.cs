@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 namespace Laz
 {
     public class LazCoordinatorBehaviour : MonoBehaviour
     {
+        public event Action OnLazDieing;
+        
         [Header("Scriptable Objects")] 
         [SerializeField]
         private LazMovementPropertyScriptableObject _movementPropertyScriptableObject = null;
@@ -74,6 +77,12 @@ namespace Laz
             _lazoBehaviour.Reset();
             _boostBehaviour.Reset();
             transform.position = _lazPlayer.SpawnPosition;
+        }
+
+        public void KillLaz()
+        {
+            //Todo: Handle Death animations and such
+            OnLazDieing?.Invoke();
         }
     }
 }
