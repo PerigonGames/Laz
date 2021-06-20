@@ -5,8 +5,6 @@ namespace Laz
 {
     public class LazCoordinatorBehaviour : MonoBehaviour
     {
-        public event Action OnLazDieing;
-        
         [Header("Scriptable Objects")] 
         [SerializeField]
         private LazMovementPropertyScriptableObject _movementPropertyScriptableObject = null;
@@ -21,6 +19,8 @@ namespace Laz
         private LazoBehaviour _lazoBehaviour = null;
         private LazModelBehavior _modelBehaviour = null;
         private LazBoostBehaviour _boostBehaviour = null;
+        
+        public event Action OnLazDieing;
 
         public void Initialize(LazPlayer lazPlayer, 
             ILazoWrapped[] objectOfInterests, 
@@ -82,7 +82,10 @@ namespace Laz
         public void KillLaz()
         {
             //Todo: Handle Death animations and such
-            OnLazDieing?.Invoke();
+            if (OnLazDieing != null)
+            {
+                OnLazDieing.Invoke();
+            }
         }
     }
 }
