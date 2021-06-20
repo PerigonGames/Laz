@@ -570,6 +570,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laz
       objectReference: {fileID: 0}
+    - target: {fileID: 6610365341234808044, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
 --- !u!4 &199378479 stripped
@@ -2833,6 +2837,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa407513b5fd34029bb68c154800a4c6, type: 3}
+--- !u!1001 &681886044850302429
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 972296399029899830, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_Name
+      value: LazKillerWall
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024531575129178338, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_RootOrder
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024531575129178338, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024531575129178338, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024531575129178338, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024531575129178338, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024531575129178338, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024531575129178338, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024531575129178338, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024531575129178338, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024531575129178338, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2024531575129178338, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3414f30a334f9374eb32c620ea4a1987, type: 3}
 --- !u!1001 &897388874849667159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2985,6 +3046,10 @@ PrefabInstance:
     - target: {fileID: 6916257338219551088, guid: d9013e9d2ae0f854cb3ef589675d242a, type: 3}
       propertyPath: m_Name
       value: LazoMeter.UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 6916257338219551089, guid: d9013e9d2ae0f854cb3ef589675d242a, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 6916257338219551092, guid: d9013e9d2ae0f854cb3ef589675d242a, type: 3}
       propertyPath: m_Pivot.x

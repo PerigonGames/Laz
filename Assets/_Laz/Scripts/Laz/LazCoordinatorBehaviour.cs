@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Laz
@@ -18,6 +19,8 @@ namespace Laz
         private LazoBehaviour _lazoBehaviour = null;
         private LazModelBehavior _modelBehaviour = null;
         private LazBoostBehaviour _boostBehaviour = null;
+        
+        public event Action OnLazDieing;
 
         public void Initialize(LazPlayer lazPlayer, 
             ILazoWrapped[] objectOfInterests, 
@@ -74,6 +77,15 @@ namespace Laz
             _lazoBehaviour.Reset();
             _boostBehaviour.Reset();
             transform.position = _lazPlayer.SpawnPosition;
+        }
+
+        public void KillLaz()
+        {
+            //Todo: Handle Death animations and such
+            if (OnLazDieing != null)
+            {
+                OnLazDieing.Invoke();
+            }
         }
     }
 }
