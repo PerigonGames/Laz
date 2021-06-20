@@ -6,8 +6,12 @@ namespace Laz
     public class DebugUIBehaviour : MonoBehaviour
     {
         [SerializeField] private TMP_Text _lazoVelocity = null;
+        [SerializeField] private TMP_Text _genericDebugTextOnWall = null;
         
         private LazMovement _movement = null;
+        private static DebugUIBehaviour _instance = null;
+        
+        public static DebugUIBehaviour Instance => _instance;
         
         public void Initialize(LazMovement movement)
         {
@@ -15,13 +19,20 @@ namespace Laz
             _movement.OnSpeedChanges += HandleVelocityChange;
         }
 
-        private void OnDestroy()
+        public void SetDebugText(string text)
         {
-            
-            _movement.OnSpeedChanges -= HandleVelocityChange;
+            _genericDebugTextOnWall.text = text;
         }
 
+        private void Awake()
+        {
+            _instance = this;
+        }
 
+        private void OnDestroy()
+        {
+            _movement.OnSpeedChanges -= HandleVelocityChange;
+        }
 
         private void HandleVelocityChange(float velocity)
         {

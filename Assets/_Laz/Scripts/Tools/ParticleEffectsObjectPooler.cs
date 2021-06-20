@@ -8,17 +8,11 @@ namespace Laz
     {
         [SerializeField] private ParticleSystem _planetoidExplosion = null;
             
-        public void Initialize(int planetoids)
+        public void Initialize(int amountToInstantiate)
         {
             var pooledObjects = new List<PoolingObject<ParticleSystem>>();
-            pooledObjects.Add(GenerateListOfPooledObjected(_planetoidExplosion, planetoids));
+            pooledObjects.Add(CreatePoolingObject(ParticleSystemObjectPoolTag.PlanetoidExplosion, _planetoidExplosion, amountToInstantiate));
             base.Initialize(pooledObjects);
-        }
-
-        private PoolingObject<ParticleSystem> GenerateListOfPooledObjected(ParticleSystem system, int number)
-        {
-            var tag = ParticleSystemObjectPoolTag.PlanetoidExplosion;
-            return new PoolingObject<ParticleSystem>(tag, system, number);
         }
     }
 

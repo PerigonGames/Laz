@@ -13,7 +13,6 @@ namespace Laz
         
         [SerializeField] private LineRenderer _lazoLineRenderer = null;
         [SerializeField] private ParticleSystem _lazoSparkleParticleSystem = null;
-        [SerializeField] private bool TurnOnDebug = false;
         [SerializeField] private Polygon _polygonShape = null;
         
         private Lazo _lazo;
@@ -25,7 +24,6 @@ namespace Laz
         public void Initialize(Lazo lazo)
         {            
             _lazo = lazo;
-            _lazo.IsDebugging = TurnOnDebug;
             _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
             _lazo.OnLoopClosed += HandleOnLoopClosed;
             _lazo.OnListOfLazoPositionsChanged += HandleOnListOfLazoPositionsChanged;
@@ -140,7 +138,7 @@ namespace Laz
 
         private void HandleOnLoopClosed(LazoPosition[] positions)
         {
-            if (TurnOnDebug && _polygonShape != null)
+            if (_polygonShape != null)
             {
                 _polygonShape.points.Clear();
                 _polygonShape.meshOutOfDate = true;
