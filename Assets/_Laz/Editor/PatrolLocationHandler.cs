@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using Laz;
@@ -11,6 +9,8 @@ namespace LazEditor
     [CustomEditor(typeof(PatrolBehaviour))]
     public class PatrolLocationHandler : Editor
     {
+        private const float DRAW_PLANE_HEIGHT = 0f;
+        private const float CLOSEST_DISTANCE_FOR_DELETION = 0.6f;
         private PatrolBehaviour _behaviour = null;
         private Vector3 _tempPosition = Vector3.zero;
         private List<Vector3> _patrolTrail;
@@ -27,6 +27,14 @@ namespace LazEditor
                 return;
             }
             
+            Event guiEvent = Event.current;
+            
+            HandleClick(guiEvent);
+            HandlePatrolPositioning();
+        }
+
+        private void HandlePatrolPositioning()
+        {
             Undo.RecordObject(_behaviour, "Patrol Positioning");
             for (int i = 0, count = _behaviour.PatrolPositions.Count; i < count; i++)
             {
@@ -36,12 +44,45 @@ namespace LazEditor
             }
             
             _patrolTrail = new List<Vector3>();
-            _patrolTrail.Add(_behaviour.gameObject.transform.position);
+            _patrolTrail.Add(_behaviour.transform.position);
             _patrolTrail.AddRange(_behaviour.PatrolPositions);
             
             Handles.color = Color.yellow;
-            
             Handles.DrawPolyLine(_patrolTrail.ToArray());
+        }
+
+        private void HandleClick(Event guiEvent)
+        {
+            //Get Mouse coordinates in Correct Coordinates (at y = 0)
+            Ray mouseRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
+
+            float rayYOrigin = mouseRay.origin.y;
+            float rayYDirection = mouseRay.direction.y;
+            float distanceToPlane = rayYDirection.Equals(0.0f) ? DRAW_PLANE_HEIGHT - rayYOrigin : (DRAW_PLANE_HEIGHT - rayYOrigin) / rayYDirection;
+            Vector3 mousePosition = mouseRay.GetPoint(distanceToPlane);
+            
+            // Add New patrol point if User Presses Ctrl/Cmd + Left Click
+            if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 &&
+                (guiEvent.modifiers == EventModifiers.Command || guiEvent.modifiers == EventModifiers.Control))
+            {
+                _behaviour.PatrolPositions.Add(mousePosition);
+            }
+            
+            // Removes Patrol Point if User Press Right Click really close to the position
+            if (guiEvent.type == EventType.MouseDown && guiEvent.button == 1 &&
+                guiEvent.modifiers == EventModifiers.None)
+            {
+                for (int i = 0, count = _behaviour.PatrolPositions.Count; i < count; i++)
+                {
+                    if (Vector3.Distance(mousePosition, _behaviour.PatrolPositions[i]) <= CLOSEST_DISTANCE_FOR_DELETION)
+                    {
+                        _behaviour.PatrolPositions.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+            
+            HandleUtility.Repaint();
         }
     }
 }
