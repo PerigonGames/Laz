@@ -29,7 +29,7 @@ namespace LazEditor
             
             Event guiEvent = Event.current;
             
-            HandleClick(guiEvent);
+            HandleInput(guiEvent);
             HandlePatrolPositioning();
         }
 
@@ -51,7 +51,7 @@ namespace LazEditor
             Handles.DrawPolyLine(_patrolTrail.ToArray());
         }
 
-        private void HandleClick(Event guiEvent)
+        private void HandleInput(Event guiEvent)
         {
             //Get Mouse coordinates in Correct Coordinates (at y = 0)
             Ray mouseRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
@@ -61,11 +61,35 @@ namespace LazEditor
             float distanceToPlane = rayYDirection.Equals(0.0f) ? DRAW_PLANE_HEIGHT - rayYOrigin : (DRAW_PLANE_HEIGHT - rayYOrigin) / rayYDirection;
             Vector3 mousePosition = mouseRay.GetPoint(distanceToPlane);
             
-            // Add New patrol point if User Presses Ctrl/Cmd + Left Click
-            if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 &&
-                (guiEvent.modifiers == EventModifiers.Command || guiEvent.modifiers == EventModifiers.Control))
+            // Add New patrol point if User Presses Left Click
+            if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
             {
-                _behaviour.PatrolPositions.Add(mousePosition);
+                // If User uses Ctrl/Cmd then add patrol point at end of list
+                if (guiEvent.modifiers == EventModifiers.Command || guiEvent.modifiers == EventModifiers.Control)
+                {
+                    _behaviour.PatrolPositions.Add(mousePosition);
+                }
+                
+                // If User uses Shift then insert patrol point between two closest patrol points
+                if (guiEvent.modifiers == EventModifiers.Shift)
+                {
+                    float closestDistance = HandleUtility.DistancePointToLineSegment(mousePosition,
+                        _patrolTrail[0], _patrolTrail[1]);
+
+                    int indexToInsert = 0;
+                    
+                    for (int i = 0, count = _patrolTrail.Count; i < count-1; i++)
+                    {
+                        if (HandleUtility.DistancePointToLineSegment(mousePosition, _patrolTrail[i],
+                            _patrolTrail[i + 1]) < closestDistance)
+                        {
+                            indexToInsert = i;
+                        }
+                    }
+                    
+                    _behaviour.PatrolPositions.Insert(indexToInsert, mousePosition);
+                }
+
             }
             
             // Removes Patrol Point if User Press Right Click really close to the position
