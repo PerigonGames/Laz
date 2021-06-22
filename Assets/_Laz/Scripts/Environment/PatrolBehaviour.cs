@@ -1,17 +1,14 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Laz
 {
     public class PatrolBehaviour : MonoBehaviour
     {
-        [SerializeField] private Transform[] _patrolLocations = null;
+        [SerializeField] private List<Vector3> _patrolPositions = new List<Vector3>();
         [SerializeField] private float _speed = 5;
         private Patrol _patrol;
-
-        [SerializeField] private List<Vector3> _patrolPositions = new List<Vector3>();
-
+        
         public List<Vector3> PatrolPositions
         {
             get => _patrolPositions;
@@ -20,8 +17,7 @@ namespace Laz
 
         public void Initialize()
         {
-            var locations = _patrolLocations.Select(t => t.position).ToArray();
-            _patrol = new Patrol(transform.position, locations, _speed);    
+            _patrol = new Patrol(transform.position, PatrolPositions.ToArray(), _speed);    
         }
 
         public void CleanUp()

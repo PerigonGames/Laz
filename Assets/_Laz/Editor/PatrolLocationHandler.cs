@@ -40,6 +40,7 @@ namespace LazEditor
             _patrolTrail.AddRange(_behaviour.PatrolPositions);
             
             Handles.color = Color.yellow;
+            
             Handles.DrawPolyLine(_patrolTrail.ToArray());
         }
     }
