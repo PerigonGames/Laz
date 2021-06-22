@@ -60,7 +60,8 @@ namespace Laz
             var interests = GameObject.FindGameObjectsWithTag(Tags.LazoInterest);
             var objectsOfInterest = GenerateObjectOfInterest(interests);
             var laz = new LazPlayer();
-            
+
+            _lazCoordinator.OnLazDieing += SetDeathState;
             StateManagerInstance.OnStateChanged += HandleOnStateChanged;
             
             _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManagerInstance);
@@ -106,6 +107,7 @@ namespace Laz
 
         private void OnDestroy()
         {
+            _lazCoordinator.OnLazDieing -= SetDeathState;
             StateManagerInstance.OnStateChanged -= HandleOnStateChanged;
         }
 
@@ -114,17 +116,32 @@ namespace Laz
             return interests.Select(x => x.GetComponent<IPlanetoidBehaviour>()).ToArray();
         }
 
+        private void SetDeathState()
+        {
+            StateManagerInstance.SetState(State.Death);
+        }
+
         private void HandleOnStateChanged(State state)
         {
-            if (state == State.PreGame)
+            switch (state)
             {
-                CleanUp(); 
-                StateManagerInstance.SetState(State.Play);
-            }
-
-            if (state == State.Play)
-            {
-                Reset();
+                case State.PreGame:
+                {
+                    CleanUp();
+                    StateManagerInstance.SetState(State.Play);
+                    break;
+                }
+                case State.Play:
+                {
+                    Reset();
+                    break;
+                }
+                case State.Death:
+                {
+                    Debug.LogWarning("Laz is dead, long live Laz!");
+                    StateManagerInstance.SetState(State.PreGame);
+                    break;
+                }
             }
         }
     }
