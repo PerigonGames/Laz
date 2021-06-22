@@ -53,6 +53,11 @@ namespace LazEditor
 
         private void HandleInput(Event guiEvent)
         {
+            if (guiEvent.type != EventType.MouseDown)
+            {
+                return;
+            }
+
             //Get Mouse coordinates in Correct Coordinates (at y = 0)
             Ray mouseRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
 
@@ -62,7 +67,7 @@ namespace LazEditor
             Vector3 mousePosition = mouseRay.GetPoint(distanceToPlane);
             
             // Add New patrol point if User Presses Left Click
-            if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
+            if (guiEvent.button == 0)
             {
                 // If User uses Ctrl/Cmd then add patrol point at end of list
                 if (guiEvent.modifiers == EventModifiers.Command || guiEvent.modifiers == EventModifiers.Control)
@@ -71,6 +76,7 @@ namespace LazEditor
                 }
                 
                 // If User uses Shift then insert patrol point between two closest patrol points
+                // UNFORTUNATELY it is a bit finicky in get the closest line segment
                 if (guiEvent.modifiers == EventModifiers.Shift)
                 {
                     float closestDistance = HandleUtility.DistancePointToLineSegment(mousePosition,
@@ -93,8 +99,7 @@ namespace LazEditor
             }
             
             // Removes Patrol Point if User Press Right Click really close to the position
-            if (guiEvent.type == EventType.MouseDown && guiEvent.button == 1 &&
-                guiEvent.modifiers == EventModifiers.None)
+            if (guiEvent.button == 1 && guiEvent.modifiers == EventModifiers.None)
             {
                 for (int i = 0, count = _behaviour.PatrolPositions.Count; i < count; i++)
                 {
