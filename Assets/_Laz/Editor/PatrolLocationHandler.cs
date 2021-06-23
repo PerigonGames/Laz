@@ -35,12 +35,16 @@ namespace LazEditor
 
         private void HandlePatrolPositioning()
         {
-            Undo.RecordObject(_behaviour, "Patrol Positioning");
             for (int i = 0, count = _behaviour.PatrolPositions.Count; i < count; i++)
             {
                 _tempPosition = Handles.PositionHandle(_behaviour.PatrolPositions[i], Quaternion.identity);
                 _tempPosition.y = 0.0f; // Ensure the position is grounded onto the plane
-                _behaviour.PatrolPositions[i] = _tempPosition;
+
+                if (!_behaviour.PatrolPositions[i].Equals(_tempPosition))
+                {
+                    Undo.RecordObject(_behaviour, "Patrol Positioning");
+                    _behaviour.PatrolPositions[i] = _tempPosition;   
+                }
             }
             
             _patrolTrail = new List<Vector3>();
@@ -72,7 +76,7 @@ namespace LazEditor
                 // If User uses Ctrl/Cmd then add patrol point at end of list
                 if (guiEvent.modifiers == EventModifiers.Command || guiEvent.modifiers == EventModifiers.Control)
                 {
-                    Undo.RecordObject(_behaviour, "New Patrol Position");
+                    Undo.RecordObject(_behaviour, "New Patrol Point");
                     _behaviour.PatrolPositions.Add(mousePosition);
                 }
                 
@@ -80,21 +84,21 @@ namespace LazEditor
                 // UNFORTUNATELY it is a bit finicky in get the closest line segment
                 if (guiEvent.modifiers == EventModifiers.Shift)
                 {
-                    float closestDistance = HandleUtility.DistancePointToLineSegment(mousePosition,
+                    float closestDistance = HandleUtility.DistancePointLine(mousePosition,
                         _patrolTrail[0], _patrolTrail[1]);
 
                     int indexToInsert = 0;
                     
                     for (int i = 0, count = _patrolTrail.Count; i < count-1; i++)
                     {
-                        if (HandleUtility.DistancePointToLineSegment(mousePosition, _patrolTrail[i],
+                        if (HandleUtility.DistancePointLine(mousePosition, _patrolTrail[i],
                             _patrolTrail[i + 1]) < closestDistance)
                         {
                             indexToInsert = i;
                         }
                     }
                     
-                    Undo.RecordObject(_behaviour, "New Patrol Position");
+                    Undo.RecordObject(_behaviour, "New Patrol Point");
                     _behaviour.PatrolPositions.Insert(indexToInsert, mousePosition);
                 }
 
