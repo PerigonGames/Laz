@@ -5,17 +5,23 @@ namespace Laz
 {
     public class LazoPosition
     {
-        public float _timeToLive;
-        public Vector3 Position;
+        private float _timeToLive;
+        private Vector3 _position;
 
         public bool IsTimeBelowZero => _timeToLive < 0;
+        public Vector3 Position => _position;
+
+        public float TimeToLive
+        {
+            set => _timeToLive = value;
+        }
 
         public event Action OnTimeBelowZero;
         
         public LazoPosition(float timeToLive, Vector3 position)
         {
             _timeToLive = timeToLive;
-            Position = position;
+            _position = position;
         }
 
         public void ForceDeath()

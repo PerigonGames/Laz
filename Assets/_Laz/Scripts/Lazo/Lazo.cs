@@ -58,14 +58,14 @@ namespace Laz
             _rateOfRecordingTimerElapsed = 0;
             _travelledDistance = 0;
             _lastPosition = null;
-            ClearWall();
+            CleanUpWall();
         }
 
         public void Reset()
         {
             _isLazoing = false;
             _rateOfRecordingTimerElapsed = 0;
-            ClearWall();
+            CleanUpWall();
             ResetTravelledDistance();
             _lastPosition = null;
         }
@@ -147,6 +147,8 @@ namespace Laz
                 {
                     OnLoopClosed(closedLoopPolygon);
                 }
+
+                KillOffTailEndOfLazoFrom(closedOffPosition, closedLoopPolygon);
                 
                 var objectOfInterests = GetObjectOfInterestsWithin(closedLoopPolygon);
                 if (!objectOfInterests.IsNullOrEmpty())
