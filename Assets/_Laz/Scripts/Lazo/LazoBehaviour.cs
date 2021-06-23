@@ -142,7 +142,6 @@ namespace Laz
             {
                 _polygonShape.points.Clear();
                 _polygonShape.meshOutOfDate = true;
-                ClearLazoTrail();
                 var allPositions = positions.Select(lazoPosition => new Vector2(lazoPosition.Position.x, lazoPosition.Position.z)).ToList();
                 foreach (var position in allPositions)
                 {

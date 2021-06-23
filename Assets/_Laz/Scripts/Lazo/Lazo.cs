@@ -147,6 +147,8 @@ namespace Laz
                 {
                     OnLoopClosed(closedLoopPolygon);
                 }
+
+                KillOffTailEndOfLazoFrom(closedOffPosition, closedLoopPolygon);
                 
                 var objectOfInterests = GetObjectOfInterestsWithin(closedLoopPolygon);
                 if (!objectOfInterests.IsNullOrEmpty())
