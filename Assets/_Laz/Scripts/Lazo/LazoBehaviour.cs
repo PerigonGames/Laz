@@ -37,12 +37,14 @@ namespace Laz
 
         public void CleanUp()
         {
+            ClearLazoTrail();
             _lazo.CleanUp();
             _elapsedCoolDown = 0;
         }
 
         public void Reset()
         {
+            SetWholeLazoLoopAlpha(1);
             _lazo.Reset();
         }
 
@@ -142,7 +144,6 @@ namespace Laz
             {
                 _polygonShape.points.Clear();
                 _polygonShape.meshOutOfDate = true;
-                ClearLazoTrail();
                 var allPositions = positions.Select(lazoPosition => new Vector2(lazoPosition.Position.x, lazoPosition.Position.z)).ToList();
                 foreach (var position in allPositions)
                 {
