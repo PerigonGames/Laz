@@ -37,7 +37,7 @@ namespace Tests
             }
             else
             {
-                Debug.LogError("Must Initialize LazoWallObjectPooler if using Lazo Tool");
+                Debug.LogWarning("Must Initialize LazoWallObjectPooler if using Lazo Tool");
             }
         }
     }
