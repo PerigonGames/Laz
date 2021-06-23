@@ -10,7 +10,7 @@ namespace Laz
             wall.Initialize(lazoPosition);
         }
         
-        private void ClearWall()
+        private void CleanUpWall()
         {
             foreach (var wall in _listOfPositions)
             {

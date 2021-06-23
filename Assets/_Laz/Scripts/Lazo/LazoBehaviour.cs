@@ -37,12 +37,14 @@ namespace Laz
 
         public void CleanUp()
         {
+            ClearLazoTrail();
             _lazo.CleanUp();
             _elapsedCoolDown = 0;
         }
 
         public void Reset()
         {
+            SetWholeLazoLoopAlpha(1);
             _lazo.Reset();
         }
 
