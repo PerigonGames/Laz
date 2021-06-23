@@ -72,6 +72,7 @@ namespace LazEditor
                 // If User uses Ctrl/Cmd then add patrol point at end of list
                 if (guiEvent.modifiers == EventModifiers.Command || guiEvent.modifiers == EventModifiers.Control)
                 {
+                    Undo.RecordObject(_behaviour, "New Patrol Position");
                     _behaviour.PatrolPositions.Add(mousePosition);
                 }
                 
@@ -93,6 +94,7 @@ namespace LazEditor
                         }
                     }
                     
+                    Undo.RecordObject(_behaviour, "New Patrol Position");
                     _behaviour.PatrolPositions.Insert(indexToInsert, mousePosition);
                 }
 
