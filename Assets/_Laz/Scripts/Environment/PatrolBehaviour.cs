@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class PatrolBehaviour : MonoBehaviour
+    public class PatrolBehaviour : MonoBehaviour, IPatrolBehaviour
     {
         [SerializeField] private List<Vector3> _patrolPositions = new List<Vector3>();
         [SerializeField] private float _speed = 5;

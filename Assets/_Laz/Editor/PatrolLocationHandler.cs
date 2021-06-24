@@ -11,6 +11,7 @@ namespace LazEditor
     {
         private const float DRAW_PLANE_HEIGHT = 0f;
         private const float CLOSEST_DISTANCE_FOR_DELETION = 0.6f;
+        private const string NEW_PATROL_TITLE = "New Patrol Point";
         private PatrolBehaviour _behaviour = null;
         private Vector3 _tempPosition = Vector3.zero;
         private List<Vector3> _patrolTrail;
@@ -63,61 +64,86 @@ namespace LazEditor
             }
 
             //Get Mouse coordinates in Correct Coordinates (at y = 0)
-            Ray mouseRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
-
-            float rayYOrigin = mouseRay.origin.y;
-            float rayYDirection = mouseRay.direction.y;
-            float distanceToPlane = rayYDirection.Equals(0.0f) ? DRAW_PLANE_HEIGHT - rayYOrigin : (DRAW_PLANE_HEIGHT - rayYOrigin) / rayYDirection;
-            Vector3 mousePosition = mouseRay.GetPoint(distanceToPlane);
+            Vector3 mousePosition = GetAdjustedMousePosition(guiEvent);
             
             // Add New patrol point if User Presses Left Click
             if (guiEvent.button == 0)
             {
-                // If User uses Ctrl/Cmd then add patrol point at end of list
-                if (guiEvent.modifiers == EventModifiers.Command || guiEvent.modifiers == EventModifiers.Control)
-                {
-                    Undo.RecordObject(_behaviour, "New Patrol Point");
-                    _behaviour.PatrolPositions.Add(mousePosition);
-                }
-                
-                // If User uses Shift then insert patrol point between two closest patrol points
-                // UNFORTUNATELY it is a bit finicky in get the closest line segment
-                if (guiEvent.modifiers == EventModifiers.Shift)
-                {
-                    float closestDistance = HandleUtility.DistancePointLine(mousePosition,
-                        _patrolTrail[0], _patrolTrail[1]);
-
-                    int indexToInsert = 0;
-                    
-                    for (int i = 0, count = _patrolTrail.Count; i < count-1; i++)
-                    {
-                        if (HandleUtility.DistancePointLine(mousePosition, _patrolTrail[i],
-                            _patrolTrail[i + 1]) < closestDistance)
-                        {
-                            indexToInsert = i;
-                        }
-                    }
-                    
-                    Undo.RecordObject(_behaviour, "New Patrol Point");
-                    _behaviour.PatrolPositions.Insert(indexToInsert, mousePosition);
-                }
-
+                HandleLeftClick(mousePosition, guiEvent.modifiers);
             }
             
             // Removes Patrol Point if User Press Right Click really close to the position
             if (guiEvent.button == 1 && guiEvent.modifiers == EventModifiers.None)
             {
-                for (int i = 0, count = _behaviour.PatrolPositions.Count; i < count; i++)
-                {
-                    if (Vector3.Distance(mousePosition, _behaviour.PatrolPositions[i]) <= CLOSEST_DISTANCE_FOR_DELETION)
-                    {
-                        _behaviour.PatrolPositions.RemoveAt(i);
-                        break;
-                    }
-                }
+                RemovePatrolPosition(mousePosition);
             }
             
             HandleUtility.Repaint();
+        }
+
+        private Vector3 GetAdjustedMousePosition(Event guiEvent)
+        {
+            Ray mouseRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
+
+            float rayYOrigin = mouseRay.origin.y;
+            float rayYDirection = mouseRay.direction.y;
+            float distanceToPlane = rayYDirection.Equals(0.0f) ? DRAW_PLANE_HEIGHT - rayYOrigin : (DRAW_PLANE_HEIGHT - rayYOrigin) / rayYDirection;
+            return mouseRay.GetPoint(distanceToPlane);
+        }
+
+        private void HandleLeftClick(Vector3 mousePosition, EventModifiers modifier)
+        {
+            // If User uses Ctrl/Cmd then add patrol point at end of list
+            if (modifier == EventModifiers.Command || modifier == EventModifiers.Control)
+            {
+                AppendPatrolPosition(mousePosition);
+            }
+                
+            // If User uses Shift then insert patrol point between two closest patrol points
+            // UNFORTUNATELY it is a bit finicky in get the closest line segment
+            if (modifier == EventModifiers.Shift)
+            {
+                InsertPatrolPosition(mousePosition);
+            }
+
+        }
+
+        private void AppendPatrolPosition(Vector3 mousePosition)
+        {
+            Undo.RecordObject(_behaviour, NEW_PATROL_TITLE);
+            _behaviour.PatrolPositions.Add(mousePosition);
+        }
+
+        private void InsertPatrolPosition(Vector3 mousePosition)
+        {
+            float closestDistance = HandleUtility.DistancePointLine(mousePosition,
+                _patrolTrail[0], _patrolTrail[1]);
+
+            int indexToInsert = 0;
+                    
+            for (int i = 0, count = _patrolTrail.Count; i < count-1; i++)
+            {
+                if (HandleUtility.DistancePointLine(mousePosition, _patrolTrail[i],
+                    _patrolTrail[i + 1]) < closestDistance)
+                {
+                    indexToInsert = i;
+                }
+            }
+                    
+            Undo.RecordObject(_behaviour, NEW_PATROL_TITLE);
+            _behaviour.PatrolPositions.Insert(indexToInsert, mousePosition);
+        }
+
+        private void RemovePatrolPosition(Vector3 mousePosition)
+        {
+            for (int i = 0, count = _behaviour.PatrolPositions.Count; i < count; i++)
+            {
+                if (Vector3.Distance(mousePosition, _behaviour.PatrolPositions[i]) <= CLOSEST_DISTANCE_FOR_DELETION)
+                {
+                    _behaviour.PatrolPositions.RemoveAt(i);
+                    break;
+                }
+            }
         }
     }
 }
