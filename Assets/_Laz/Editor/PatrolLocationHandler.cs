@@ -12,18 +12,18 @@ namespace LazEditor
         private const float DRAW_PLANE_HEIGHT = 0f;
         private const float CLOSEST_DISTANCE_FOR_DELETION = 0.6f;
         private const string NEW_PATROL_TITLE = "New Patrol Point";
-        private PatrolBehaviour _behaviour = null;
+        private PatrolBehaviour _patrolBehaviour = null;
         private Vector3 _tempPosition = Vector3.zero;
         private List<Vector3> _patrolTrail;
 
         private void OnEnable()
         {
-            _behaviour = (PatrolBehaviour) target;
+            _patrolBehaviour = (PatrolBehaviour) target;
         }
 
         private void OnSceneGUI()
         {
-            if (_behaviour == null)
+            if (_patrolBehaviour == null)
             {
                 return;
             }
@@ -36,21 +36,21 @@ namespace LazEditor
 
         private void HandlePatrolPositioning()
         {
-            for (int i = 0, count = _behaviour.PatrolPositions.Count; i < count; i++)
+            for (int i = 0, count = _patrolBehaviour.PatrolPositions.Count; i < count; i++)
             {
-                _tempPosition = Handles.PositionHandle(_behaviour.PatrolPositions[i], Quaternion.identity);
+                _tempPosition = Handles.PositionHandle(_patrolBehaviour.PatrolPositions[i], Quaternion.identity);
                 _tempPosition.y = 0.0f; // Ensure the position is grounded onto the plane
 
-                if (!_behaviour.PatrolPositions[i].Equals(_tempPosition))
+                if (!_patrolBehaviour.PatrolPositions[i].Equals(_tempPosition))
                 {
-                    Undo.RecordObject(_behaviour, "Patrol Positioning");
-                    _behaviour.PatrolPositions[i] = _tempPosition;   
+                    Undo.RecordObject(_patrolBehaviour, "Patrol Positioning");
+                    _patrolBehaviour.PatrolPositions[i] = _tempPosition;   
                 }
             }
             
             _patrolTrail = new List<Vector3>();
-            _patrolTrail.Add(_behaviour.transform.position);
-            _patrolTrail.AddRange(_behaviour.PatrolPositions);
+            _patrolTrail.Add(_patrolBehaviour.transform.position);
+            _patrolTrail.AddRange(_patrolBehaviour.PatrolPositions);
             
             Handles.color = Color.yellow;
             Handles.DrawPolyLine(_patrolTrail.ToArray());
@@ -110,8 +110,8 @@ namespace LazEditor
 
         private void AppendPatrolPosition(Vector3 mousePosition)
         {
-            Undo.RecordObject(_behaviour, NEW_PATROL_TITLE);
-            _behaviour.PatrolPositions.Add(mousePosition);
+            Undo.RecordObject(_patrolBehaviour, NEW_PATROL_TITLE);
+            _patrolBehaviour.PatrolPositions.Add(mousePosition);
         }
 
         private void InsertPatrolPosition(Vector3 mousePosition)
@@ -130,17 +130,17 @@ namespace LazEditor
                 }
             }
                     
-            Undo.RecordObject(_behaviour, NEW_PATROL_TITLE);
-            _behaviour.PatrolPositions.Insert(indexToInsert, mousePosition);
+            Undo.RecordObject(_patrolBehaviour, NEW_PATROL_TITLE);
+            _patrolBehaviour.PatrolPositions.Insert(indexToInsert, mousePosition);
         }
 
         private void RemovePatrolPosition(Vector3 mousePosition)
         {
-            for (int i = 0, count = _behaviour.PatrolPositions.Count; i < count; i++)
+            for (int i = 0, count = _patrolBehaviour.PatrolPositions.Count; i < count; i++)
             {
-                if (Vector3.Distance(mousePosition, _behaviour.PatrolPositions[i]) <= CLOSEST_DISTANCE_FOR_DELETION)
+                if (Vector3.Distance(mousePosition, _patrolBehaviour.PatrolPositions[i]) <= CLOSEST_DISTANCE_FOR_DELETION)
                 {
-                    _behaviour.PatrolPositions.RemoveAt(i);
+                    _patrolBehaviour.PatrolPositions.RemoveAt(i);
                     break;
                 }
             }
