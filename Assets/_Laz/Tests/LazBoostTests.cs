@@ -34,7 +34,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
             var originalPosition = Vector3.zero;
             var expectedBoostSpeed = 30f;
@@ -60,7 +60,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
             var originalPosition = Vector3.zero;
             var expectedLazoSpeed = 11f;

@@ -23,7 +23,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             var patrollingObject = GameObject.FindObjectOfType<PatrolBehaviour>();
@@ -38,7 +38,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             var patrollingObject = GameObject.FindObjectOfType<PatrolBehaviour>();
@@ -46,7 +46,7 @@ namespace Tests
             patrollingObject.Initialize();
             patrollingObject.CleanUp();
                 
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForFixedUpdate();
             Assert.AreEqual(Vector3.zero, patrollingObject.transform.position, "Patrolling object should have moved");
         }
         
@@ -55,7 +55,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             var patrollingObject = GameObject.FindObjectOfType<PatrolBehaviour>();
@@ -63,7 +63,7 @@ namespace Tests
             patrollingObject.Initialize();
             patrollingObject.Reset();
                 
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(0);
             Assert.AreEqual(Vector3.left, patrollingObject.transform.position, "Patrolling object should have moved");
         }
     }
