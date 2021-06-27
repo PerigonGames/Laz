@@ -27,7 +27,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             var lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
@@ -43,7 +43,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             var lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
@@ -59,7 +59,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             var lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
@@ -75,7 +75,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             var lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();

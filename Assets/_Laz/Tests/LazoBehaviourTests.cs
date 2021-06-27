@@ -33,7 +33,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             // When
@@ -84,7 +84,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             // When
@@ -134,7 +134,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             // When
@@ -167,7 +167,7 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             // When
@@ -198,7 +198,7 @@ namespace Tests
             lazoBehaviour.ResetLazoLimit();
             yield return new WaitForSeconds(0.1f);
             lazoBehaviour.ResetLazoLimit();
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForFixedUpdate();
             
             Assert.IsTrue(_player.LazoTool.IsLazoing);
         }
@@ -208,14 +208,14 @@ namespace Tests
         {
             for (int i = 0; i < 5; i++)
             {
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             // When
             var amountToSpawn = 11;
             var lazoWallObjectPool = GameObject.FindObjectOfType<LazoWallObjectPooler>();
             lazoWallObjectPool.Initialize(amountToSpawn);
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForFixedUpdate();
 
             // Then
             var actualResult = lazoWallObjectPool.gameObject.transform.childCount;
