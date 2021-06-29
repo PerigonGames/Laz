@@ -734,7 +734,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lazoLineRenderer: {fileID: 6301279925122541434}
   _lazoSparkleParticleSystem: {fileID: 7379877751013173474}
-  TurnOnDebug: 0
   _polygonShape: {fileID: 0}
 --- !u!114 &636070730102409017
 MonoBehaviour:
@@ -1160,6 +1159,110 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5034091015857931440, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ShapeModule.angle
+      value: 14.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ShapeModule.length
+      value: 0.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.x.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.y.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.scalar
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ShapeModule.m_Scale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.minScalar
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.x.minMaxState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.y.minMaxState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.minMaxState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: EmissionModule.m_BurstCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.randomizePerFrame
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.maxCurve.m_Curve.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.maxCurve.m_Curve.Array.data[1].time
+      value: 0.06315014
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.maxCurve.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.maxCurve.m_Curve.Array.data[1].value
+      value: 0.7104367
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].repeatInterval
+      value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.maxCurve.m_Curve.Array.data[1].inSlope
+      value: 0.9279902
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.maxCurve.m_Curve.Array.data[2].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.maxCurve.m_Curve.Array.data[0].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.maxCurve.m_Curve.Array.data[1].outSlope
+      value: 0.9279902
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.maxCurve.m_Curve.Array.data[2].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863888408787192148, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
+      propertyPath: ForceModule.z.maxCurve.m_Curve.Array.data[0].outWeight
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9002642598453465757, guid: 04bd6d3a3dcf28940b55ab959c1d9f50, type: 3}
