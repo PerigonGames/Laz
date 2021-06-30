@@ -12,7 +12,7 @@ namespace Laz
         public Vector3 Position { get; }
     }
     
-    public class PlanetoidBehaviour : BaseWrappableBehaviour, IPlanetoidBehaviour
+    public class PlanetoidBehaviour : BaseActivatingBehaviour, IPlanetoidBehaviour
     {
         
         private Planetoid _planetoid;

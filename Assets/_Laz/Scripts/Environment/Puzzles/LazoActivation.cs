@@ -5,7 +5,7 @@ namespace Laz
     [System.Serializable]
     public struct LazoActivation
     {
-        public BaseWrappableBehaviour[] PuzzleWrappableItems;
+        public BaseActivatingBehaviour[] PuzzleWrappableItems;
         public BasePuzzleActivateBehaviour OnLazoWrappedItem;
 
         public void ActivateWrapItemIfNeeded()
