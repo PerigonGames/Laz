@@ -29,11 +29,11 @@ namespace Laz
         {
             if (canActivate)
             {
-                transform.localScale = Vector3.one * 2;
+                transform.localScale = Vector3.one * 0.75f;
             }
             else
             {
-                transform.ResetScale();
+                transform.localScale = Vector3.one * 0.3f;
             }
         }
 
