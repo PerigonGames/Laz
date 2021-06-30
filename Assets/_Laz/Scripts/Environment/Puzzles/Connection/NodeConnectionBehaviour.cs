@@ -1,21 +1,26 @@
-using System;
-using PerigonGames;
 using UnityEngine;
 
 namespace Laz
 {
+    [RequireComponent(typeof(Collider))]
     public class NodeConnectionBehaviour : MonoBehaviour
     {
+        [SerializeField] private ParticleSystem _particleSystem = null;
+        [SerializeField] private Transform _meshTransform = null;
+        
         private Node _node = null;
+        private LazoBehaviour _lazo = null;
         
         public void Initialize(Node node)
         {
+            ClearParticleSystem();
             _node = node;
             _node.OnCanActivateChanged += HandleOnOnCanActivateChanged;
         }
 
         private void CleanUp()
         {
+            ClearParticleSystem();
             _node.OnCanActivateChanged -= HandleOnOnCanActivateChanged;
             _node = null;
         }
@@ -25,33 +30,46 @@ namespace Laz
             
         }
 
+        private void ClearParticleSystem()
+        {
+            _particleSystem.Stop();
+            _particleSystem.Clear();
+        }
+
         private void HandleOnOnCanActivateChanged(bool canActivate)
         {
             if (canActivate)
             {
-                transform.localScale = Vector3.one * 0.75f;
+                _meshTransform.localScale = Vector3.one * 0.75f;
             }
             else
             {
-                transform.localScale = Vector3.one * 0.3f;
+                _meshTransform.localScale = Vector3.one * 0.3f;
             }
+        }
+
+        private void Awake()
+        {
+            GetComponent<Collider>().isTrigger = true;
         }
 
         private void OnTriggerEnter(Collider other)
         {
             var lazo = other.GetComponent<LazoBehaviour>();
-            if (lazo != null)
+            if (lazo != null && lazo.IsLazoing)
             {
-                if (lazo.IsLazoing)
-                {
-                    
-                }
+                _lazo = lazo;
+                _particleSystem.Play();
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        private void Update()
         {
-            throw new NotImplementedException();
+            if (_lazo != null && !_lazo.IsLazoing)
+            {
+                ClearParticleSystem();
+                _lazo = null;
+            }
         }
     }
 }
