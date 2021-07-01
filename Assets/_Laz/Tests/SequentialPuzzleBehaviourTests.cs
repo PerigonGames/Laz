@@ -55,5 +55,56 @@ namespace Tests
             
             Assert.AreEqual(Vector3.zero, _doorToActivate.transform.localScale, "Should Complete Sequential puzzle to hide door");
         }
+        
+        [UnityTest]
+        public IEnumerator Test_SequentialPuzzle_DoorDoesNotActivates()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            // When
+            var _doorToActivate = GameObject.FindObjectOfType<DoorPuzzleActivationBehaviour>();
+            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
+            
+            _lazCoordinatorBehaviour.gameObject.transform.position = Vector3.zero;
+
+            _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
+
+
+            // Then
+            Press(_keyboard.sKey);
+            yield return new WaitForSeconds(2f);
+            
+            Assert.AreNotEqual(Vector3.zero, _doorToActivate.transform.localScale, "Should NOT Complete Sequential puzzle to hide door");
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_SequentialPuzzle_OnlyPartlyConnect_DoorDoesNotActivates()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            // When
+            var _doorToActivate = GameObject.FindObjectOfType<DoorPuzzleActivationBehaviour>();
+            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
+            
+            _lazCoordinatorBehaviour.gameObject.transform.position = Vector3.zero;
+
+            _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
+
+
+            // Then
+            Press(_keyboard.spaceKey);
+            Press(_keyboard.sKey);
+            yield return new WaitForSeconds(0.2f);
+            Release(_keyboard.spaceKey);
+            yield return new WaitForSeconds(1f);
+            
+            Assert.AreNotEqual(Vector3.zero, _doorToActivate.transform.localScale, "Should NOT Complete Sequential puzzle to hide door");
+        }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class ConnectingActivation : BasePuzzleBehaviour
+    public class ConnectingActivationBehaviour : BasePuzzleBehaviour
     {
         [SerializeField] private NodeConnectionBehaviour[] _nodeBehaviours = null;
         [SerializeField] private Polyline _line = null;
