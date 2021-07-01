@@ -19,10 +19,7 @@ namespace Laz
             set
             {
                 _canActivate = value;
-                if (OnCanActivateChanged != null)
-                {
-                    OnCanActivateChanged(value);
-                }
+                OnCanActivateChanged?.Invoke(value);
             }
         }
 
@@ -32,10 +29,7 @@ namespace Laz
             set
             {
                 _isActive = value;
-                if (OnIsActiveChanged != null)
-                {
-                    OnIsActiveChanged(value);
-                }
+                OnIsActiveChanged?.Invoke(value);
             }
         }
 
@@ -43,10 +37,7 @@ namespace Laz
         {
             _canActivate = false;
             _isActive = false;
-            if (OnNodeCompleted != null)
-            {
-                OnNodeCompleted();
-            }
+            OnNodeCompleted?.Invoke();
         }
     }
 }

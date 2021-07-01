@@ -5,6 +5,10 @@ namespace Laz
     [RequireComponent(typeof(Collider))]
     public class NodeConnectionBehaviour : MonoBehaviour
     {
+        //Place holder Design/Feedback to show which nodes can be activated
+        private const float CanActivateNodeSize = 0.75f;
+        private const float CannotActivateNodeSize = 0.3f;
+        
         [SerializeField] private ParticleSystem _particleSystem = null;
         [SerializeField] private Transform _meshTransform = null;
         
@@ -24,7 +28,7 @@ namespace Laz
             ClearParticleSystem();
             HandleOnNodeCompleted();
             _node.OnCanActivateChanged -= HandleOnCanActivateChanged;
-            _node.OnNodeCompleted += HandleOnNodeCompleted;
+            _node.OnNodeCompleted -= HandleOnNodeCompleted;
             _node = null;
         }
 
@@ -54,11 +58,11 @@ namespace Laz
         {
             if (canActivate)
             {
-                _meshTransform.localScale = Vector3.one * 0.75f;
+                _meshTransform.localScale = Vector3.one * CanActivateNodeSize;
             }
             else
             {
-                _meshTransform.localScale = Vector3.one * 0.3f;
+                _meshTransform.localScale = Vector3.one * CannotActivateNodeSize;
             }
         }
 

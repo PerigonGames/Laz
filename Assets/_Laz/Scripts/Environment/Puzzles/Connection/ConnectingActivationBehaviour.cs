@@ -44,8 +44,7 @@ namespace Laz
         private void SetupQueueOfEdges()
         {
             var numberOfNodes = _nodeBehaviours.Length;
-            var arrayOfNodes = CreateArrayOfNodes(numberOfNodes);
-            QueueUpEdges(arrayOfNodes);
+            QueueUpEdges(CreateArrayOfNodes(numberOfNodes));
         }
 
         private void AddPositionToLineRenderer(Vector3 position)

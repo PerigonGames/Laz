@@ -8,16 +8,7 @@ namespace Laz
         private bool _isActived = false;
         public virtual bool IsActivated => _isActived;
         public event Action OnPuzzleCompleted;
-
-        protected void Activate()
-        {
-            _isActived = true;
-            if (OnPuzzleCompleted != null)
-            {
-                OnPuzzleCompleted();
-            }
-        }
-
+        
         public virtual void Initialize()
         {
             _isActived = false;
@@ -31,6 +22,15 @@ namespace Laz
         public virtual void Reset()
         {
             _isActived = false;
+        }
+        
+        protected void Activate()
+        {
+            _isActived = true;
+            if (OnPuzzleCompleted != null)
+            {
+                OnPuzzleCompleted();
+            }
         }
     }
 }
