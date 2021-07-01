@@ -7,13 +7,9 @@ namespace Laz
     {
         [SerializeField] 
         private LazoActivation[] _puzzleItems = null;
-
-        private LazoWrappableManager _lazoWrappableManager = null;
         
-        public void Initialize(LazoWrappableManager wrappableManager)
+        public void Initialize()
         {
-            _lazoWrappableManager = wrappableManager;
-            _lazoWrappableManager.OnWrappableActivated += HandleOnLazoWrappedItemActivated;
             SetupPuzzleItems();
         }
 
@@ -21,45 +17,21 @@ namespace Laz
         {
             foreach (var item in _puzzleItems)
             {
-                item.OnLazoWrappedItem.Reset();
+                item.ItemToActivate.Reset();
             }
-        }
-
-        private void OnDestroy()
-        {
-            _lazoWrappableManager.OnWrappableActivated -= HandleOnLazoWrappedItemActivated;
         }
 
         private void SetupPuzzleItems()
         {
             foreach (var item in _puzzleItems)
             {
-                if (item.PuzzleWrappableItems.Contains(null))
+                if (item.PuzzleItems.Contains(null))
                 {
                     Debug.LogWarning("Empty Puzzle Wrappable items Within the Puzzle Manager");
                 }
 
-                var wrappedItem = item.OnLazoWrappedItem;
-                if (wrappedItem != null)
-                {
-                    wrappedItem.Initialize();
-                }
+                item.Initialize();
             }
         }
-
-        #region Delegate
-
-        private void HandleOnLazoWrappedItemActivated()
-        {
-            foreach (var puzzleItem in _puzzleItems)
-            {
-                puzzleItem.ActivateWrapItemIfNeeded();
-            }
-        }
-        #endregion
     }
-
-    
-
-
 }

@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using UnityEngine;
 
 namespace Laz
@@ -12,14 +10,13 @@ namespace Laz
         public Vector3 Position { get; }
     }
     
-    public class PlanetoidBehaviour : BaseActivatingBehaviour, IPlanetoidBehaviour
+    public class PlanetoidBehaviour : BasePuzzleBehaviour, IPlanetoidBehaviour
     {
         
         private Planetoid _planetoid;
         private PatrolBehaviour _patrolBehaviour = null;
-        
-        public override bool IsActivated => _planetoid.IsActivated;
         public Planetoid PlanetoidModel => _planetoid;
+        public override bool IsActivated => _planetoid.IsActivated;
         public Vector3 Position => transform.position;
         
         public void Initialize()
@@ -54,6 +51,7 @@ namespace Laz
         
         public void LazoActivated()
         {
+            Activate();
             PlayExplosion();
             gameObject.SetActive(false);
         }

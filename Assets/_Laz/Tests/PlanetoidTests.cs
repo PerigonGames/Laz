@@ -11,7 +11,7 @@ namespace Tests
             // Arrange
             var planetoid = new Planetoid(new MockPlanetoidBehaviour());
             var activatedCalled = false;
-            planetoid.OnActivated += () =>
+            planetoid.OnPlanetoidActivated += () =>
             {
                 activatedCalled = true;
             };
@@ -30,7 +30,7 @@ namespace Tests
             // Arrange
             var planetoid = new Planetoid(new MockPlanetoidBehaviour());
             var activatedCalled = false;
-            planetoid.OnActivated += () =>
+            planetoid.OnPlanetoidActivated += () =>
             {
                 activatedCalled = true;
             };

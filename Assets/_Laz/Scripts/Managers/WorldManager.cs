@@ -69,7 +69,7 @@ namespace Laz
 
             if (_puzzleManager != null)
             {
-                _puzzleManager.Initialize(_wrappableManager);
+                _puzzleManager.Initialize();
             }
 
             SetupObjectPoolers(objectsOfInterest.Length);

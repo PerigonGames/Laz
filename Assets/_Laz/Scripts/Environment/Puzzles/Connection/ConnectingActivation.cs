@@ -4,11 +4,10 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class ConnectingActivation : BaseActivatingBehaviour
+    public class ConnectingActivation : BasePuzzleBehaviour
     {
         [SerializeField] private NodeConnectionBehaviour[] _nodeBehaviours = null;
-        
-        public override bool IsActivated { get; }
+
         private List<Vertex> _listOfVertex = new List<Vertex>();
 
         private void Awake()
@@ -53,7 +52,7 @@ namespace Laz
         {
             if (_listOfVertex.All(v => v.IsActivated))
             {
-                // TODO puzzle completed
+                Activate();
             }
         }
     }

@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace Laz
 {
@@ -19,11 +18,6 @@ namespace Laz
             _frontNode.OnIsActiveChanged += HandleOnNodeIsActiveChanged;
             _backNode = backNode;
             _backNode.OnIsActiveChanged += HandleOnNodeIsActiveChanged;
-        }
-
-        public void SetFrontNodeCanActivate()
-        {
-            _frontNode.CanActivate = true;
         }
 
         private void HandleOnNodeIsActiveChanged(bool isActive)

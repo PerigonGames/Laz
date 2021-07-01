@@ -42,11 +42,11 @@ namespace Laz
                 planetoidBehaviour.Initialize();
                 var planetoid = planetoidBehaviour.PlanetoidModel;
                 _listOfPlanetoids.Add(planetoid);
-                planetoid.OnActivated += HandleOnWrappableActivated;
+                planetoid.OnPlanetoidActivated += HandleOnWrappablePlanetoidActivated;
             }
         }
 
-        private void HandleOnWrappableActivated()
+        private void HandleOnWrappablePlanetoidActivated()
         {
             if (_listOfPlanetoids.All(p => p.IsActivated))
             {

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class DoorPuzzleActivateBehaviour : BasePuzzleActivateBehaviour
+    public class DoorPuzzleActivationBehaviour : BaseCompletedPuzzleActivationBehaviour
     {
         private Vector3 _initializeSize;
         
