@@ -30,8 +30,9 @@ namespace Laz
             Reset();
         }
 
-        public void CleanUp()
+        public override void CleanUp()
         {
+            base.CleanUp();
             if (_patrolBehaviour != null)
             {
                 _patrolBehaviour.CleanUp();
@@ -40,8 +41,9 @@ namespace Laz
             gameObject.SetActive(false);
         }
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             if (_patrolBehaviour != null)
             {
                 _patrolBehaviour.Reset();

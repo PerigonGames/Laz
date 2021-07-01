@@ -13,11 +13,38 @@ namespace Laz
         private Queue<Vertex> _listOfVertex = new Queue<Vertex>();
         private Queue<Vector3> _listOfNodePositions = new Queue<Vector3>();
 
-        private void Awake()
+        public override void Initialize()
+        {
+            SetupQueueOfVertex();
+        }
+
+        public override void CleanUp()
+        {
+            base.CleanUp();
+            foreach (var nodeBehaviour in _nodeBehaviours)
+            {
+                nodeBehaviour.CleanUp();
+            }
+            _listOfVertex.Clear();
+            _listOfNodePositions.Clear();
+            _line.points = new List<PolylinePoint>();
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            foreach (var nodeBehaviour in _nodeBehaviours)
+            {
+                nodeBehaviour.Reset();
+            }
+            _line.points = new List<PolylinePoint>();
+            SetupQueueOfVertex();
+        }
+
+        private void SetupQueueOfVertex()
         {
             var numberOfNodes = _nodeBehaviours.Length;
             var arrayOfNodes = CreateArrayOfNodes(numberOfNodes);
-            _line.points = new List<PolylinePoint>();
             QueueUpVertex(arrayOfNodes);
         }
 
@@ -25,8 +52,7 @@ namespace Laz
         {
             _line.AddPoint(position);
         }
-
-
+        
         private void QueueUpVertex(Node[] nodes)
         {
             var numberOfNodes = nodes.Length;

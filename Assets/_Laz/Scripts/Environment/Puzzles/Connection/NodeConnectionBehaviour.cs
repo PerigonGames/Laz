@@ -19,17 +19,18 @@ namespace Laz
             _node.OnNodeCompleted += HandleOnNodeCompleted;
         }
 
-        private void CleanUp()
+        public void CleanUp()
         {
             ClearParticleSystem();
             HandleOnNodeCompleted();
             _node.OnCanActivateChanged -= HandleOnCanActivateChanged;
+            _node.OnNodeCompleted += HandleOnNodeCompleted;
             _node = null;
         }
 
-        private void Reset()
+        public void Reset()
         {
-            
+            HandleOnCanActivateChanged(false);
         }
 
         private void ClearParticleSystem()
@@ -37,7 +38,19 @@ namespace Laz
             _particleSystem.Stop();
             _particleSystem.Clear();
         }
-
+        
+        private void ActivateNodeIfNeeded(Collider other)
+        {
+            var lazo = other.GetComponent<LazoBehaviour>();
+            if (lazo != null && lazo.IsLazoing && _node.CanActivate)
+            {
+                _lazo = lazo;
+                _particleSystem.Play();
+                _node.IsActive = true;
+            }
+        }
+        
+        #region Delegate
         private void HandleOnCanActivateChanged(bool canActivate)
         {
             if (canActivate)
@@ -56,7 +69,9 @@ namespace Laz
             ClearParticleSystem();
             _lazo = null;
         }
-
+        #endregion
+        
+        #region Mono
         private void Awake()
         {
             GetComponent<Collider>().isTrigger = true;
@@ -64,15 +79,14 @@ namespace Laz
 
         private void OnTriggerEnter(Collider other)
         {
-            var lazo = other.GetComponent<LazoBehaviour>();
-            if (lazo != null && lazo.IsLazoing && _node.CanActivate)
-            {
-                _lazo = lazo;
-                _particleSystem.Play();
-                _node.IsActive = true;
-            }
+            ActivateNodeIfNeeded(other);
         }
-
+        
+        private void OnTriggerStay(Collider other)
+        {
+            ActivateNodeIfNeeded(other);
+        }
+        
         private void Update()
         {
             if (_lazo != null && !_lazo.IsLazoing)
@@ -82,5 +96,7 @@ namespace Laz
                 _lazo = null;
             }
         }
+        
+        #endregion
     }
 }

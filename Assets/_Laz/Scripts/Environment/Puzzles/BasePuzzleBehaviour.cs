@@ -17,5 +17,20 @@ namespace Laz
                 OnPuzzleCompleted();
             }
         }
+
+        public virtual void Initialize()
+        {
+            _isActived = false;
+        }
+
+        public virtual void CleanUp()
+        {
+            _isActived = false;
+        }
+
+        public virtual void Reset()
+        {
+            _isActived = false;
+        }
     }
 }

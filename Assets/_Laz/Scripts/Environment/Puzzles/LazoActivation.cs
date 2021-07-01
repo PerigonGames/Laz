@@ -12,10 +12,29 @@ namespace Laz
         {
             foreach (var puzzleItem in PuzzleItems)
             {
+                puzzleItem.Initialize();
                 puzzleItem.OnPuzzleCompleted += ActivateWrapItemIfNeeded;
             }
             
             ItemToActivate.Initialize();
+        }
+
+        public void CleanUp()
+        {
+            foreach (var item in PuzzleItems)
+            {
+                item.CleanUp();
+            }
+            ItemToActivate.CleanUp();
+        }
+
+        public void Reset()
+        {
+            foreach (var item in PuzzleItems)
+            {
+                item.Reset();
+            }
+            ItemToActivate.Reset();
         }
 
         private void ActivateWrapItemIfNeeded()

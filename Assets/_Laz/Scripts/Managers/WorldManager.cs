@@ -36,6 +36,7 @@ namespace Laz
         {
             _wrappableManager.CleanUp();
             _lazCoordinator.CleanUp();
+            _puzzleManager.CleanUp();
             //TODO - placeholder on how to handle the Patrolling objects
             foreach (var patrolItem in _listOfPatrollingWalls)
             {

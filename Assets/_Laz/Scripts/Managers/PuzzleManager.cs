@@ -13,11 +13,19 @@ namespace Laz
             SetupPuzzleItems();
         }
 
+        public void CleanUp()
+        {
+            foreach (var item in _puzzleItems)
+            {
+                item.CleanUp();
+            }
+        }
+
         public void Reset()
         {
             foreach (var item in _puzzleItems)
             {
-                item.ItemToActivate.Reset();
+                item.Reset();
             }
         }
 
