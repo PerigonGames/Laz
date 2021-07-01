@@ -39,10 +39,9 @@ namespace Laz
             _particleSystem.Clear();
         }
         
-        private void ActivateNodeIfNeeded(Collider other)
+        private void ActivateNodeIfNeeded(LazoBehaviour lazo)
         {
-            var lazo = other.GetComponent<LazoBehaviour>();
-            if (lazo != null && lazo.IsLazoing && _node.CanActivate)
+            if (lazo is {IsLazoing: true} && _node.CanActivate)
             {
                 _lazo = lazo;
                 _particleSystem.Play();
@@ -79,12 +78,14 @@ namespace Laz
 
         private void OnTriggerEnter(Collider other)
         {
-            ActivateNodeIfNeeded(other);
+            var lazo = other.GetComponent<LazoBehaviour>();
+            ActivateNodeIfNeeded(lazo);
         }
         
         private void OnTriggerStay(Collider other)
         {
-            ActivateNodeIfNeeded(other);
+            var lazo = other.GetComponent<LazoBehaviour>();
+            ActivateNodeIfNeeded(lazo);
         }
         
         private void Update()

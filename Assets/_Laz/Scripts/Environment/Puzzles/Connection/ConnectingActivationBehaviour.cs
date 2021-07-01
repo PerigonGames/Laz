@@ -10,12 +10,12 @@ namespace Laz
         [SerializeField] private NodeConnectionBehaviour[] _nodeBehaviours = null;
         [SerializeField] private Polyline _line = null;
         
-        private Queue<Vertex> _listOfVertex = new Queue<Vertex>();
+        private Queue<Edge> _listOfEdges = new Queue<Edge>();
         private Queue<Vector3> _listOfNodePositions = new Queue<Vector3>();
 
         public override void Initialize()
         {
-            SetupQueueOfVertex();
+            SetupQueueOfEdges();
         }
 
         public override void CleanUp()
@@ -25,7 +25,7 @@ namespace Laz
             {
                 nodeBehaviour.CleanUp();
             }
-            _listOfVertex.Clear();
+            _listOfEdges.Clear();
             _listOfNodePositions.Clear();
             _line.points = new List<PolylinePoint>();
         }
@@ -38,14 +38,14 @@ namespace Laz
                 nodeBehaviour.Reset();
             }
             _line.points = new List<PolylinePoint>();
-            SetupQueueOfVertex();
+            SetupQueueOfEdges();
         }
 
-        private void SetupQueueOfVertex()
+        private void SetupQueueOfEdges()
         {
             var numberOfNodes = _nodeBehaviours.Length;
             var arrayOfNodes = CreateArrayOfNodes(numberOfNodes);
-            QueueUpVertex(arrayOfNodes);
+            QueueUpEdges(arrayOfNodes);
         }
 
         private void AddPositionToLineRenderer(Vector3 position)
@@ -53,12 +53,12 @@ namespace Laz
             _line.AddPoint(position);
         }
         
-        private void QueueUpVertex(Node[] nodes)
+        private void QueueUpEdges(Node[] nodes)
         {
             var numberOfNodes = nodes.Length;
             for (int i = 0; i < numberOfNodes; i++)
             {
-                //Initializes Node before placing into Vertex
+                //Initializes Node before placing into the Edge
                 var node = nodes[i];
                 _nodeBehaviours[i].Initialize(node);
                 _listOfNodePositions.Enqueue(_nodeBehaviours[i].gameObject.transform.localPosition);
@@ -66,9 +66,9 @@ namespace Laz
          
                 if (i + 1 < numberOfNodes)
                 {
-                    var v = new Vertex(node, nodes[i + 1]);
-                    v.OnVertexCompleted += HandleOnVertexCompleted;
-                    _listOfVertex.Enqueue(v);
+                    var v = new Edge(node, nodes[i + 1]);
+                    v.OnEdgeCompleted += HandleOnEdgeCompleted;
+                    _listOfEdges.Enqueue(v);
                 }
             }
             var position = _listOfNodePositions.Dequeue();
@@ -86,14 +86,14 @@ namespace Laz
             return arrayOfNodes;
         }
 
-        private void HandleOnVertexCompleted()
+        private void HandleOnEdgeCompleted()
         {
-            var vertex = _listOfVertex.Dequeue();
+            var edge = _listOfEdges.Dequeue();
             var nodePosition = _listOfNodePositions.Dequeue();
             AddPositionToLineRenderer(nodePosition);
-            if (_listOfVertex.Count == 0)
+            if (_listOfEdges.Count == 0)
             {
-                vertex.CompleteBackNodeConnection();
+                edge.CompleteBackNodeConnection();
                 Activate();
             }
         }

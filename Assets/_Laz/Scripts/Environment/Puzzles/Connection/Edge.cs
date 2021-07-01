@@ -2,15 +2,15 @@ using System;
 
 namespace Laz
 {
-    public class Vertex
+    public class Edge
     {
         private bool _isActivated = false;
         private Node _frontNode = null;
         private Node _backNode = null;
 
-        public event Action OnVertexCompleted;
+        public event Action OnEdgeCompleted;
 
-        public Vertex(Node frontNode, Node backNode)
+        public Edge(Node frontNode, Node backNode)
         {
             _frontNode = frontNode;
             _frontNode.OnIsActiveChanged += HandleOnNodeIsActiveChanged;
@@ -34,9 +34,9 @@ namespace Laz
             {
                 _isActivated = true;
                 _frontNode.CompletedConnection();
-                if (OnVertexCompleted != null)
+                if (OnEdgeCompleted != null)
                 {
-                    OnVertexCompleted();
+                    OnEdgeCompleted();
                 }
 
                 return;
