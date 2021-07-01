@@ -25,7 +25,12 @@ namespace Laz
             {
                 nodeBehaviour.CleanUp();
             }
-            _listOfEdges.Clear();
+
+            while(_listOfEdges.Count > 0)
+            {
+                var edge = _listOfEdges.Dequeue();
+                edge.CleanUp();
+            }
             _listOfNodePositions.Clear();
             _line.points = new List<PolylinePoint>();
         }
@@ -33,6 +38,8 @@ namespace Laz
         public override void Reset()
         {
             base.Reset();
+            _listOfEdges = new Queue<Edge>();
+            _listOfNodePositions = new Queue<Vector3>();
             foreach (var nodeBehaviour in _nodeBehaviours)
             {
                 nodeBehaviour.Reset();

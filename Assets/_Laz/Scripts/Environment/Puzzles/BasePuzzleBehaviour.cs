@@ -17,6 +17,7 @@ namespace Laz
         public virtual void CleanUp()
         {
             _isActived = false;
+            OnPuzzleCompleted = null;
         }
 
         public virtual void Reset()

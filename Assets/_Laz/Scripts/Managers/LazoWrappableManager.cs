@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Laz
 {
@@ -21,6 +22,7 @@ namespace Laz
             foreach (var interest in _listOfPlanetoids)
             {
                 interest.CleanUp();
+                interest.OnPlanetoidActivated -= HandleOnWrappablePlanetoidActivated;
             }
         }
 
@@ -29,6 +31,7 @@ namespace Laz
             foreach (var interest in _listOfPlanetoids)
             {
                 interest.Reset();
+                interest.OnPlanetoidActivated += HandleOnWrappablePlanetoidActivated;
             }
         }
 

@@ -23,6 +23,13 @@ namespace Laz
             _backNode.CompletedConnection();
         }
 
+        public void CleanUp()
+        {
+            _frontNode.OnIsActiveChanged -= HandleOnNodeIsActiveChanged;
+            _backNode.OnIsActiveChanged -= HandleOnNodeIsActiveChanged;
+            OnEdgeCompleted -= null;
+        }
+
         private void HandleOnNodeIsActiveChanged(bool isActive)
         {
             if (_isActivated)
@@ -39,6 +46,7 @@ namespace Laz
                     OnEdgeCompleted();
                 }
 
+                CleanUp();
                 return;
             }
 
