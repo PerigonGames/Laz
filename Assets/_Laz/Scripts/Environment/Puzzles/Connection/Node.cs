@@ -4,7 +4,6 @@ namespace Laz
 {
     public class Node
     {
-        private int key = 0;
         private bool _canActivate = false;
         private bool _isActive = false;
 
@@ -12,11 +11,6 @@ namespace Laz
         public event Action<bool> OnIsActiveChanged;
 
         public event Action OnNodeCompleted;
-
-        public Node(int key)
-        {
-            this.key = key;
-        }
 
         public bool CanActivate
         {

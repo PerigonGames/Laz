@@ -54,7 +54,7 @@ namespace Laz
             var arrayOfNodes = new Node[numberOfNodes];
             for (int i = 0; i < numberOfNodes; i++)
             {
-                arrayOfNodes[i] = new Node(i);
+                arrayOfNodes[i] = new Node();
             }
 
             return arrayOfNodes;
