@@ -15,13 +15,15 @@ namespace Laz
         {
             ClearParticleSystem();
             _node = node;
-            _node.OnCanActivateChanged += HandleOnOnCanActivateChanged;
+            _node.OnCanActivateChanged += HandleOnCanActivateChanged;
+            _node.OnNodeCompleted += HandleOnNodeCompleted;
         }
 
         private void CleanUp()
         {
             ClearParticleSystem();
-            _node.OnCanActivateChanged -= HandleOnOnCanActivateChanged;
+            HandleOnNodeCompleted();
+            _node.OnCanActivateChanged -= HandleOnCanActivateChanged;
             _node = null;
         }
 
@@ -36,7 +38,7 @@ namespace Laz
             _particleSystem.Clear();
         }
 
-        private void HandleOnOnCanActivateChanged(bool canActivate)
+        private void HandleOnCanActivateChanged(bool canActivate)
         {
             if (canActivate)
             {
@@ -48,6 +50,13 @@ namespace Laz
             }
         }
 
+        private void HandleOnNodeCompleted()
+        {
+            _meshTransform.localScale = Vector3.zero;
+            ClearParticleSystem();
+            _lazo = null;
+        }
+
         private void Awake()
         {
             GetComponent<Collider>().isTrigger = true;
@@ -56,10 +65,11 @@ namespace Laz
         private void OnTriggerEnter(Collider other)
         {
             var lazo = other.GetComponent<LazoBehaviour>();
-            if (lazo != null && lazo.IsLazoing)
+            if (lazo != null && lazo.IsLazoing && _node.CanActivate)
             {
                 _lazo = lazo;
                 _particleSystem.Play();
+                _node.IsActive = true;
             }
         }
 
@@ -68,6 +78,7 @@ namespace Laz
             if (_lazo != null && !_lazo.IsLazoing)
             {
                 ClearParticleSystem();
+                _node.IsActive = false;
                 _lazo = null;
             }
         }

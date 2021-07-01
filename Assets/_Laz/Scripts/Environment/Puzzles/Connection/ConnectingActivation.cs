@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Laz
@@ -9,7 +9,7 @@ namespace Laz
         [SerializeField] private NodeConnectionBehaviour[] _nodeBehaviours = null;
         
         public override bool IsActivated { get; }
-        private Queue<Vertex> _queueOfVertex = new Queue<Vertex>();
+        private List<Vertex> _listOfVertex = new List<Vertex>();
 
         private void Awake()
         {
@@ -32,7 +32,8 @@ namespace Laz
                 if (i + 1 < numberOfNodes)
                 {
                     var v = new Vertex(node, nodes[i + 1]);
-                    _queueOfVertex.Enqueue(v);
+                    v.OnVertexCompleted += HandleOnVertexCompleted;
+                    _listOfVertex.Add(v);
                 }
             }
         }
@@ -42,48 +43,18 @@ namespace Laz
             var arrayOfNodes = new Node[numberOfNodes];
             for (int i = 0; i < numberOfNodes; i++)
             {
-                arrayOfNodes[i] = new Node();
+                arrayOfNodes[i] = new Node(i);
             }
 
             return arrayOfNodes;
         }
-    }
 
-    public class Node
-    {
-        private bool _canActivate = false;
-
-        private bool _isActive = false;
-
-        public event Action<bool> OnCanActivateChanged;
-        
-        public bool CanActivate
+        private void HandleOnVertexCompleted()
         {
-            get => _canActivate;
-
-            set
+            if (_listOfVertex.All(v => v.IsActivated))
             {
-                _canActivate = value;
-                if (OnCanActivateChanged != null)
-                {
-                    OnCanActivateChanged(value);
-                }
+                // TODO puzzle completed
             }
-        }
-    }
-
-    public class Vertex
-    {
-        private bool _isActivated = false;
-        private Node _frontNode = null;
-        private Node _backNode = null;
-
-        public Node FrontNode => _frontNode;
-
-        public Vertex(Node frontNode, Node backNode)
-        {
-            _frontNode = frontNode;
-            _backNode = backNode;
         }
     }
 }
