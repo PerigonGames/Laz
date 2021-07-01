@@ -100,7 +100,7 @@ namespace Tests
             // Then
             Press(_keyboard.spaceKey);
             Press(_keyboard.sKey);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.5f);
             Release(_keyboard.spaceKey);
             yield return new WaitForSeconds(1f);
             
