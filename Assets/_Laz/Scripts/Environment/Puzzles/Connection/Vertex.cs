@@ -10,14 +10,17 @@ namespace Laz
 
         public event Action OnVertexCompleted;
 
-        public bool IsActivated => _isActivated;
-
         public Vertex(Node frontNode, Node backNode)
         {
             _frontNode = frontNode;
             _frontNode.OnIsActiveChanged += HandleOnNodeIsActiveChanged;
             _backNode = backNode;
             _backNode.OnIsActiveChanged += HandleOnNodeIsActiveChanged;
+        }
+
+        public void CompleteBackNodeConnection()
+        {
+            _backNode.CompletedConnection();
         }
 
         private void HandleOnNodeIsActiveChanged(bool isActive)
