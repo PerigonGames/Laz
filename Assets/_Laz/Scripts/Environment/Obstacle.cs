@@ -9,13 +9,12 @@ namespace Laz
         {
             if (other.collider.CompareTag(Tags.LazPlayer))
             {
-                LazCoordinatorBehaviour behaviour = other.gameObject.GetComponent<LazCoordinatorBehaviour>();
+                LazCoordinatorBehaviour lazCoordinator = other.gameObject.GetComponent<LazCoordinatorBehaviour>();
 
-                if (behaviour != null)
+                if (lazCoordinator != null)
                 {
-                    behaviour.KillLaz();
+                    lazCoordinator.KillLaz();
                 }
-
             }
         }
     }

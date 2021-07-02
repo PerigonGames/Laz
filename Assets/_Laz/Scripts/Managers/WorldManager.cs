@@ -61,7 +61,6 @@ namespace Laz
             var objectsOfInterest = GenerateObjectOfInterest(interests);
             var laz = new LazPlayer();
 
-            _lazCoordinator.OnLazDieing += SetDeathState;
             StateManagerInstance.OnStateChanged += HandleOnStateChanged;
             
             _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManagerInstance);
@@ -107,7 +106,6 @@ namespace Laz
 
         private void OnDestroy()
         {
-            _lazCoordinator.OnLazDieing -= SetDeathState;
             StateManagerInstance.OnStateChanged -= HandleOnStateChanged;
         }
 
