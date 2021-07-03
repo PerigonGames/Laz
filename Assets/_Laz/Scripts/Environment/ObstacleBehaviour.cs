@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Laz
 {
     [RequireComponent(typeof(Collider))]
-    public class Obstacle : MonoBehaviour
+    public class ObstacleBehaviour : MonoBehaviour
     {
         private void OnCollisionEnter(Collision other)
         {
