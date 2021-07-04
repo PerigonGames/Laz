@@ -6,8 +6,8 @@ namespace Laz
     public class NodeConnectionBehaviour : MonoBehaviour
     {
         //Place holder Design/Feedback to show which nodes can be activated
-        private const float CanActivateNodeSize = 0.75f;
-        private const float CannotActivateNodeSize = 0.3f;
+        private const float CAN_ACTIVATE_NODE_SIZE = 0.75f;
+        private const float CANNOT_ACTIVATE_NODE_SIZE = 0.3f;
         
         [SerializeField] private ParticleSystem _particleSystem = null;
         [SerializeField] private Transform _meshTransform = null;
@@ -58,11 +58,11 @@ namespace Laz
         {
             if (canActivate)
             {
-                _meshTransform.localScale = Vector3.one * CanActivateNodeSize;
+                _meshTransform.localScale = Vector3.one * CAN_ACTIVATE_NODE_SIZE;
             }
             else
             {
-                _meshTransform.localScale = Vector3.one * CannotActivateNodeSize;
+                _meshTransform.localScale = Vector3.one * CANNOT_ACTIVATE_NODE_SIZE;
             }
         }
 

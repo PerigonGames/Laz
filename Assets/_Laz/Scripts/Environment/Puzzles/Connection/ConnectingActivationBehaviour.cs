@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using PerigonGames;
+using System.Linq;
 using Shapes;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace Laz
@@ -10,74 +11,79 @@ namespace Laz
         [SerializeField] private NodeConnectionBehaviour[] _nodeBehaviours = null;
         [SerializeField] private Polyline _line = null;
         
-        private Queue<Edge> _listOfEdges = new Queue<Edge>();
-        private Queue<Vector3> _listOfNodePositions = new Queue<Vector3>();
+        private Queue<Edge> _queueOfEdges = new Queue<Edge>();
+        private Queue<Vector3> _queueOfNodePositions = new Queue<Vector3>();
+        private Node[] _nodes = { };
+
+        private int NumberOfNodes => _nodes.Length;
+        private bool IsQueueOfEdgesEmpty => _queueOfEdges.Count == 0;
 
         public override void Initialize()
         {
-            SetupQueueOfEdges();
+            var numberOfNodes = _nodeBehaviours.Length;
+            _nodes = CreateArrayOfNodes(numberOfNodes);
+            EnqueueNodeBehaviourPositions();
+            Reset();
         }
 
         public override void CleanUp()
         {
             base.CleanUp();
-            foreach (var nodeBehaviour in _nodeBehaviours)
-            {
-                nodeBehaviour.CleanUp();
-            }
-
-            while(_listOfEdges.Count > 0)
-            {
-                var edge = _listOfEdges.Dequeue();
-                edge.CleanUp();
-            }
-            _listOfNodePositions.Clear();
             _line.points = new List<PolylinePoint>();
+            _queueOfEdges = new Queue<Edge>();
+            _queueOfNodePositions = new Queue<Vector3>();
+            _line.points = new List<PolylinePoint>();
+            _nodeBehaviours.ForEach(node => node.CleanUp());
+            _queueOfEdges.ForEach(edge => edge.CleanUp());
+            _queueOfNodePositions.Clear();
         }
 
         public override void Reset()
         {
             base.Reset();
-            _listOfEdges = new Queue<Edge>();
-            _listOfNodePositions = new Queue<Vector3>();
-            foreach (var nodeBehaviour in _nodeBehaviours)
+            _nodeBehaviours.ForEach(behaviour => behaviour.Reset());
+            BindNodeBehaviour();
+            SetupNodes();
+            CreateAndEnqueueEdges();
+            SetupFirstNode();
+        }
+
+        private void BindNodeBehaviour()
+        {
+            for (int i = 0; i < _nodes.Length; i++)
             {
-                nodeBehaviour.Reset();
+                _nodeBehaviours[i].Initialize(_nodes[i]);
             }
-            _line.points = new List<PolylinePoint>();
-            SetupQueueOfEdges();
         }
 
-        private void SetupQueueOfEdges()
+        private void SetupNodes()
         {
-            var numberOfNodes = _nodeBehaviours.Length;
-            QueueUpEdges(CreateArrayOfNodes(numberOfNodes));
-        }
-
-        private void AddPositionToLineRenderer(Vector3 position)
-        {
-            _line.AddPoint(position);
+            foreach (var node in _nodes)
+            {
+                node.CanActivate = false;
+            }
         }
         
-        private void QueueUpEdges(Node[] nodes)
+        private void CreateAndEnqueueEdges()
         {
-            var numberOfNodes = nodes.Length;
-            for (int i = 0; i < numberOfNodes; i++)
+            for (int frontNodeIndex = 0; frontNodeIndex < NumberOfNodes; frontNodeIndex++)
             {
-                //Initializes Node before placing into the Edge
-                var node = nodes[i];
-                _nodeBehaviours[i].Initialize(node);
-                _listOfNodePositions.Enqueue(_nodeBehaviours[i].gameObject.transform.localPosition);
-                node.CanActivate = i == 0;
-         
-                if (i + 1 < numberOfNodes)
+                var backNodeIndex = frontNodeIndex + 1;
+                var isBackNodeWithinBounds = backNodeIndex < NumberOfNodes;
+                if (isBackNodeWithinBounds)
                 {
-                    var v = new Edge(node, nodes[i + 1]);
-                    v.OnEdgeCompleted += HandleOnEdgeCompleted;
-                    _listOfEdges.Enqueue(v);
+                    var frontNode = _nodes[frontNodeIndex];
+                    var backNode = _nodes[backNodeIndex];
+                    var edge = new Edge(frontNode, backNode, HandleOnEdgeCompleted);
+                    _queueOfEdges.Enqueue(edge);
                 }
             }
-            var position = _listOfNodePositions.Dequeue();
+        }
+
+        private void SetupFirstNode()
+        {
+            _nodes.First().CanActivate = true;
+            var position = _queueOfNodePositions.Dequeue();
             AddPositionToLineRenderer(position);
         }
 
@@ -92,17 +98,31 @@ namespace Laz
             return arrayOfNodes;
         }
 
+        private void EnqueueNodeBehaviourPositions()
+        {
+            foreach (var behaviours in _nodeBehaviours)
+            {
+                _queueOfNodePositions.Enqueue(behaviours.transform.position);
+            }
+        }
+
         private void HandleOnEdgeCompleted()
         {
-            var edge = _listOfEdges.Dequeue();
-            var nodePosition = _listOfNodePositions.Dequeue();
-            AddPositionToLineRenderer(nodePosition);
-            if (_listOfEdges.Count == 0)
+            var completedEdge = _queueOfEdges.Dequeue();
+            var nextNodePosition = _queueOfNodePositions.Dequeue();
+            AddPositionToLineRenderer(nextNodePosition);
+            if (IsQueueOfEdgesEmpty)
             {
-                edge.CompleteBackNodeConnection();
+                completedEdge.CompleteBackNodeConnection();
                 Activate();
             }
         }
+        
+        private void AddPositionToLineRenderer(Vector3 position)
+        {
+            _line.AddPoint(position);
+        }
+
         
         #region Gizmo
         void OnDrawGizmosSelected()

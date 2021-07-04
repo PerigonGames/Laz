@@ -10,12 +10,13 @@ namespace Laz
 
         public event Action OnEdgeCompleted;
 
-        public Edge(Node frontNode, Node backNode)
+        public Edge(Node frontNode, Node backNode, Action handleOnEdgeCompleted)
         {
             _frontNode = frontNode;
             _frontNode.OnIsActiveChanged += HandleOnNodeIsActiveChanged;
             _backNode = backNode;
             _backNode.OnIsActiveChanged += HandleOnNodeIsActiveChanged;
+            OnEdgeCompleted += handleOnEdgeCompleted;
         }
 
         public void CompleteBackNodeConnection()
