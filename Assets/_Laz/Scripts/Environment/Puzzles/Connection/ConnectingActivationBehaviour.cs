@@ -16,12 +16,11 @@ namespace Laz
         private Node[] _nodes = { };
 
         private int NumberOfNodes => _nodes.Length;
+        private int NumberOfNodeBehaviours => _nodeBehaviours.Length;
         private bool IsQueueOfEdgesEmpty => _queueOfEdges.Count == 0;
 
         public override void Initialize()
         {
-            var numberOfNodes = _nodeBehaviours.Length;
-            _nodes = CreateArrayOfNodes(numberOfNodes);
             EnqueueNodeBehaviourPositions();
             Reset();
         }
@@ -33,6 +32,7 @@ namespace Laz
             _queueOfEdges = new Queue<Edge>();
             _queueOfNodePositions = new Queue<Vector3>();
             _line.points = new List<PolylinePoint>();
+            _nodes = new Node[]{};
             _nodeBehaviours.ForEach(node => node.CleanUp());
             _queueOfEdges.ForEach(edge => edge.CleanUp());
             _queueOfNodePositions.Clear();
@@ -42,6 +42,7 @@ namespace Laz
         {
             base.Reset();
             _nodeBehaviours.ForEach(behaviour => behaviour.Reset());
+            _nodes = CreateArrayOfNodes();
             BindNodeBehaviour();
             SetupNodes();
             CreateAndEnqueueEdges();
@@ -58,10 +59,7 @@ namespace Laz
 
         private void SetupNodes()
         {
-            foreach (var node in _nodes)
-            {
-                node.CanActivate = false;
-            }
+            _nodes.ForEach(node => node.IsActive = false);
         }
         
         private void CreateAndEnqueueEdges()
@@ -87,10 +85,10 @@ namespace Laz
             AddPositionToLineRenderer(position);
         }
 
-        private Node[] CreateArrayOfNodes(int numberOfNodes)
+        private Node[] CreateArrayOfNodes()
         {
-            var arrayOfNodes = new Node[numberOfNodes];
-            for (int i = 0; i < numberOfNodes; i++)
+            var arrayOfNodes = new Node[NumberOfNodeBehaviours];
+            for (int i = 0; i < NumberOfNodeBehaviours; i++)
             {
                 arrayOfNodes[i] = new Node();
             }
