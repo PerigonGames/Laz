@@ -28,14 +28,12 @@ namespace Laz
         public override void CleanUp()
         {
             base.CleanUp();
-            _line.points = new List<PolylinePoint>();
-            _queueOfEdges = new Queue<Edge>();
-            _queueOfNodePositions = new Queue<Vector3>();
-            _line.points = new List<PolylinePoint>();
             _nodes = new Node[]{};
+            _line.points.Clear();
+            _queueOfEdges.Clear();
+            _queueOfNodePositions.Clear();
             _nodeBehaviours.ForEach(node => node.CleanUp());
             _queueOfEdges.ForEach(edge => edge.CleanUp());
-            _queueOfNodePositions.Clear();
         }
 
         public override void Reset()
