@@ -13,22 +13,16 @@ namespace Laz
         
         private Queue<Edge> _queueOfEdges = new Queue<Edge>();
         private Queue<Vector3> _queueOfNodePositions = new Queue<Vector3>();
-        private Node[] _nodes = { };
-
-        private int NumberOfNodes => _nodes.Length;
-        private int NumberOfNodeBehaviours => _nodeBehaviours.Length;
         private bool IsQueueOfEdgesEmpty => _queueOfEdges.Count == 0;
 
         public override void Initialize()
         {
-            EnqueueNodeBehaviourPositions();
             Reset();
         }
 
         public override void CleanUp()
         {
             base.CleanUp();
-            _nodes = new Node[]{};
             _line.points.Clear();
             _queueOfEdges.Clear();
             _queueOfNodePositions.Clear();
@@ -40,53 +34,54 @@ namespace Laz
         {
             base.Reset();
             _nodeBehaviours.ForEach(behaviour => behaviour.Reset());
-            _nodes = CreateArrayOfNodes();
-            BindNodeBehaviour();
-            SetupNodes();
-            CreateAndEnqueueEdges();
-            SetupFirstNode();
+            EnqueueNodeBehaviourPositions();
+            var nodes = CreateArrayOfNodes(_nodeBehaviours.Length);
+            BindNodeBehaviour(nodes);
+            SetupNodes(nodes);
+            CreateAndEnqueueEdges(nodes);
+            SetupFirstNode(nodes);
         }
 
-        private void BindNodeBehaviour()
+        private void BindNodeBehaviour(Node[] nodes)
         {
-            for (int i = 0; i < _nodes.Length; i++)
+            for (int i = 0; i < nodes.Length; i++)
             {
-                _nodeBehaviours[i].Initialize(_nodes[i]);
+                _nodeBehaviours[i].Initialize(nodes[i]);
             }
         }
 
-        private void SetupNodes()
+        private void SetupNodes(Node[] nodes)
         {
-            _nodes.ForEach(node => node.IsActive = false);
+            nodes.ForEach(node => node.IsActive = false);
         }
         
-        private void CreateAndEnqueueEdges()
+        private void CreateAndEnqueueEdges(Node[] nodes)
         {
-            for (int frontNodeIndex = 0; frontNodeIndex < NumberOfNodes; frontNodeIndex++)
+            for (int frontNodeIndex = 0; frontNodeIndex < nodes.Length; frontNodeIndex++)
             {
                 var backNodeIndex = frontNodeIndex + 1;
-                var isBackNodeWithinBounds = backNodeIndex < NumberOfNodes;
+                var isBackNodeWithinBounds = backNodeIndex < nodes.Length;
                 if (isBackNodeWithinBounds)
                 {
-                    var frontNode = _nodes[frontNodeIndex];
-                    var backNode = _nodes[backNodeIndex];
+                    var frontNode = nodes[frontNodeIndex];
+                    var backNode = nodes[backNodeIndex];
                     var edge = new Edge(frontNode, backNode, HandleOnEdgeCompleted);
                     _queueOfEdges.Enqueue(edge);
                 }
             }
         }
 
-        private void SetupFirstNode()
+        private void SetupFirstNode(Node[] nodes)
         {
-            _nodes.First().CanActivate = true;
+            nodes.First().CanActivate = true;
             var position = _queueOfNodePositions.Dequeue();
             AddPositionToLineRenderer(position);
         }
 
-        private Node[] CreateArrayOfNodes()
+        private Node[] CreateArrayOfNodes(int numberOfNodes)
         {
-            var arrayOfNodes = new Node[NumberOfNodeBehaviours];
-            for (int i = 0; i < NumberOfNodeBehaviours; i++)
+            var arrayOfNodes = new Node[numberOfNodes];
+            for (int i = 0; i < numberOfNodes; i++)
             {
                 arrayOfNodes[i] = new Node();
             }
