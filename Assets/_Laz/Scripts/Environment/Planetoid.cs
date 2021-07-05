@@ -9,7 +9,7 @@ namespace Laz
 
         private bool _isActivated = false;
 
-        public event Action OnActivated;
+        public event Action OnPlanetoidActivated;
 
         public Vector3 Position => _planetoidBehaviour.Position;
         
@@ -24,9 +24,9 @@ namespace Laz
         {
             _isActivated = true;
             _planetoidBehaviour.LazoActivated();
-            if (OnActivated != null)
+            if (OnPlanetoidActivated != null)
             {
-                OnActivated();
+                OnPlanetoidActivated();
             }
         }
 
