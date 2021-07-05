@@ -7,7 +7,7 @@ namespace Laz
     {
         void ActivateLazo();
         Vector3 Position { get; }
-        event Action OnActivated;
+        event Action OnPlanetoidActivated;
         bool IsActivated { get; }
     }
 }
