@@ -6,9 +6,9 @@ namespace Laz
     {
         private bool _canActivate = false;
         private bool _isActive = false;
-
+        
         public event Action<bool> OnCanActivateChanged;
-        public event Action<bool> OnIsActiveChanged;
+        public event Action<Node> OnIsActiveChanged;
 
         public event Action OnNodeCompleted;
 
@@ -29,7 +29,7 @@ namespace Laz
             set
             {
                 _isActive = value;
-                OnIsActiveChanged?.Invoke(value);
+                OnIsActiveChanged?.Invoke(this);
             }
         }
 

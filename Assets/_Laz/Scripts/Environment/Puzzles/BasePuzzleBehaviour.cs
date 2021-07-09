@@ -5,29 +5,29 @@ namespace Laz
 {
     public abstract class BasePuzzleBehaviour : MonoBehaviour
     {
-        private bool _isActived = false;
-        public virtual bool IsActivated => _isActived;
+        private bool _isActivated = false;
+        public virtual bool IsActivated => _isActivated;
         public event Action OnPuzzleCompleted;
         
         public virtual void Initialize()
         {
-            _isActived = false;
+            _isActivated = false;
         }
 
         public virtual void CleanUp()
         {
-            _isActived = false;
+            _isActivated = false;
             OnPuzzleCompleted = null;
         }
 
         public virtual void Reset()
         {
-            _isActived = false;
+            _isActivated = false;
         }
         
         protected void Activate()
         {
-            _isActived = true;
+            _isActivated = true;
             if (OnPuzzleCompleted != null)
             {
                 OnPuzzleCompleted();

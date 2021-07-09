@@ -19,8 +19,9 @@ namespace Laz
         public override bool IsActivated => _planetoid.IsActivated;
         public Vector3 Position => transform.position;
         
-        public void Initialize()
+        public override void Initialize()
         {
+            base.Initialize();
             _patrolBehaviour = GetComponent<PatrolBehaviour>();
             if (_patrolBehaviour != null)
             {

@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Laz
 {
     [RequireComponent(typeof(Collider))]
-    public class NodeConnectionBehaviour : MonoBehaviour
+    public class NodeConnectionBehaviour : BasePuzzleBehaviour
     {
         //Place holder Design/Feedback to show which nodes can be activated
         private const float CAN_ACTIVATE_NODE_SIZE = 0.75f;

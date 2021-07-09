@@ -35,7 +35,7 @@ namespace Laz
             {
                 if (item.PuzzleItems.Contains(null))
                 {
-                    Debug.LogWarning("Empty Puzzle Wrappable items Within the Puzzle Manager");
+                    Debug.LogWarning("Empty Puzzle items Within the Puzzle Manager");
                 }
 
                 item.Initialize();
