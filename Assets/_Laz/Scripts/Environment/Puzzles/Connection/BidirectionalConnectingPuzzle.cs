@@ -8,11 +8,9 @@ namespace Laz
     public class BidirectionalConnectingPuzzle
     {
         private readonly Dictionary<Node, List<Node>> _dictionaryOfNeighbouringNodes = new Dictionary<Node, List<Node>>();
-
         private readonly Node[] _nodes;
 
         public event Action OnBidirectionalPuzzleCompleted;
-
         public event Action<Node, Node> OnEdgeCompleted;
 
         public Node[] Nodes => _nodes;
@@ -91,7 +89,7 @@ namespace Laz
                 {
                     RemoveConnectingNeighbors(node, connectingNode);
                     RemoveConnectingNeighbors(connectingNode, node);
-                    ConnectEdge(node, connectingNode);
+                    RenderEdgeBetween(node, connectingNode);
                 }
 
                 CallBackOnPuzzleCompletedIfNeeded();
@@ -141,7 +139,7 @@ namespace Laz
             }
         }
 
-        private void ConnectEdge(Node source, Node destination)
+        private void RenderEdgeBetween(Node source, Node destination)
         {
             OnEdgeCompleted?.Invoke(source, destination);
         }
