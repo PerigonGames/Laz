@@ -57,6 +57,67 @@ namespace Tests
         }
         
         [UnityTest]
+        public IEnumerator Test_SequentialPuzzle_LineRenderers_Generated()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            // When
+            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
+            
+            _lazCoordinatorBehaviour.gameObject.transform.position = Vector3.zero;
+
+            _lazoProperties.DistanceLimitOfLazo = float.MaxValue;
+            _lazoProperties.TimeToLivePerPoint = float.MaxValue;
+            _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
+            
+            // Then
+            Press(_keyboard.spaceKey);
+            Press(_keyboard.sKey);
+            yield return new WaitForSeconds(2f);
+
+            var sequentialPuzzle = Object.FindObjectOfType<SequentialConnectingPuzzleBehaviour>();
+            var lineRenderers = sequentialPuzzle.GetComponentsInChildren<LineRenderer>();
+            Assert.AreEqual(3, lineRenderers.Length, "Should have 3 line renderers generated");
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_SequentialPuzzle_CleanUp_RemoveLineRenderer()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            // When
+            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
+            
+            _lazCoordinatorBehaviour.gameObject.transform.position = Vector3.zero;
+
+            _lazoProperties.DistanceLimitOfLazo = float.MaxValue;
+            _lazoProperties.TimeToLivePerPoint = float.MaxValue;
+            _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
+
+
+            // Then
+            Press(_keyboard.spaceKey);
+            
+            Press(_keyboard.sKey);
+            yield return new WaitForSeconds(2f);
+            Release(_keyboard.spaceKey);
+            Release(_keyboard.sKey);
+            var sequentialPuzzle = Object.FindObjectOfType<SequentialConnectingPuzzleBehaviour>();
+            sequentialPuzzle.CleanUp();
+            yield return new WaitForSeconds(0);
+
+            // Therefore
+            var lineRenderers = sequentialPuzzle.GetComponentsInChildren<LineRenderer>();
+            Assert.AreEqual(0, lineRenderers.Length, "All Line Renderers should be cleaned up and gone");
+        }
+        
+        [UnityTest]
         public IEnumerator Test_SequentialPuzzle_DoorDoesNotActivates()
         {
             for (int i = 0; i < 5; i++)
