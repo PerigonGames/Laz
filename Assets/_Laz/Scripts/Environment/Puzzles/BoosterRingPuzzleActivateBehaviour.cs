@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class BoosterRingPuzzleActivateBehaviour : BasePuzzleActivateBehaviour
+    public class BoosterRingPuzzleActivateBehaviour : BaseCompletedPuzzleActivationBehaviour
     {
         public override void Initialize()
         {

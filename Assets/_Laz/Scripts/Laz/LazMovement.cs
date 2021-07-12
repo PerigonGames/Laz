@@ -37,13 +37,13 @@ namespace Laz
         {
             _movementProperty = movementProperty;
             _lazo = lazo;
-            _lazo.OnLazoDeactivated += SetSpeedToBaseWhenExitingLazo;
-            _lazo.OnLazoLimitReached += SetSpeedToBaseWhenExitingLazo;
             Reset();
         }
 
         public void CleanUp()
         {
+            _lazo.OnLazoDeactivated -= SetSpeedToBaseWhenExitingLazo;
+            _lazo.OnLazoLimitReached -= SetSpeedToBaseWhenExitingLazo;
             _inputDirection = Vector3.zero;
             _isMovementPressed = false;
             _currentDirection = Vector3.zero;
@@ -54,6 +54,8 @@ namespace Laz
 
         public void Reset()
         {
+            _lazo.OnLazoDeactivated += SetSpeedToBaseWhenExitingLazo;
+            _lazo.OnLazoLimitReached += SetSpeedToBaseWhenExitingLazo;
             _currentMaxSpeed = _movementProperty.BaseMaxSpeed;
         }
 

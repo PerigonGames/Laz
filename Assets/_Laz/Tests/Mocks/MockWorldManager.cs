@@ -10,6 +10,7 @@ namespace Tests
         [SerializeField] private PatrolBehaviour _patrolBehaviour = null;
         [SerializeField] private PlanetoidBehaviour _planetoidBehaviour = null;
         [SerializeField] private LazoWallObjectPooler _wallObjectPool = null;
+        [SerializeField] private PuzzleManager _puzzleManager = null;
         
         public ILazoWrapped Wrappable => _planetoidBehaviour.PlanetoidModel;
         
@@ -38,6 +39,11 @@ namespace Tests
             else
             {
                 Debug.LogWarning("Must Initialize LazoWallObjectPooler if using Lazo Tool");
+            }
+
+            if (_puzzleManager != null)
+            {
+                _puzzleManager.Initialize();
             }
         }
     }
