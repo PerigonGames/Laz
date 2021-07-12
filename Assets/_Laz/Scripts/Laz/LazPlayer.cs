@@ -7,11 +7,17 @@ namespace Laz
         private LazMovement _lazMovement;
         private Lazo _lazo;
         private Vector3 _spawnPosition = Vector3.zero;
-
+        private IStateManager _stateManager = null;
+        
         public LazMovement Movement => _lazMovement;
         public Lazo LazoTool => _lazo;
 
         public Vector3 SpawnPosition => _spawnPosition;
+
+        public LazPlayer(IStateManager stateManager = null)
+        {
+            _stateManager = stateManager ?? StateManager.Instance;
+        }
 
         public void SetMovement(ILazMovementProperty movementProperty, Lazo lazo)
         {
@@ -26,6 +32,11 @@ namespace Laz
         public void SetSpawn(Vector3 spawnPosition)
         {
             _spawnPosition = spawnPosition;
+        }
+
+        public void KillLaz()
+        {
+            _stateManager.SetState(State.Death);
         }
     }
 }

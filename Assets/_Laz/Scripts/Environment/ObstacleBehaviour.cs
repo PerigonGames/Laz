@@ -3,19 +3,18 @@ using UnityEngine;
 namespace Laz
 {
     [RequireComponent(typeof(Collider))]
-    public class Obstacle : MonoBehaviour
+    public class ObstacleBehaviour : MonoBehaviour
     {
         private void OnCollisionEnter(Collision other)
         {
             if (other.collider.CompareTag(Tags.LazPlayer))
             {
-                LazCoordinatorBehaviour behaviour = other.gameObject.GetComponent<LazCoordinatorBehaviour>();
+                LazCoordinatorBehaviour lazCoordinator = other.gameObject.GetComponent<LazCoordinatorBehaviour>();
 
-                if (behaviour != null)
+                if (lazCoordinator != null)
                 {
-                    behaviour.KillLaz();
+                    lazCoordinator.KillLaz();
                 }
-
             }
         }
     }

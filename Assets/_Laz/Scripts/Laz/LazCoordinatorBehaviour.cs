@@ -19,15 +19,17 @@ namespace Laz
         private LazoBehaviour _lazoBehaviour = null;
         private LazModelBehavior _modelBehaviour = null;
         private LazBoostBehaviour _boostBehaviour = null;
-        
-        public event Action OnLazDieing;
 
         public void Initialize(LazPlayer lazPlayer, 
-            ILazoWrapped[] objectOfInterests, 
+            ILazoWrapped[] objectOfInterests = null, 
             ILazMovementProperty movementProperty = null,
             ILazoProperties lazoProperties = null)
         {
             _lazPlayer = lazPlayer;
+            if (objectOfInterests == null)
+            {
+                objectOfInterests = new ILazoWrapped[] { };
+            }
             
             if (!TryGetComponent(out _movementBehaviour))
             {
@@ -81,11 +83,7 @@ namespace Laz
 
         public void KillLaz()
         {
-            //Todo: Handle Death animations and such
-            if (OnLazDieing != null)
-            {
-                OnLazDieing.Invoke();
-            }
+            _lazPlayer.KillLaz();
         }
     }
 }
