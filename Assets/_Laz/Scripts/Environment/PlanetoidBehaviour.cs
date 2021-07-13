@@ -2,25 +2,27 @@ using UnityEngine;
 
 namespace Laz
 {
-    public interface IPlanetoidBehaviour: ILifeCycle
+    public interface IPlanetoidBehaviour
     {
-        public Planetoid PlanetoidModel { get; }
-        public void Initialize();
-        public void LazoActivated();
-        public Vector3 Position { get; }
+        Planetoid PlanetoidModel { get; }
+        void Initialize();
+        void LazoActivated();
+        Vector3 Position { get; }
+        void Reset();
+        void CleanUp();
     }
     
     public class PlanetoidBehaviour : BasePuzzleBehaviour, IPlanetoidBehaviour
     {
-        
         private Planetoid _planetoid;
         private PatrolBehaviour _patrolBehaviour = null;
         public Planetoid PlanetoidModel => _planetoid;
         public override bool IsActivated => _planetoid.IsActivated;
         public Vector3 Position => transform.position;
         
-        public void Initialize()
+        public override void Initialize()
         {
+            base.Initialize();
             _patrolBehaviour = GetComponent<PatrolBehaviour>();
             if (_patrolBehaviour != null)
             {
