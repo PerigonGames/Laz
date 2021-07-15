@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Laz
@@ -11,6 +12,7 @@ namespace Laz
     }
 
     [CreateAssetMenu(fileName = "Lazo Properties", menuName = "Laz/Lazo Properties", order = 1)]
+    [InlineEditor]
     public class LazoPropertiesScriptableObject : ScriptableObject, ILazoProperties
     {
         [SerializeField]

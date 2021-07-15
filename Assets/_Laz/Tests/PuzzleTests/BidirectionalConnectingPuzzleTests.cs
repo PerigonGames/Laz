@@ -9,7 +9,7 @@ using UnityEngine.TestTools;
 
 namespace Tests
 {
-    public class SequentialPuzzleBehaviourTests : InputTestFixture
+    public class BidirectionalConnectingPuzzleTests : InputTestFixture
     {
         private LazPlayer _player = new LazPlayer();
         private LazCoordinatorBehaviour _lazCoordinatorBehaviour = null;
@@ -24,12 +24,12 @@ namespace Tests
             _mockMovement = new MockLazMovement();
             _lazoProperties = new MockLazoProperties();
             _player = new LazPlayer();  
-            EditorSceneManager.LoadSceneAsyncInPlayMode("Assets/_Laz/Scenes/TestingScenes/LazSequentialPuzzleTests.unity", new LoadSceneParameters(LoadSceneMode.Single));
+            EditorSceneManager.LoadSceneAsyncInPlayMode("Assets/_Laz/Scenes/TestingScenes/LazBidirectionallPuzzleTests.unity", new LoadSceneParameters(LoadSceneMode.Single));
             _keyboard = InputSystem.AddDevice<Keyboard>();
         }
         
         [UnityTest]
-        public IEnumerator Test_SequentialPuzzle_DoorActivates()
+        public IEnumerator Test_BidirectionalPuzzle_DownThenUp_DoorActivates()
         {
             for (int i = 0; i < 5; i++)
             {
@@ -51,37 +51,16 @@ namespace Tests
             Press(_keyboard.spaceKey);
             
             Press(_keyboard.sKey);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
+            Release(_keyboard.sKey);
+            Press(_keyboard.wKey);
+            yield return new WaitForSeconds(1.5f);
             
-            Assert.AreEqual(Vector3.zero, _doorToActivate.transform.localScale, "Should Complete Sequential puzzle to hide door");
+            Assert.AreEqual(Vector3.zero, _doorToActivate.transform.localScale, "Should Complete Bidirectional puzzle to hide door");
         }
         
         [UnityTest]
-        public IEnumerator Test_SequentialPuzzle_DoorDoesNotActivates()
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                yield return new WaitForFixedUpdate();
-            }
-
-            // When
-            var _doorToActivate = GameObject.FindObjectOfType<DoorPuzzleActivationBehaviour>();
-            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
-            
-            _lazCoordinatorBehaviour.gameObject.transform.position = Vector3.zero;
-
-            _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
-
-
-            // Then
-            Press(_keyboard.sKey);
-            yield return new WaitForSeconds(2f);
-            
-            Assert.AreNotEqual(Vector3.zero, _doorToActivate.transform.localScale, "Should NOT Complete Sequential puzzle to hide door");
-        }
-        
-        [UnityTest]
-        public IEnumerator Test_SequentialPuzzle_OnlyPartlyConnect_DoorDoesNotActivates()
+        public IEnumerator Test_BidirectionalPuzzle_OnlyPartlyConnect_DoorDoesNotActivates()
         {
             for (int i = 0; i < 5; i++)
             {
@@ -100,11 +79,46 @@ namespace Tests
             // Then
             Press(_keyboard.spaceKey);
             Press(_keyboard.sKey);
-            yield return new WaitForSeconds(0.5f);
-            Release(_keyboard.spaceKey);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(3f);
             
-            Assert.AreNotEqual(Vector3.zero, _doorToActivate.transform.localScale, "Should NOT Complete Sequential puzzle to hide door");
+            Assert.AreNotEqual(Vector3.zero, _doorToActivate.transform.localScale, "Should NOT Complete Bidirectional puzzle to hide door");
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BidirectionalPuzzle_CleanUp_LineRendererShouldDisappear()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            // When
+            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
+            
+            _lazCoordinatorBehaviour.gameObject.transform.position = Vector3.zero;
+
+            _lazoProperties.DistanceLimitOfLazo = float.MaxValue;
+            _lazoProperties.TimeToLivePerPoint = float.MaxValue;
+            _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
+
+
+            // Then
+            Press(_keyboard.spaceKey);
+            
+            Press(_keyboard.sKey);
+            yield return new WaitForSeconds(1f);
+            Release(_keyboard.sKey);
+            Press(_keyboard.wKey);
+            yield return new WaitForSeconds(1.5f);
+            Release(_keyboard.spaceKey);
+            Release(_keyboard.wKey);
+            var bidirectionalPuzzle = Object.FindObjectOfType<BidirectionalConnectingPuzzleBehaviour>();
+            bidirectionalPuzzle.CleanUp();
+            yield return new WaitForFixedUpdate();
+            
+            // Therefore
+            var lineRenderers =  bidirectionalPuzzle.GetComponentsInChildren<LineRenderer>();
+            Assert.AreEqual(0, lineRenderers.Length, "All Line Renderers should be cleaned up and gone");
         }
     }
 }
