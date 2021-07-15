@@ -76,7 +76,7 @@ namespace Tests
             Press(_keyboard.wKey);
             yield return new WaitForSeconds(1f);
             
-            Assert.IsTrue(planetoid.IsActivated);
+            Assert.IsTrue(planetoid.IsPuzzleActivated);
         }
         
         [UnityTest]
@@ -126,7 +126,7 @@ namespace Tests
             Press(_keyboard.wKey);
             yield return new WaitForSeconds(1f);
             
-            Assert.IsFalse(planetoid.IsActivated);
+            Assert.IsFalse(planetoid.IsPuzzleActivated);
         }
         
         [UnityTest]

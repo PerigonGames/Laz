@@ -49,7 +49,7 @@ namespace Laz
 
         private bool AreAllPuzzlesActivated()
         {
-            return PuzzleItems.All(item => item.IsActivated);
+            return PuzzleItems.All(item => item.IsPuzzleActivated);
         }
 
         public void ActivatePuzzleItem()

@@ -1,15 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
-using Shapes;
 using Sirenix.Utilities;
 using UnityEngine;
 
 namespace Laz
 {
-    public class ConnectingActivationBehaviour : BasePuzzleBehaviour
+    public class SequentialConnectingPuzzleBehaviour : BasePuzzleBehaviour
     {
         [SerializeField] private NodeConnectionBehaviour[] _nodeBehaviours = null;
-        [SerializeField] private Polyline _line = null;
         
         private Queue<Edge> _queueOfEdges = new Queue<Edge>();
         private Queue<Vector3> _queueOfNodePositions = new Queue<Vector3>();
@@ -17,17 +15,18 @@ namespace Laz
 
         public override void Initialize()
         {
+            base.Initialize();
             Reset();
         }
 
         public override void CleanUp()
         {
             base.CleanUp();
-            _line.points.Clear();
             _queueOfEdges.Clear();
             _queueOfNodePositions.Clear();
             _nodeBehaviours.ForEach(node => node.CleanUp());
             _queueOfEdges.ForEach(edge => edge.CleanUp());
+            GetComponentsInChildren<LineRenderer>().ForEach(line => Destroy(line.gameObject));
         }
 
         public override void Reset()
@@ -74,8 +73,6 @@ namespace Laz
         private void SetupFirstNode(Node[] nodes)
         {
             nodes.First().CanActivate = true;
-            var position = _queueOfNodePositions.Dequeue();
-            AddPositionToLineRenderer(position);
         }
 
         private Node[] CreateArrayOfNodes(int numberOfNodes)
@@ -100,21 +97,20 @@ namespace Laz
         private void HandleOnEdgeCompleted()
         {
             var completedEdge = _queueOfEdges.Dequeue();
-            var nextNodePosition = _queueOfNodePositions.Dequeue();
-            AddPositionToLineRenderer(nextNodePosition);
+            AddLineToCompletedEdge();
             if (IsQueueOfEdgesEmpty)
             {
                 completedEdge.CompleteBackNodeConnection();
-                Activate();
+                ActivatePuzzle();
             }
         }
-        
-        private void AddPositionToLineRenderer(Vector3 position)
+
+        private void AddLineToCompletedEdge()
         {
-            _line.AddPoint(position);
+            var line = LineFactory.CreateLineBetween(_queueOfNodePositions.Dequeue(), _queueOfNodePositions.Peek());
+            line.transform.parent = transform;
         }
 
-        
         #region Gizmo
         void OnDrawGizmosSelected()
         {
