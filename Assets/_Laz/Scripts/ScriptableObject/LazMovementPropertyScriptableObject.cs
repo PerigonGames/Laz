@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Laz
@@ -13,6 +14,7 @@ namespace Laz
         float BoostTimeLimit { get; }
     }
     [CreateAssetMenu(fileName = "Laz Movement", menuName = "Laz/Movement", order = 1)]
+    [InlineEditor]
     public class LazMovementPropertyScriptableObject : ScriptableObject, ILazMovementProperty
     {
         [SerializeField]

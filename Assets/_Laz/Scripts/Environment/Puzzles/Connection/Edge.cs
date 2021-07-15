@@ -5,8 +5,8 @@ namespace Laz
     public class Edge
     {
         private bool _isActivated = false;
-        private Node _frontNode = null;
-        private Node _backNode = null;
+        private readonly Node _frontNode = null;
+        private readonly Node _backNode = null;
 
         public event Action OnEdgeCompleted;
 
@@ -31,7 +31,7 @@ namespace Laz
             OnEdgeCompleted -= null;
         }
 
-        private void HandleOnNodeIsActiveChanged(bool isActive)
+        private void HandleOnNodeIsActiveChanged(Node node)
         {
             if (_isActivated)
             {
