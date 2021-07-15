@@ -101,7 +101,7 @@ namespace Laz
             if (IsQueueOfEdgesEmpty)
             {
                 completedEdge.CompleteBackNodeConnection();
-                Activate();
+                ActivatePuzzle();
             }
         }
 

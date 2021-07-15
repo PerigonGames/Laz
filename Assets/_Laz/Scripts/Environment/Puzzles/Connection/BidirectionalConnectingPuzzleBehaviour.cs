@@ -29,7 +29,7 @@ namespace Laz
         {
             base.Reset();
             _connectingPuzzle = new BidirectionalConnectingPuzzle(_nodeBehaviours.Length);
-            _connectingPuzzle.OnBidirectionalPuzzleCompleted += Activate;
+            _connectingPuzzle.OnBidirectionalPuzzleCompleted += ActivatePuzzle;
             _connectingPuzzle.OnEdgeCompleted += HandleOnEdgeCompleted;
             BindNodeToBehaviour();
             _connectingPuzzle.SetNodesCanActivate();

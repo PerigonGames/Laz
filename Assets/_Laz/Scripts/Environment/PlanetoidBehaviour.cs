@@ -16,7 +16,6 @@ namespace Laz
         private Planetoid _planetoid;
         private PatrolBehaviour _patrolBehaviour = null;
         public Planetoid PlanetoidModel => _planetoid;
-        public override bool IsActivated => _planetoid.IsActivated;
         public Vector3 Position => transform.position;
         
         public override void Initialize()
@@ -54,7 +53,7 @@ namespace Laz
         
         public void LazoActivated()
         {
-            Activate();
+            ActivatePuzzle();
             PlayExplosion();
             gameObject.SetActive(false);
         }
