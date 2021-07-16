@@ -51,7 +51,7 @@ namespace Tests
             Press(_keyboard.spaceKey);
             
             Press(_keyboard.sKey);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             Release(_keyboard.sKey);
             Press(_keyboard.wKey);
             yield return new WaitForSeconds(1.5f);
@@ -119,6 +119,37 @@ namespace Tests
             // Therefore
             var lineRenderers =  bidirectionalPuzzle.GetComponentsInChildren<LineRenderer>();
             Assert.AreEqual(0, lineRenderers.Length, "All Line Renderers should be cleaned up and gone");
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_BidirectionalPuzzle_B_DownThenUp_DoorDoesNotActivate()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            // When
+            var _doorToActivate = GameObject.FindObjectOfType<DoorPuzzleActivationBehaviour>();
+            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
+
+            _lazCoordinatorBehaviour.gameObject.transform.position = new Vector3(10.21f, 0, 0);
+
+            _lazoProperties.DistanceLimitOfLazo = float.MaxValue;
+            _lazoProperties.TimeToLivePerPoint = float.MaxValue;
+            _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
+
+
+            // Then
+            Press(_keyboard.spaceKey);
+            
+            Press(_keyboard.sKey);
+            yield return new WaitForSeconds(0.5f);
+            Release(_keyboard.sKey);
+            Press(_keyboard.wKey);
+            yield return new WaitForSeconds(1.5f);
+            
+            Assert.AreNotEqual(Vector3.zero, _doorToActivate.transform.localScale, "Should Complete Bidirectional puzzle to hide door");
         }
     }
 }

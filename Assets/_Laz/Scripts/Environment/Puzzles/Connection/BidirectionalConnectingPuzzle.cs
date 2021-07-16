@@ -81,7 +81,8 @@ namespace Laz
 
         private void HandleNodeIsActiveChanged(Node node)
         {
-            if (node.IsActive)
+            var areOnlyTwoNodesActive = Nodes.Count(n => n.IsActive) == 2;
+            if (node.IsActive && areOnlyTwoNodesActive)
             {
                 var listOfLazActivatedNodeNeighbors =
                     GetNeighborsFrom(node).Where(neighbor => neighbor.IsActive).ToList();
@@ -90,6 +91,7 @@ namespace Laz
                     RemoveConnectingNeighbors(node, connectingNode);
                     RemoveConnectingNeighbors(connectingNode, node);
                     RenderEdgeBetween(node, connectingNode);
+                    Deactivate(new[] {node, connectingNode});
                 }
 
                 CallBackOnPuzzleCompletedIfNeeded();
@@ -130,6 +132,16 @@ namespace Laz
 
             return true;
         }
+        
+        private void RenderEdgeBetween(Node source, Node destination)
+        {
+            OnEdgeCompleted?.Invoke(source, destination);
+        }
+
+        private void Deactivate(Node[] nodes)
+        {
+            nodes.ForEach(node => node.IsActive = false);
+        }
 
         private void CallBackOnPuzzleCompletedIfNeeded()
         {
@@ -139,9 +151,5 @@ namespace Laz
             }
         }
 
-        private void RenderEdgeBetween(Node source, Node destination)
-        {
-            OnEdgeCompleted?.Invoke(source, destination);
-        }
     }
 }
