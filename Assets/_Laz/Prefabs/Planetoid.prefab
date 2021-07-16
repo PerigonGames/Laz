@@ -105,7 +105,8 @@ GameObject:
   - component: {fileID: 7959790425013479012}
   - component: {fileID: 80406764619832612}
   - component: {fileID: 474468082}
-  m_Layer: 0
+  - component: {fileID: 3710508749620850938}
+  m_Layer: 7
   m_Name: Planetoid
   m_TagString: LazoInterest
   m_Icon: {fileID: 0}
@@ -152,9 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fb0ce06ca9943efa633d170f3990f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _patrolLocations:
-  - {fileID: 897388874226933257}
-  - {fileID: 897388873580357071}
+  _patrolPositions: []
   _speed: 5
 --- !u!135 &80406764619832612
 SphereCollider:
@@ -185,6 +184,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!114 &3710508749620850938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897388874422119430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183748dd497aa473a98ff0cd8cb67fc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  uniqueID: 4514329694202954828
+  updateError: 1
+  checkTime: 0.2
 --- !u!1 &897388875184113828
 GameObject:
   m_ObjectHideFlags: 0

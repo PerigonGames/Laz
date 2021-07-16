@@ -451,7 +451,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 81614044}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 14.58, z: 0}
+  m_LocalPosition: {x: -14.58, y: 14.58, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -528,7 +528,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6610365341234808042, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -14.58
       objectReference: {fileID: 0}
     - target: {fileID: 6610365341234808042, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1178,7 +1178,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 694554984}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 14.58, z: 0}
+  m_LocalPosition: {x: -14.58, y: 14.58, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2121999100}
@@ -1330,6 +1330,10 @@ PrefabInstance:
     - target: {fileID: 897388874422119430, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
       propertyPath: m_Name
       value: Planetoid (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3710508749620850938, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
+      propertyPath: uniqueID
+      value: 3816031147422653271
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
@@ -2518,6 +2522,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Planetoid (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3710508749620850938, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
+      propertyPath: uniqueID
+      value: 6852806092351986579
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf0afa10fad2a46408612db0f97ef7f5, type: 3}
 --- !u!4 &1740171764 stripped
@@ -3536,27 +3544,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Agent
       objectReference: {fileID: 0}
+    - target: {fileID: 7394380555502095493, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 755421050}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
---- !u!1 &7394380555502095492 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6187784087072409016, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
-  m_PrefabInstance: {fileID: 7394380555502095491}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7394380555502095493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7394380555502095492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9679e68a0f1144e79c664d9a11ca121, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  target: {fileID: 755421050}
 --- !u!1001 &9141106055651249909
 PrefabInstance:
   m_ObjectHideFlags: 0
