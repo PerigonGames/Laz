@@ -81,7 +81,8 @@ namespace Laz
 
         private void HandleNodeIsActiveChanged(Node node)
         {
-            if (node.IsActive)
+            var areOnlyTwoNodesActive = Nodes.Count(n => n.IsActive) == 2;
+            if (node.IsActive && areOnlyTwoNodesActive)
             {
                 var listOfLazActivatedNodeNeighbors =
                     GetNeighborsFrom(node).Where(neighbor => neighbor.IsActive).ToList();
