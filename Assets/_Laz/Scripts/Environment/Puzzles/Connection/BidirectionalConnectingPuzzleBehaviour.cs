@@ -70,5 +70,20 @@ namespace Laz
         }
 
         #endregion
+        
+        #region Gizmo
+        void OnDrawGizmosSelected()
+        {
+            if (!_nodeBehaviours.IsNullOrEmpty())
+            {
+                // Draws a blue line from this transform to the target
+                for(int i = 0;i < _nodeBehaviours.Length - 1; i++)
+                {
+                    Gizmos.color = Color.cyan;
+                    Gizmos.DrawLine(_nodeBehaviours[i].transform.position, _nodeBehaviours[i + 1].transform.position);
+                }
+            }
+        }
+        #endregion
     }
 }
