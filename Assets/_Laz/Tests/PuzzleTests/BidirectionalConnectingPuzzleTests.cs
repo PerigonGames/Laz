@@ -29,7 +29,7 @@ namespace Tests
         }
         
         [UnityTest]
-        public IEnumerator Test_BidirectionalPuzzle_DownThenUp_DoorActivates()
+        public IEnumerator Test_BidirectionalPuzzle_UpThenDown_DoorActivates()
         {
             for (int i = 0; i < 5; i++)
             {
@@ -44,17 +44,23 @@ namespace Tests
 
             _lazoProperties.DistanceLimitOfLazo = float.MaxValue;
             _lazoProperties.TimeToLivePerPoint = float.MaxValue;
+            _lazoProperties.RateOfRecordingPosition = 0.05f;
             _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
 
 
             // Then
             Press(_keyboard.spaceKey);
             
-            Press(_keyboard.sKey);
-            yield return new WaitForSeconds(0.5f);
-            Release(_keyboard.sKey);
             Press(_keyboard.wKey);
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(0.5f);
+            Release(_keyboard.wKey);
+            Release(_keyboard.spaceKey);
+            
+            yield return new WaitForSeconds(2f);
+            Press(_keyboard.spaceKey);
+            
+            Press(_keyboard.sKey);
+            yield return new WaitForSeconds(2.0f);
             
             Assert.AreEqual(Vector3.zero, _doorToActivate.transform.localScale, "Should Complete Bidirectional puzzle to hide door");
         }

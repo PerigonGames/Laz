@@ -13,7 +13,7 @@ namespace Laz
         [SerializeField] private Transform _meshTransform = null;
         
         private Node _node = null;
-        private LazoBehaviour _lazo = null;
+        private LazoWallBehaviour _lazoWall = null;
         
         public void Initialize(Node node)
         {
@@ -43,12 +43,16 @@ namespace Laz
             _particleSystem.Clear();
         }
         
-        private void ActivateNodeIfNeeded(LazoBehaviour lazo)
+        private void ActivateNodeIfNeeded(LazoWallBehaviour lazoWall)
         {
-            if (lazo is {IsLazoing: true} && _node.CanActivate)
+            if (lazoWall != null && lazoWall.gameObject.activeSelf && _node.CanActivate)
             {
-                _lazo = lazo;
-                _particleSystem.Play();
+                _lazoWall = lazoWall;
+                if (!_particleSystem.isPlaying)
+                {
+                    _particleSystem.Play();
+                }
+
                 _node.IsActive = true;
             }
         }
@@ -70,7 +74,7 @@ namespace Laz
         {
             _meshTransform.localScale = Vector3.zero;
             ClearParticleSystem();
-            _lazo = null;
+            _lazoWall = null;
         }
         #endregion
         
@@ -82,23 +86,23 @@ namespace Laz
 
         private void OnTriggerEnter(Collider other)
         {
-            var lazo = other.GetComponent<LazoBehaviour>();
-            ActivateNodeIfNeeded(lazo);
+            var lazoWall = other.GetComponent<LazoWallBehaviour>();
+            ActivateNodeIfNeeded(lazoWall);
         }
         
         private void OnTriggerStay(Collider other)
         {
-            var lazo = other.GetComponent<LazoBehaviour>();
-            ActivateNodeIfNeeded(lazo);
+            var lazoWall = other.GetComponent<LazoWallBehaviour>();
+            ActivateNodeIfNeeded(lazoWall);
         }
         
         private void Update()
         {
-            if (_lazo != null && !_lazo.IsLazoing)
+            if (_lazoWall != null && !_lazoWall.gameObject.activeSelf)
             {
                 ClearParticleSystem();
                 _node.IsActive = false;
-                _lazo = null;
+                _lazoWall = null;
             }
         }
         
