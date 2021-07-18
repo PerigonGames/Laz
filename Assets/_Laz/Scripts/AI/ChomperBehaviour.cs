@@ -12,16 +12,15 @@ namespace Laz
         // Dependencies
         private IChomperProperties _chomperProperties = null;
         private IAstarAI _ai = null;
-        private IRandomPositionGenerator _randomPositionGenerator = null;
+        private IRandomPosition _randomPosition = null;
 
         public void Initialize(
             IChomperProperties chomperProperties = null, 
-            IRandomPositionGenerator randomPositionGenerator = null)
+            IRandomPosition randomPosition = null)
         {            
             base.Initialize();
             _chomperProperties = chomperProperties ?? _chomperPropertiesScriptableObject;
-            _randomPositionGenerator =
-                randomPositionGenerator ?? new RandomPositionGenerator(transform.position, _chomperProperties.IdleRadius);
+            _randomPosition = randomPosition ?? new RandomPositionInsideCircle(transform.position, _chomperProperties.IdleRadius);
             MoveTo(transform.position);
         }
 
@@ -34,7 +33,7 @@ namespace Laz
         public override void Reset()
         {
             base.Reset();
-            _ai.destination = _randomPositionGenerator.GetRandomPosition();
+            _ai.destination = _randomPosition.GetRandomPosition();
         }
         
         #region Mono
@@ -54,7 +53,7 @@ namespace Laz
         {
             if (_ai.reachedDestination || _ai.isStopped)
             {
-                var destination = _randomPositionGenerator.GetRandomPosition();
+                var destination = _randomPosition.GetRandomPosition();
                 MoveTo(destination);
             }
         }

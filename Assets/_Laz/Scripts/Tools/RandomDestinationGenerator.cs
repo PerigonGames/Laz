@@ -4,19 +4,19 @@ using UnityEngine;
 
 namespace Laz
 {
-    public interface IRandomPositionGenerator
+    public interface IRandomPosition
     {
         Vector3 GetRandomPosition();
     }
     
-    public class RandomPositionGenerator : IRandomPositionGenerator
+    public class RandomPositionInsideCircle : IRandomPosition
     {
         private readonly Vector3 _spawnPosition;
         private readonly float _radius;
         
         private readonly IRandomUtility _randomUtility;
         
-        public RandomPositionGenerator(Vector3 spawnPosition, float radius, IRandomUtility randomUtility = null)
+        public RandomPositionInsideCircle(Vector3 spawnPosition, float radius, IRandomUtility randomUtility = null)
         {
             var seed = spawnPosition.GetHashCode();
             _randomUtility = randomUtility ?? new RandomUtility(seed);
