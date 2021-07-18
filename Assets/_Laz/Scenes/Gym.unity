@@ -4331,6 +4331,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9002406071292314685, guid: f688e5ae3b8b3dc46ab03f44c5ec60e6, type: 3}
+      propertyPath: maxFrameTime
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9002406071292314685, guid: f688e5ae3b8b3dc46ab03f44c5ec60e6, type: 3}
+      propertyPath: logPathResults
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9002406071292314685, guid: f688e5ae3b8b3dc46ab03f44c5ec60e6, type: 3}
+      propertyPath: showSearchTree
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9002406071292314685, guid: f688e5ae3b8b3dc46ab03f44c5ec60e6, type: 3}
       propertyPath: data.dataString
       value: UEsDBBQAAAgIAACAn+uk8x+RkgIAAIQFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFlVF1P4kAU/StknlcDgrjs2y4g7iYqsbvxYevDtL2lE6YzzXwIaPjv3jttaUVj0nLO/Tpn7vSdCWUrSJ02KyOye50B+zFg9M6+DTryDvZ8o1Uk3qCNeRaZKyiIh5gn7oRGfERpVpfgjEh/qo2k4CGCXolcm3KZbWCurbMI51xaQMpoR9kKofcB2zcJh+b5Rs/BEd9SUA5MF3UxOY8bzy5n9De9CglepZKXFWQ0eJc3GrZ5+BYCFYpqYkhAqqUUtpmIuUMVFEdVAQZIciY4CgyjTPBnAWJTuPPcxzy30KKGHxbCoE91UfZL1+aV3G7rwV659NRmOgkT1TXvv9AXo0DnRpd3p7ZBjytEun3ih5Rb1zO3Dy+6uUfBnh2XW55IeC5APeiV0V5lSDrjKdVbuFr0Sp2kzQtIt11cPWsLttG++nqeo+48j0H9fi5FmRByOamBSOpg94xywODB/MaJw37YphKiNMU/C3/5pr9IDXErjHVINQ0VjZdobyiULYNppMa7uTYKAtwoqUBx6Q5rLOP6Rzj8yvXanjG3nK5M07zh2ptwlhLgLn44PKPWetedloU/vqzWWigXATdp0atnC727B1s8eieFgk4REQ9o4lwrVa+f/UxSVuRNztNeloO98wYW3PFwBXAk3JKs3xD9DBnKS0kLGURQ7f8ogv5fyOOCY1sZYPagVbg9n54vtAcbL7LPa86SaZZcjaezaTKb5dPk+uL6+2h8neTjm5sJTJJ8yMI9EAot53Jde9acFC6Q6rQo3Pn2ozZYGV6Fi5cZvluJt1L37BAq11FqANRjXeEkFgw2we9DtswEyozAOaHC6rH3mEmdbiGLT4XiYOxy7wyPuyoxq8SrdoTEbB4+ZTE7suMHUEsDBBQAAAgIAACAn+uglXkcbQAAAHgAAAAJACQAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1YqSy0qzszPU7JSMNEz0jM01VFQSi9KLMgoBooYgjilmSkgdrRSkllKkpGxmaVZkqVlmlmSqa6phaGxaVKasbm5SapJUpqBUixQfUllQapfYm4qRE9AYklGWmZeSmZeup57UWaKO8hopdhaAFBLAQItABQAAAgIAACAn+uk8x+RkgIAAIQFAAALACQAAAAAAAAAAAAAAAAAAABncmFwaDAuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLAQItABQAAAgIAACAn+uglXkcbQAAAHgAAAAJACQAAAAAAAAAAAAAAN8CAABtZXRhLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwUGAAAAAAIAAgC4AAAAlwMAAAAA
       objectReference: {fileID: 0}
