@@ -13,7 +13,8 @@ namespace Laz
         
         public RandomPositionGenerator(Vector3 spawnPosition, float radius, IRandomUtility randomUtility = null)
         {
-            _randomUtility = randomUtility ?? new RandomUtility();
+            var seed = spawnPosition.GetHashCode();
+            _randomUtility = randomUtility ?? new RandomUtility(seed);
             _spawnPosition = spawnPosition;
             _radius = radius;
         }

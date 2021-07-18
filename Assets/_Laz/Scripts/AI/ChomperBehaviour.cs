@@ -1,3 +1,4 @@
+using System;
 using Pathfinding;
 using UnityEngine;
 
@@ -28,11 +29,13 @@ namespace Laz
         public override void CleanUp()
         {
             base.CleanUp();
+            _ai.destination = transform.position;
         }
 
         public override void Reset()
         {
             base.Reset();
+            _ai.destination = _randomPositionGenerator.GetRandomPosition();
         }
         
         #region Mono
@@ -50,7 +53,7 @@ namespace Laz
         // REMOVE THIS COMMENT BY END OF 2020 ^^^^^
         private void Update()
         {
-            if (_ai.reachedDestination)
+            if (_ai.reachedDestination || _ai.isStopped)
             {
                 var destination = _randomPositionGenerator.GetRandomPosition();
                 MoveTo(destination);
@@ -62,6 +65,16 @@ namespace Laz
             _ai.destination = position;
         }
         
+        #endregion
+        
+        #region Gizmo
+
+        public void OnDrawGizmos()
+        {
+            Gizmos.color = new Color(1, 1, 0, 0.25f);
+            Gizmos.DrawSphere(transform.position, _chomperPropertiesScriptableObject.IdleRadius);
+        }
+
         #endregion
     }
 
