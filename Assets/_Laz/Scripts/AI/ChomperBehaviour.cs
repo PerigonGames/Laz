@@ -48,7 +48,7 @@ namespace Laz
         }
 
         // TODO - PLACEHOLDER, SHOULD MOVE THIS INTO SEPARATE AI MOVE SCRIPT.
-        // REMOVE THIS COMMENT BY END OF 2020 ^^^^^
+        // REMOVE THIS COMMENT BY END OF 2021 ^^^^^
         private void Update()
         {
             if (_ai.reachedDestination || _ai.isStopped)
