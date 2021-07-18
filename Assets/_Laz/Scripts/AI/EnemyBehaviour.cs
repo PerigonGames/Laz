@@ -4,7 +4,7 @@ namespace Laz
 {
     public abstract class EnemyBehaviour : MonoBehaviour
     {
-        private Vector3 _originalPosition;
+        protected Vector3 _originalPosition;
         
         #region Mono
 

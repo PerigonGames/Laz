@@ -1,4 +1,3 @@
-using System;
 using Pathfinding;
 using UnityEngine;
 
@@ -72,7 +71,7 @@ namespace Laz
         public void OnDrawGizmos()
         {
             Gizmos.color = new Color(1, 1, 0, 0.25f);
-            Gizmos.DrawSphere(transform.position, _chomperPropertiesScriptableObject.IdleRadius);
+            Gizmos.DrawSphere(_originalPosition, _chomperPropertiesScriptableObject.IdleRadius);
         }
 
         #endregion
