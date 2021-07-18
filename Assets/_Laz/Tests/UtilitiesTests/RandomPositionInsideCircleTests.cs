@@ -42,9 +42,9 @@ namespace Tests.Utilities
             // Assert
             /// Floating Point Error causes hard to test whole Vector3
             /// So separated tests to test each axis
-            Assert.AreEqual(expectedResult.x, actualResult.x, "Randomizer always return 0.25, So Quarter angle circle + Quarter distance from center");
-            Assert.AreEqual(expectedResult.y, actualResult.y, "Randomizer always return 0.25, So Quarter angle circle + Quarter distance from center");
-            Assert.AreEqual(expectedResult.z, actualResult.z, "Randomizer always return 0.25, So Quarter angle circle + Quarter distance from center");
+            Assert.AreEqual(expectedResult.x, actualResult.x, 0.1f, "Randomizer always return 0.25, So Quarter angle circle + Quarter distance from center");
+            Assert.AreEqual(expectedResult.y, actualResult.y, 0.1f,"Randomizer always return 0.25, So Quarter angle circle + Quarter distance from center");
+            Assert.AreEqual(expectedResult.z, actualResult.z, 0.1f,"Randomizer always return 0.25, So Quarter angle circle + Quarter distance from center");
         }
     }
 }
