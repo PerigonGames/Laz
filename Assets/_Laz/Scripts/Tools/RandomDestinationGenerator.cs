@@ -4,7 +4,12 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class RandomPositionGenerator
+    public interface IRandomPositionGenerator
+    {
+        Vector3 GetRandomPosition();
+    }
+    
+    public class RandomPositionGenerator : IRandomPositionGenerator
     {
         private readonly Vector3 _spawnPosition;
         private readonly float _radius;

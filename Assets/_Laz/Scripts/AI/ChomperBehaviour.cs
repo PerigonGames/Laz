@@ -12,11 +12,11 @@ namespace Laz
         // Dependencies
         private IChomperProperties _chomperProperties = null;
         private IAstarAI _ai = null;
-        private RandomPositionGenerator _randomPositionGenerator = null;
+        private IRandomPositionGenerator _randomPositionGenerator = null;
 
         public void Initialize(
             IChomperProperties chomperProperties = null, 
-            RandomPositionGenerator randomPositionGenerator = null)
+            IRandomPositionGenerator randomPositionGenerator = null)
         {            
             base.Initialize();
             _chomperProperties = chomperProperties ?? _chomperPropertiesScriptableObject;
