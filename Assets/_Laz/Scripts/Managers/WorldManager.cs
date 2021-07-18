@@ -10,11 +10,15 @@ namespace Laz
         [Title("Placeholder")]
         [SerializeField] 
         private PatrolBehaviour[] _listOfPatrollingWalls = null;
+        
         [Title("Main Components")]
         [SerializeField]
         private LazCoordinatorBehaviour _lazCoordinator = null;
         [SerializeField] 
         private PuzzleManager _puzzleManager = null;
+        [SerializeField] 
+        private EnemyManager _enemyManager = null;
+        
         [Title("Object Poolers")]
         [SerializeField] 
         private ParticleEffectsObjectPooler _particleEffectsObjectPooler = null;
@@ -37,6 +41,7 @@ namespace Laz
             _wrappableManager.CleanUp();
             _lazCoordinator.CleanUp();
             _puzzleManager.CleanUp();
+            _enemyManager.CleanUp();
             //TODO - placeholder on how to handle the Patrolling objects
             foreach (var patrolItem in _listOfPatrollingWalls)
             {
@@ -49,6 +54,7 @@ namespace Laz
             _wrappableManager.Reset();
             _lazCoordinator.Reset();
             _puzzleManager.Reset();
+            _enemyManager.Reset();
             //TODO - placeholder on how to handle the Patrolling objects
             foreach (var patrolItem in _listOfPatrollingWalls)
             {
@@ -66,11 +72,9 @@ namespace Laz
             
             _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManagerInstance);
             _lazCoordinator.Initialize(laz, _wrappableManager.WrappableObjects);
-
-            if (_puzzleManager != null)
-            {
-                _puzzleManager.Initialize();
-            }
+            
+            _puzzleManager?.Initialize();
+            _enemyManager?.Initialize();
 
             SetupObjectPoolers(objectsOfInterest.Length);
             
@@ -113,11 +117,6 @@ namespace Laz
         private IPlanetoidBehaviour[] GenerateObjectOfInterest(GameObject[] interests)
         {
             return interests.Select(x => x.GetComponent<IPlanetoidBehaviour>()).ToArray();
-        }
-
-        private void SetDeathState()
-        {
-            StateManagerInstance.SetState(State.Death);
         }
 
         private void HandleOnStateChanged(State state)

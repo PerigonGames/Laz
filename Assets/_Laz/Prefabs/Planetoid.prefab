@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 80406764619832612}
   - component: {fileID: 474468082}
   - component: {fileID: 3710508749620850938}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Planetoid
   m_TagString: LazoInterest
   m_Icon: {fileID: 0}

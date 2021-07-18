@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 1598179516257948246}
   - component: {fileID: 8207650668868248755}
   - component: {fileID: 1124217841175901949}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ Transform:
   m_GameObject: {fileID: 8034448207591354980}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.53, y: 0, z: -4.09}
-  m_LocalScale: {x: 14.01, y: 1, z: 1}
+  m_LocalScale: {x: 18.005808, y: 1.3815, z: 0.72108}
   m_Children:
   - {fileID: 9117605575069328439}
   m_Father: {fileID: 0}
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  uniqueID: 1994817244566912865
+  uniqueID: 3625194544787145702
   updateError: 1
   checkTime: 0.2
 --- !u!65 &1124217841175901949

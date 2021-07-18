@@ -46,7 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fb0ce06ca9943efa633d170f3990f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _patrolPositions: []
+  _patrolPositions:
+  - {x: -80.47823, y: 0, z: 36.328053}
+  - {x: -69.47034, y: 0, z: 36.281815}
   _speed: 5
 --- !u!114 &2772366823214237392
 MonoBehaviour:
@@ -61,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  uniqueID: 4159969125810600603
+  uniqueID: 8831267353549415940
   updateError: 1
   checkTime: 0.2
 --- !u!65 &594074756343965513
