@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class LazoWrappableManager: ILifeCycle
+    public class LazoWrappableManager
     {
         private readonly List<Planetoid> _listOfPlanetoids = new List<Planetoid>();
         private readonly IStateManager _stateManager = null;

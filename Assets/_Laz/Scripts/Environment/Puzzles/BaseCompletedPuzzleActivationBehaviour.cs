@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Laz
 {    
-    public abstract class BaseCompletedPuzzleActivationBehaviour : MonoBehaviour, ILifeCycle
+    public abstract class BaseCompletedPuzzleActivationBehaviour : MonoBehaviour
     {
         public abstract void Initialize();
         

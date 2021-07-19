@@ -24,10 +24,7 @@ namespace Laz
         {
             _isActivated = true;
             _planetoidBehaviour.LazoActivated();
-            if (OnPlanetoidActivated != null)
-            {
-                OnPlanetoidActivated();
-            }
+            OnPlanetoidActivated?.Invoke();
         }
 
         public void CleanUp()
