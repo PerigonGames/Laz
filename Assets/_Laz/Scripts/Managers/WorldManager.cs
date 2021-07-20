@@ -54,7 +54,8 @@ namespace Laz
         public void Reset()
         {
             _wrappableManager.Reset();
-            _lazCoordinator.Reset(_checkPointManager.GetActiveCheckpointPosition());
+            _checkPointManager.Reset();
+            _lazCoordinator.Reset();
             _puzzleManager.Reset();
             _enemyManager.Reset();
             //TODO - placeholder on how to handle the Patrolling objects
@@ -74,7 +75,7 @@ namespace Laz
 
             if (_checkPointManager != null)
             {
-                _checkPointManager.Initialize();
+                _checkPointManager.Initialize(laz);
             }
 
             _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManagerInstance);

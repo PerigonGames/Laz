@@ -49,9 +49,7 @@ namespace Laz
             {
                 Debug.LogError("Laz missing LazBoostBehaviour");
             }
-
-            _lazPlayer.SetSpawn(transform.position);
-
+            
             _lazoProperties = lazoProperties ?? _lazoScriptableObject;
             _lazPlayer.SetLazo(_lazoProperties, objectOfInterests, _boostBehaviour);
 
@@ -72,12 +70,11 @@ namespace Laz
             transform.position = Vector3.zero;
         }
         
-        public void Reset(Vector3 spawnPosition)
+        public void Reset()
         {
             _movementBehaviour.Reset();
             _lazoBehaviour.Reset();
             _boostBehaviour.Reset();
-            _lazPlayer.SetSpawn(spawnPosition);
             transform.position = _lazPlayer.SpawnPosition;
         }
 

@@ -18,7 +18,6 @@ namespace Laz
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("New Checkpoint");
             if (!_isActiveCheckpoint && other.CompareTag(Tags.LazPlayer))
             {
                 OnCheckpointActivation?.Invoke(this);

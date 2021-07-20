@@ -8,13 +8,17 @@ namespace Laz
         [SerializeField] private Checkpoint[] _checkpoints;
         private Checkpoint _activeCheckpoint = null;
         private Vector3 _initialCheckPointPosition = Vector3.zero;
+        private LazPlayer _laz = null;
 
-        public void Initialize()
+        public void Initialize(LazPlayer laz)
         {
             if (_checkpoints.IsNullOrEmpty())
             {
+                Debug.LogError("No Checkpoints Found!");
                 return;
             }
+
+            _laz = laz;
             
             for (int i = 0; i < _checkpoints.Length; i++)
             {
@@ -22,6 +26,7 @@ namespace Laz
 
                 if (checkpoint == null)
                 {
+                    Debug.LogError("Null Checkpoint");
                     continue;
                 }
                 
@@ -32,6 +37,7 @@ namespace Laz
                     _activeCheckpoint = checkpoint;
                     _activeCheckpoint.IsActiveCheckpoint = true;
                     _initialCheckPointPosition = _activeCheckpoint.transform.position;
+                    _laz.SetSpawn(_initialCheckPointPosition);
                 }
             }
         }
@@ -41,41 +47,20 @@ namespace Laz
             return _activeCheckpoint != null ? _activeCheckpoint.transform.position : _initialCheckPointPosition;
         }
         
-        //Not sure how this will be implemented properly with current setup
         public void Reset()
         {
-            if (_checkpoints.IsNullOrEmpty())
-            {
-                return;
-            }
-
-            foreach (Checkpoint checkpoint in _checkpoints)
-            {
-                if (checkpoint != null)
-                {
-                    checkpoint.IsActiveCheckpoint = false;
-                }
-            }
+            _laz.SetSpawn(_activeCheckpoint != null ? _activeCheckpoint.transform.position : _initialCheckPointPosition);
         }
 
         private void SetNewCheckpoint(Checkpoint checkpoint)
         {
-            if (_activeCheckpoint != null)
-            {
-                _activeCheckpoint.IsActiveCheckpoint = false;
-            }
-
+            _activeCheckpoint.IsActiveCheckpoint = false;
             _activeCheckpoint = checkpoint;
             _activeCheckpoint.IsActiveCheckpoint = true;
         }
 
         private void OnDestroy()
         {
-            if (_checkpoints == null)
-            {
-                return;
-            }
-
             foreach (Checkpoint checkpoint in _checkpoints)
             {
                 checkpoint.OnCheckpointActivation -= SetNewCheckpoint;
