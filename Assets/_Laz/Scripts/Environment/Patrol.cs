@@ -7,7 +7,7 @@ namespace Laz
     {
         private readonly Queue<Vector3> _queueOfLocations = new Queue<Vector3>();
         private readonly float _speed = 0;
-        private readonly Vector3[] _arrayOfLocations = new Vector3[] { };
+        private readonly Vector3[] _arrayOfLocations;
 
         private Vector3? _currentDestination = null;
 

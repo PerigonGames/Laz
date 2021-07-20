@@ -13,7 +13,7 @@ namespace Laz
         float CurvatureRate { get; }
         float BoostTimeLimit { get; }
     }
-    [CreateAssetMenu(fileName = "Laz Movement", menuName = "Laz/Movement", order = 1)]
+    [CreateAssetMenu(fileName = "Laz Movement", menuName = "Laz/Player/Movement", order = 1)]
     [InlineEditor]
     public class LazMovementPropertyScriptableObject : ScriptableObject, ILazMovementProperty
     {

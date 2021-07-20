@@ -8,11 +8,8 @@ namespace Laz
         [SerializeField] private List<Vector3> _patrolPositions = new List<Vector3>();
         [SerializeField] private float _speed = 5;
         private Patrol _patrol;
-        
-        public List<Vector3> PatrolPositions
-        {
-            get => _patrolPositions;
-        }
+
+        public List<Vector3> PatrolPositions => _patrolPositions;
         
         public void Initialize()
         {

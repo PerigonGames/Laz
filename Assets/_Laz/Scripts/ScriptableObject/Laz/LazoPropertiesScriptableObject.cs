@@ -11,7 +11,7 @@ namespace Laz
         float CoolDown { get; }
     }
 
-    [CreateAssetMenu(fileName = "Lazo Properties", menuName = "Laz/Lazo Properties", order = 1)]
+    [CreateAssetMenu(fileName = "Lazo Properties", menuName = "Laz/Player/Lazo", order = 1)]
     [InlineEditor]
     public class LazoPropertiesScriptableObject : ScriptableObject, ILazoProperties
     {
