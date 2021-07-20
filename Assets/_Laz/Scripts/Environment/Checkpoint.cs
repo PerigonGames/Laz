@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Laz
 {
@@ -23,15 +24,5 @@ namespace Laz
                 OnCheckpointActivation?.Invoke(this);
             }
         }
-        
-        //For visualization
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.magenta;
-            BoxCollider collider = GetComponent<BoxCollider>();
-            Gizmos.DrawCube(transform.position, collider.size);
-        }
-#endif
     }
 }
