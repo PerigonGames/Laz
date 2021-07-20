@@ -16,6 +16,8 @@ namespace Laz
         private LazCoordinatorBehaviour _lazCoordinator = null;
         [SerializeField]
         private PuzzleManager _puzzleManager = null;
+
+        [SerializeField] private CheckPointManager _checkPointManager;
         [SerializeField] 
         private EnemyManager _enemyManager = null;
 
