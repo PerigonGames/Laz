@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class CheckpointManager : MonoBehaviour
+    public class CheckPointManager : MonoBehaviour
     {
         [SerializeField] private Checkpoint[] _checkpoints;
         private Checkpoint _activeCheckpoint = null;

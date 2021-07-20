@@ -72,12 +72,13 @@ namespace Laz
             _boostBehaviour.CleanUp();
             transform.position = Vector3.zero;
         }
-
-        public void Reset()
+        
+        public void Reset(Vector3 spawnPosition)
         {
             _movementBehaviour.Reset();
             _lazoBehaviour.Reset();
             _boostBehaviour.Reset();
+            _lazPlayer.SetSpawn(spawnPosition);
             transform.position = _lazPlayer.SpawnPosition;
         }
 

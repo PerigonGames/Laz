@@ -15,6 +15,7 @@ namespace Laz
         private LazCoordinatorBehaviour _lazCoordinator = null;
         [SerializeField] 
         private PuzzleManager _puzzleManager = null;
+        [SerializeField] private CheckPointManager _checkPointManager = null;
         [Title("Object Poolers")]
         [SerializeField] 
         private ParticleEffectsObjectPooler _particleEffectsObjectPooler = null;
@@ -47,7 +48,8 @@ namespace Laz
         public void Reset()
         {
             _wrappableManager.Reset();
-            _lazCoordinator.Reset();
+            //_checkPointManager.Reset();
+            _lazCoordinator.Reset(_checkPointManager.GetActiveCheckpointPosition());
             _puzzleManager.Reset();
             //TODO - placeholder on how to handle the Patrolling objects
             foreach (var patrolItem in _listOfPatrollingWalls)
@@ -63,7 +65,12 @@ namespace Laz
             var laz = new LazPlayer();
 
             StateManagerInstance.OnStateChanged += HandleOnStateChanged;
-            
+
+            if (_checkPointManager != null)
+            {
+                _checkPointManager.Initialize();
+            }
+
             _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManagerInstance);
             _lazCoordinator.Initialize(laz, _wrappableManager.WrappableObjects);
 
