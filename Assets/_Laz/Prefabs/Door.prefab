@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 9117605575069328439}
   - component: {fileID: 8067471398382809885}
   - component: {fileID: 7450029525888762854}
-  - component: {fileID: 335420429613522760}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,19 +81,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &335420429613522760
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2908455429603339568}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8034448207591354980
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,7 +91,9 @@ GameObject:
   m_Component:
   - component: {fileID: 9144214631147053232}
   - component: {fileID: 1598179516257948246}
-  m_Layer: 0
+  - component: {fileID: 8207650668868248755}
+  - component: {fileID: 1124217841175901949}
+  m_Layer: 6
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +109,7 @@ Transform:
   m_GameObject: {fileID: 8034448207591354980}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.53, y: 0, z: -4.09}
-  m_LocalScale: {x: 14.01, y: 1, z: 1}
+  m_LocalScale: {x: 18.005808, y: 1.3815, z: 0.72108}
   m_Children:
   - {fileID: 9117605575069328439}
   m_Father: {fileID: 0}
@@ -139,3 +127,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c7b5e747b7c31e40a5ea47ed4cf2042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8207650668868248755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8034448207591354980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183748dd497aa473a98ff0cd8cb67fc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  uniqueID: 3625194544787145702
+  updateError: 1
+  checkTime: 0.2
+--- !u!65 &1124217841175901949
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8034448207591354980}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
