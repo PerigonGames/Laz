@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.Build.Reporting;
@@ -10,11 +11,18 @@ public class BuildScript : MonoBehaviour
     public static void MyBuild()
     {
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
-        // TODO: Update which scenes need to be built
-        buildPlayerOptions.scenes = new[] { "Assets/_Laz/Scenes/Gym.unity" };
+        List<string> scenePaths = new List<string>();
+        
+        foreach (EditorBuildSettingsScene e in EditorBuildSettings.scenes)
+        {
+            scenePaths.Add(e.path);
+            Debug.Log("Scene added to build: " + e.path);
+        }
+
+        buildPlayerOptions.scenes = scenePaths.ToArray();
         buildPlayerOptions.locationPathName = "C:/Users/Developer/OneDrive/_PerigonGames/new_build/windowsBuild.exe";
         buildPlayerOptions.target = BuildTarget.StandaloneWindows64;
-        buildPlayerOptions.options = BuildOptions.None;
+        buildPlayerOptions.options = BuildOptions.Development;
 
         BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
         BuildSummary summary = report.summary;
