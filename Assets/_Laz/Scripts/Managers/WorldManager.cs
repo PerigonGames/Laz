@@ -48,7 +48,6 @@ namespace Laz
         public void Reset()
         {
             _wrappableManager.Reset();
-            //_checkPointManager.Reset();
             _lazCoordinator.Reset(_checkPointManager.GetActiveCheckpointPosition());
             _puzzleManager.Reset();
             //TODO - placeholder on how to handle the Patrolling objects
