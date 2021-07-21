@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.Utilities;
@@ -110,6 +111,18 @@ namespace Laz
             var line = LineFactory.CreateLineBetween(_queueOfNodePositions.Dequeue(), _queueOfNodePositions.Peek());
             line.transform.parent = transform;
         }
+        
+        #region Mono
+
+        private void Awake()
+        {
+            if (_nodeBehaviours.Length < 2)
+            {
+                PanicHelper.Panic(new Exception("You only have 1 or less Nodes in your Sequential Connecting puzzle"));
+            }
+        }
+
+        #endregion
 
         #region Gizmo
         void OnDrawGizmosSelected()

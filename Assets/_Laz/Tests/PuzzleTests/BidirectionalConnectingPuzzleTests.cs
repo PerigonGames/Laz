@@ -143,6 +143,7 @@ namespace Tests
 
             _lazoProperties.DistanceLimitOfLazo = float.MaxValue;
             _lazoProperties.TimeToLivePerPoint = float.MaxValue;
+            _lazoProperties.RateOfRecordingPosition = 0.05f;
             _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
 
 

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Laz
@@ -32,22 +33,22 @@ namespace Laz
             
             if (!TryGetComponent(out _movementBehaviour))
             {
-                Debug.LogError("Laz missing LazMovementBehaviour");
+                PanicHelper.Panic(new Exception("Laz missing LazMovementBehaviour"));
             }
             
             if (!TryGetComponent(out _lazoBehaviour))
             {
-                Debug.LogError("Laz missing LazoBehaviour");
+                PanicHelper.Panic(new Exception("Laz missing LazoBehaviour"));
             }
             
             if (!TryGetComponent(out _modelBehaviour))
             {
-                Debug.LogError("Laz missing LazModelBehavior");
+                PanicHelper.Panic(new Exception("Laz missing LazModelBehavior"));
             }
             
             if (!TryGetComponent(out _boostBehaviour))
             {
-                Debug.LogError("Laz missing LazBoostBehaviour");
+                PanicHelper.Panic(new Exception("Laz missing LazBoostBehaviour"));
             }
 
             _lazPlayer.SetSpawn(transform.position);
