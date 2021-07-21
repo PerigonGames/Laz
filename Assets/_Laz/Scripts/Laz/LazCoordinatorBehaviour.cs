@@ -50,9 +50,7 @@ namespace Laz
             {
                 PanicHelper.Panic(new Exception("Laz missing LazBoostBehaviour"));
             }
-
-            _lazPlayer.SetSpawn(transform.position);
-
+            
             _lazoProperties = lazoProperties ?? _lazoScriptableObject;
             _lazPlayer.SetLazo(_lazoProperties, objectOfInterests, _boostBehaviour);
 
@@ -72,7 +70,7 @@ namespace Laz
             _boostBehaviour.CleanUp();
             transform.position = Vector3.zero;
         }
-
+        
         public void Reset()
         {
             _movementBehaviour.Reset();

@@ -8,28 +8,30 @@ namespace Laz
     {
         //TODO - Placeholder to get the patrolling doors
         [Title("Placeholder")]
-        [SerializeField] 
+        [SerializeField]
         private PatrolBehaviour[] _listOfPatrollingWalls = null;
-        
+
         [Title("Main Components")]
         [SerializeField]
         private LazCoordinatorBehaviour _lazCoordinator = null;
-        [SerializeField] 
+        [SerializeField]
         private PuzzleManager _puzzleManager = null;
+
+        [SerializeField] private CheckPointManager _checkPointManager;
         [SerializeField] 
         private EnemyManager _enemyManager = null;
-        
+
         [Title("Object Poolers")]
-        [SerializeField] 
+        [SerializeField]
         private ParticleEffectsObjectPooler _particleEffectsObjectPooler = null;
-        [SerializeField] 
+        [SerializeField]
         private LazoWallObjectPooler _lazoWallObjectPooler = null;
         private StateManager StateManagerInstance => StateManager.Instance;
 
-        [Title("User Interface")] 
+        [Title("User Interface")]
         [SerializeField]
         private LazoMeterBehaviour _lazoMeter = null;
-        
+
         [Title("Debug")]
         [SerializeField]
         private DebugUIBehaviour debugUIBehaviour = null;
@@ -48,7 +50,7 @@ namespace Laz
                 patrolItem.CleanUp();
             }
         }
-        
+
         public void Reset()
         {
             _wrappableManager.Reset();
@@ -61,7 +63,7 @@ namespace Laz
                 patrolItem.Reset();
             }
         }
-        
+
         private void Awake()
         {
             var interests = GameObject.FindGameObjectsWithTag(Tags.LazoInterest);
@@ -69,21 +71,26 @@ namespace Laz
             var laz = new LazPlayer();
 
             StateManagerInstance.OnStateChanged += HandleOnStateChanged;
-            
+
+            if (_checkPointManager != null)
+            {
+                _checkPointManager.Initialize(laz);
+            }
+
             _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManagerInstance);
             _lazCoordinator.Initialize(laz, _wrappableManager.WrappableObjects);
-            
+
             _puzzleManager?.Initialize();
             _enemyManager?.Initialize();
 
             SetupObjectPoolers(objectsOfInterest.Length);
-            
+
             //TODO - placeholder on how to handle the Patrolling objects
             foreach (var patrolItem in _listOfPatrollingWalls)
             {
                 patrolItem.Initialize();
             }
-            
+
             // User Interface
             if (_lazoMeter != null)
             {
@@ -102,7 +109,7 @@ namespace Laz
             {
                 _particleEffectsObjectPooler.Initialize(particleEffectsAmount);
             }
-            
+
             if (_lazoWallObjectPooler != null)
             {
                 _lazoWallObjectPooler.Initialize();
