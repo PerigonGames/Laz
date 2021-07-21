@@ -8,9 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Laz/Scenes/Gym.unity
     guid: b2913559a2da6564abbf7b28e6c0c0b8
-  - enabled: 1
-    path: Assets/_Laz/Scenes/TemplateSandbox.unity
-    guid: 9f0152bcad47d21409821a5552a00aeb
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 5eb1441859adc18458b4b7ba206f2980, type: 2}
     xr.sdk.mock-hmd.settings: {fileID: 11400000, guid: 4b46ab7a81ef4e04e88c26bb6ad6f136, type: 2}
