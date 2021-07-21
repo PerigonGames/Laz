@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -35,7 +36,7 @@ namespace Laz
             {
                 if (item.PuzzleItems.Contains(null))
                 {
-                    Debug.LogWarning("Empty Puzzle items Within the Puzzle Manager");
+                    PanicHelper.Panic(new Exception("Null Puzzle items Within the Puzzle Manager"));
                 }
 
                 item.Initialize();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.Utilities;
 using UnityEngine;
@@ -63,9 +64,9 @@ namespace Laz
 
         private void Awake()
         {
-            if (_nodeBehaviours.Length < 1)
+            if (_nodeBehaviours.Length < 2)
             {
-                Debug.LogError("You only have 1 or less Nodes in your Bidirectional Connecting puzzle");
+                PanicHelper.Panic(new Exception("You only have 1 or less Nodes in your Bidirectional Connecting puzzle"));
             }
         }
 
