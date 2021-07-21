@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Laz
@@ -32,7 +33,7 @@ namespace Laz
             
             if (!TryGetComponent(out _movementBehaviour))
             {
-                Debug.LogError("Laz missing LazMovementBehaviour");
+                PanicHelper.Panic(new Exception("Laz missing LazMovementBehaviour"));
             }
             
             if (!TryGetComponent(out _lazoBehaviour))
