@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace Tests.Puzzles
 {
     public class SequentialPuzzleBehaviourTests : InputTestFixture
     {
@@ -168,6 +168,33 @@ namespace Tests
             yield return new WaitForSeconds(1f);
             
             Assert.AreNotEqual(Vector3.zero, _doorToActivate.transform.localScale, "Should NOT Complete Sequential puzzle to hide door");
+        }
+        
+        [UnityTest]
+        public IEnumerator Test_SequentialPuzzle_ReverseSolve_DoorDoesNotActivate()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            // When
+            var doorToActivate = GameObject.FindObjectOfType<DoorPuzzleActivationBehaviour>();
+            var expectedScale = new Vector3(18, 1.5f, 1f);
+            doorToActivate.transform.localScale = expectedScale;
+            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
+
+            _lazCoordinatorBehaviour.gameObject.transform.position = new Vector3(0, 0, -15f);
+            _lazoProperties.RateOfRecordingPosition = 0.05f;
+            _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
+
+
+            // Then
+            Press(_keyboard.spaceKey);
+            Press(_keyboard.wKey);
+            yield return new WaitForSeconds(3f);
+            
+            Assert.AreEqual(expectedScale, doorToActivate.transform.localScale, "Should NOT Complete Sequential puzzle to hide door");
         }
     }
 }
