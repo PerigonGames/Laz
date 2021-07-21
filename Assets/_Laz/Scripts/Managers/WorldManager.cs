@@ -54,7 +54,6 @@ namespace Laz
         public void Reset()
         {
             _wrappableManager.Reset();
-            _checkPointManager.Reset();
             _lazCoordinator.Reset();
             _puzzleManager.Reset();
             _enemyManager.Reset();

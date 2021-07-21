@@ -1,3 +1,4 @@
+using System;
 using PerigonGames;
 using UnityEngine;
 
@@ -12,13 +13,16 @@ namespace Laz
 
         public void Initialize(LazPlayer laz)
         {
+            _laz = laz;
+            _laz.SetSpawn(_initialCheckPointPosition);
+        }
+
+        private void Awake()
+        {
             if (_checkpoints.IsNullOrEmpty())
             {
-                Debug.LogError("No Checkpoints Found!");
-                return;
+                Debug.LogError("No Checkpoints found in the CheckPointManager!");
             }
-
-            _laz = laz;
             
             for (int i = 0; i < _checkpoints.Length; i++)
             {
@@ -26,8 +30,7 @@ namespace Laz
 
                 if (checkpoint == null)
                 {
-                    Debug.LogError("Null Checkpoint");
-                    continue;
+                    Debug.LogError("There are Null Checkpoints within the CheckpointManager");
                 }
                 
                 checkpoint.OnCheckpointActivation += SetNewCheckpoint;
@@ -37,19 +40,8 @@ namespace Laz
                     _activeCheckpoint = checkpoint;
                     _activeCheckpoint.IsActiveCheckpoint = true;
                     _initialCheckPointPosition = _activeCheckpoint.transform.position;
-                    _laz.SetSpawn(_initialCheckPointPosition);
                 }
             }
-        }
-        
-        public Vector3 GetActiveCheckpointPosition()
-        {
-            return _activeCheckpoint != null ? _activeCheckpoint.transform.position : _initialCheckPointPosition;
-        }
-        
-        public void Reset()
-        {
-            _laz.SetSpawn(_activeCheckpoint != null ? _activeCheckpoint.transform.position : _initialCheckPointPosition);
         }
 
         private void SetNewCheckpoint(Checkpoint checkpoint)
@@ -57,6 +49,7 @@ namespace Laz
             _activeCheckpoint.IsActiveCheckpoint = false;
             _activeCheckpoint = checkpoint;
             _activeCheckpoint.IsActiveCheckpoint = true;
+            _laz.SetSpawn(_activeCheckpoint.transform.position);
         }
 
         private void OnDestroy()
