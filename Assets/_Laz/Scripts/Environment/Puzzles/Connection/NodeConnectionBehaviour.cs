@@ -13,7 +13,9 @@ namespace Laz
         [SerializeField] private Transform _meshTransform = null;
         
         private Node _node = null;
-        private LazoWallBehaviour _lazoWall = null;
+        private LazoBehaviour _lazoBehaviour = null;
+
+        private bool CanActivateNode => _node.CanActivate && !_node.IsActive;
         
         public void Initialize(Node node)
         {
@@ -43,11 +45,13 @@ namespace Laz
             _particleSystem.Clear();
         }
         
-        private void ActivateNodeIfNeeded(LazoWallBehaviour lazoWall)
+        private void ActivateNodeIfNeeded(LazoBehaviour lazoBehaviour)
         {
-            if (lazoWall != null && lazoWall.gameObject.activeSelf && _node.CanActivate)
+            if (lazoBehaviour is {IsLazoing: true} && CanActivateNode)
             {
-                _lazoWall = lazoWall;
+                _lazoBehaviour = lazoBehaviour;
+                _lazoBehaviour.LazoModel.OnLoopClosed += HandleOnLazoLoopClosed;
+                
                 if (!_particleSystem.isPlaying)
                 {
                     _particleSystem.Play();
@@ -56,7 +60,7 @@ namespace Laz
                 _node.IsActive = true;
             }
         }
-        
+
         #region Delegate
         private void HandleOnCanActivateChanged(bool canActivate)
         {
@@ -74,7 +78,15 @@ namespace Laz
         {
             _meshTransform.localScale = Vector3.zero;
             ClearParticleSystem();
-            _lazoWall = null;
+            _lazoBehaviour = null;
+        }
+        
+        private void HandleOnLazoLoopClosed(LazoPosition[] positions)
+        {
+            if (_lazoBehaviour != null)
+            {
+                DeactivateNode();
+            }
         }
         #endregion
         
@@ -86,26 +98,31 @@ namespace Laz
 
         private void OnTriggerEnter(Collider other)
         {
-            var lazoWall = other.GetComponent<LazoWallBehaviour>();
-            ActivateNodeIfNeeded(lazoWall);
+            var lazo = other.GetComponent<LazoBehaviour>();
+            ActivateNodeIfNeeded(lazo);
         }
         
         private void OnTriggerStay(Collider other)
         {
-            var lazoWall = other.GetComponent<LazoWallBehaviour>();
-            ActivateNodeIfNeeded(lazoWall);
+            var lazo = other.GetComponent<LazoBehaviour>();
+            ActivateNodeIfNeeded(lazo);
         }
         
         private void Update()
         {
-            if (_lazoWall != null && !_lazoWall.gameObject.activeSelf)
+            if (_lazoBehaviour is { IsLazoing: false })
             {
-                ClearParticleSystem();
-                _node.IsActive = false;
-                _lazoWall = null;
+                DeactivateNode();
             }
         }
-        
+
+        private void DeactivateNode()
+        {
+            ClearParticleSystem();
+            _node.IsActive = false;
+            _lazoBehaviour.LazoModel.OnLoopClosed -= HandleOnLazoLoopClosed;
+            _lazoBehaviour = null;
+        }
         #endregion
     }
 }
