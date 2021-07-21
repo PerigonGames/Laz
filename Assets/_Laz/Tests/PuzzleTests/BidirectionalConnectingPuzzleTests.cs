@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace Tests.Puzzles
 {
     public class BidirectionalConnectingPuzzleTests : InputTestFixture
     {
@@ -143,6 +143,7 @@ namespace Tests
 
             _lazoProperties.DistanceLimitOfLazo = float.MaxValue;
             _lazoProperties.TimeToLivePerPoint = float.MaxValue;
+            _lazoProperties.RateOfRecordingPosition = 0.05f;
             _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
 
 
