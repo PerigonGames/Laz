@@ -16,15 +16,14 @@ namespace Laz
 
         private void Awake()
         {
-            GetBuildScenes();
+            GetBuildSceneNames();
             
 #if UNITY_EDITOR
-            UnityEditor.EditorBuildSettings.sceneListChanged += GetBuildScenes;
+            UnityEditor.EditorBuildSettings.sceneListChanged += GetBuildSceneNames;
 #endif
-
         }
 
-        private void GetBuildScenes()
+        private void GetBuildSceneNames()
         {
             _buildSceneNames = new List<string>();
 
@@ -51,14 +50,20 @@ namespace Laz
         {
             if (Keyboard.current[_sceneChangeModifier].wasPressedThisFrame)
             {
-                //
+                //Show Scene Name UI and options
             }
+
+            if (Keyboard.current[_sceneChangeModifier].wasReleasedThisFrame)
+            {
+                
+            }
+            
         }
 
         private void OnDestroy()
         {
 #if UNITY_EDITOR
-            UnityEditor.EditorBuildSettings.sceneListChanged += GetBuildScenes;
+            UnityEditor.EditorBuildSettings.sceneListChanged += GetBuildSceneNames;
 #endif
         }
     }
