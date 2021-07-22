@@ -6,6 +6,7 @@ namespace Laz
     public interface IChomperProperties : IEnemyProperties
     {
         float IdleRadius { get; }
+        float AgroDetectionRadius { get; }
     }
     
     [InlineEditor]
@@ -17,8 +18,13 @@ namespace Laz
             "Circular Area the chomper is allowed to idle around from spawn")]
         [SerializeField]
         private float _idleRadius = 0;
+        [InfoBox("Detection Radius - Starts Agro when Lazo within detection radius")]
+        [SerializeField] 
+        private float _agroDetectionRadius = 0;
 
         public float IdleRadius => _idleRadius;
+
+        public float AgroDetectionRadius => _agroDetectionRadius;
 
     }
 }

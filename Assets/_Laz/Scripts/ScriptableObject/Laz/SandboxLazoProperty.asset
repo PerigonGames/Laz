@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 979f757a46d735e4e8b525a9f55ebfcb, type: 3}
-  m_Name: Chomper
+  m_Script: {fileID: 11500000, guid: ae5a25c59eb1f5243bc53cf0e1075e2a, type: 3}
+  m_Name: SandboxLazoProperty
   m_EditorClassIdentifier: 
-  _speed: 5
-  _idleRadius: 5
-  _agroDetectionRadius: 5
+  _timeToLivePerPoint: 5
+  _rateOfRecordingPosition: 0.05
+  _distanceLimitOfLazo: 149.63
+  _coolDown: 2

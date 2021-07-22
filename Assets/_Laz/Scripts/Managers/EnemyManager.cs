@@ -6,9 +6,9 @@ namespace Laz
     {
         private EnemyBehaviour[] _enemies = null;
         
-        public void Initialize()
+        public void Initialize(Lazo lazo)
         {
-            InitializeEnemies();
+            InitializeEnemies(lazo);
         }
 
         public void Reset()
@@ -33,13 +33,13 @@ namespace Laz
             }
         }
         
-        private void InitializeEnemies()
+        private void InitializeEnemies(Lazo lazo)
         {
             foreach (var enemy in _enemies)
             {
                 if (enemy is ChomperBehaviour chomper)
                 {
-                    chomper.Initialize();
+                    chomper.Initialize(lazo);
                 }
             }
         }
