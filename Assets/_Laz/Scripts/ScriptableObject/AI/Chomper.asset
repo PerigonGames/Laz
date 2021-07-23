@@ -15,3 +15,4 @@ MonoBehaviour:
   _speed: 5
   _idleRadius: 5
   _agroDetectionRadius: 5
+  _extraDistanceToTravel: 10

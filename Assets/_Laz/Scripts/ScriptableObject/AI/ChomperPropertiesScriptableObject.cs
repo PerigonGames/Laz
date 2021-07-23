@@ -7,6 +7,7 @@ namespace Laz
     {
         float IdleRadius { get; }
         float AgroDetectionRadius { get; }
+        float ExtraDistanceToTravel { get; }
     }
     
     [InlineEditor]
@@ -21,10 +22,13 @@ namespace Laz
         [InfoBox("Detection Radius - Starts Agro when Lazo within detection radius")]
         [SerializeField] 
         private float _agroDetectionRadius = 0;
-
+        [InfoBox("Extra distance to travel after completing the Lazo trail")]
+        [SerializeField] 
+        private float _extraDistanceToTravel = 0;
+        
         public float IdleRadius => _idleRadius;
-
         public float AgroDetectionRadius => _agroDetectionRadius;
+        public float ExtraDistanceToTravel => _extraDistanceToTravel;
 
     }
 }

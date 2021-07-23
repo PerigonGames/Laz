@@ -22,7 +22,8 @@ namespace Laz
         private IAstarAI _ai = null;
         private AIPatrolBehaviour _patrolBehaviour = null;
         private AIDetectionBehaviour _detectionBehaviour = null;
-        private AIChomperAgroBehaviour _aiChomperAgroBehaviour = null;
+        
+        private AIChomperAgro _aiChomperAgro = null;
         private ChomperState _state = ChomperState.Idle;
 
         public void Initialize(Lazo lazo,
@@ -32,7 +33,7 @@ namespace Laz
             _chomperProperties = chomperProperties ?? _chomperPropertiesScriptableObject;
             _patrolBehaviour.Initialize(_ai, _chomperProperties.IdleRadius);
             _detectionBehaviour.Initialize(_chomperProperties.AgroDetectionRadius, this);
-            _aiChomperAgroBehaviour.Initialize(_ai, lazo);
+            _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel);
         }
 
         public override void CleanUp()
@@ -46,19 +47,17 @@ namespace Laz
         {
             base.Reset();
             _patrolBehaviour.Reset();
+            _aiChomperAgro.Reset();
             _state = ChomperState.Idle;
         }
         
         public void RayCastDidCollideWith(GameObject collidedGameObject)
         {
-            // Check if it's a LazoWall
-            // Need list of LazoPositions
             var lazoWallBehaviour = collidedGameObject.GetComponent<LazoWallBehaviour>();
             if (lazoWallBehaviour != null)
             {
-                _aiChomperAgroBehaviour.StartAgroAt(lazoWallBehaviour.LazoWallPosition);
+                _aiChomperAgro.StartAgroAt(lazoWallBehaviour.LazoWallPosition);
                 _state = ChomperState.Agro;
-                Debug.Log("Set to Agro");
             }
         }
         
@@ -81,11 +80,6 @@ namespace Laz
             {
                 PanicHelper.Panic(new Exception("Chomper is missing an AIDetectionBehaviour script"));
             }
-            
-            if (!TryGetComponent(out _aiChomperAgroBehaviour))
-            {
-                PanicHelper.Panic(new Exception("Chomper is missing an AIDetectionBehaviour script"));
-            }
         }
 
         private void Update()
@@ -97,7 +91,7 @@ namespace Laz
                     _detectionBehaviour.Detect();
                     break;
                 case ChomperState.Agro:
-                    _aiChomperAgroBehaviour.Agro();
+                    _aiChomperAgro.Agro();
                     break;
                 default:
                     _patrolBehaviour.PatrolCircularArea();

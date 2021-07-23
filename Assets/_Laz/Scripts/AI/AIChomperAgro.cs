@@ -1,22 +1,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using Pathfinding;
-using PerigonGames;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Laz
 {
-    public class AIChomperAgroBehaviour : MonoBehaviour
+    public class AIChomperAgro
     {
         // Dependencies
-        private IAstarAI _ai;
-        private int _positionIndex = 0;
-        private Lazo _lazo = null;
-        private float _extraDistance = 0;
+        private const int MINIMUM_AMOUNT_OF_POINTS_IN_PATH = 2;
+        
+        private readonly IAstarAI _ai;
+        private readonly Lazo _lazo = null;
+        private readonly float _extraDistance = 0;
 
+        private int _positionIndex = 0;
         private List<Vector3> _tempLazoPositions = new List<Vector3>();
         
-        public void Initialize(IAstarAI ai, Lazo lazo, float extraDistance = 5f)
+        private bool CanCreateCopyOfLazoPositions => _tempLazoPositions.Count <= _lazo.GetListOfLazoPositions.Count;
+        
+        public AIChomperAgro(IAstarAI ai, Lazo lazo, float extraDistance = 5f)
         {
             _ai = ai;
             _lazo = lazo;
@@ -26,6 +30,7 @@ namespace Laz
 
         public void StartAgroAt(LazoPosition lazoPosition)
         {
+            _ai.canSearch = false;
             _lazo.IsTimeToLiveFrozen = true;
             _positionIndex = _lazo.GetListOfLazoPositions.IndexOf(lazoPosition);
             if (lazoPosition != null)
@@ -38,28 +43,32 @@ namespace Laz
         {
             if (_ai.reachedEndOfPath && !_ai.pathPending)
             {
-                _ai.canSearch = false;
-                CopyLazoPositionsToTempLazoPositions();
+                CopyLazoPositionsToTempLazoPositionsIfPossible();
                 var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
-                if (listOfPositions.IsNullOrEmpty())
-                {
-                    // Go a bit further
-                }
                 SetAIPathWith(listOfPositions);
             }
+        }
+        
+        public void Reset()
+        {
+            _tempLazoPositions = new List<Vector3>();
+            _positionIndex = 0;
         }
 
         private void HandleOnLazoDeactivated()
         {
-            CopyLazoPositionsToTempLazoPositions();
-            
-            var length = _tempLazoPositions.Count;
-            var last = _tempLazoPositions[length - 1];
-            var secondLast = _tempLazoPositions[length - 2];
-            var direction = NormalizedDirectionFromTwoPoints(last, secondLast);
-            var lastPosition = _tempLazoPositions[length - 1] + (direction * _extraDistance);
-            
-            _tempLazoPositions.Add(lastPosition);
+            CopyLazoPositionsToTempLazoPositionsIfPossible();
+            var extraLastPosition = CreateExtraLastPositionForAI();
+            _tempLazoPositions.Add(extraLastPosition);
+        }
+
+        private Vector3 CreateExtraLastPositionForAI()
+        {
+            var amountOfPositions = _tempLazoPositions.Count;
+            var lastPosition = _tempLazoPositions[amountOfPositions - 1];
+            var secondLastPosition = _tempLazoPositions[amountOfPositions - 2];
+            var direction = NormalizedDirectionFromTwoPoints(lastPosition, secondLastPosition);
+            return lastPosition + (direction * _extraDistance);
         }
 
         private Vector3 NormalizedDirectionFromTwoPoints(Vector3 secondLastPosition, Vector3 lastPosition)
@@ -67,16 +76,15 @@ namespace Laz
             return (secondLastPosition - lastPosition).normalized;
         }
         
-        
-        private void CopyLazoPositionsToTempLazoPositions()
+        private void CopyLazoPositionsToTempLazoPositionsIfPossible()
         {
-            if (_tempLazoPositions.Count <= _lazo.GetListOfLazoPositions.Count)
+            if (CanCreateCopyOfLazoPositions)
             {
                 var length = _lazo.GetListOfLazoPositions.Count;
-                Vector3[] temp = new Vector3[length];
+                Vector3[] tempLazoPositionContainer = new Vector3[length];
                 var listOfPositions = _lazo.GetListOfLazoPositions.Select(lazo => lazo.Position).ToList();
-                listOfPositions.CopyTo(temp);
-                _tempLazoPositions = temp.ToList();
+                listOfPositions.CopyTo(tempLazoPositionContainer);
+                _tempLazoPositions = tempLazoPositionContainer.ToList();
             }
         }
 
@@ -84,35 +92,22 @@ namespace Laz
         {
             var rangeOfPositions = _tempLazoPositions.Count - startingPosition;
             _positionIndex = _tempLazoPositions.Count - 1;
-            if (rangeOfPositions > 0 &&  startingPosition > 0)
+            if (rangeOfPositions > 0 && startingPosition >= 0)
             {
                 return _tempLazoPositions.GetRange(startingPosition, rangeOfPositions);
             }
-
+            
+            Debug.LogWarning("Range Position :" + rangeOfPositions +  "|| Starting Position :" + startingPosition);
             return new List<Vector3>();
         }
 
         private void SetAIPathWith(List<Vector3> listOfPositions)
         {
-            if (listOfPositions.Count > 2)
+            if (listOfPositions.Count > MINIMUM_AMOUNT_OF_POINTS_IN_PATH)
             {
                 var aiPath = ABPath.FakePath(listOfPositions);
                 _ai.SetPath(aiPath);
             }
         }
-        
-        #region Mono
-
-        private void OnDestroy()
-        {
-            _lazo.OnLazoDeactivated -= CopyLazoPositionsToTempLazoPositions;
-        }
-
-        #endregion
-    }
-
-    public class AIChomperAgro
-    {
-        
     }
 }
