@@ -18,7 +18,7 @@ namespace Laz
             _dataSource = dataSource;
         }
 
-        public void Detect()
+        public void OnDetectUpdate()
         {
             RaycastHit hit;
             if (Physics.SphereCast(transform.position, _detectionRadius, transform.forward, out hit))

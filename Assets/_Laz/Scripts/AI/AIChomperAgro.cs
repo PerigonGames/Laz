@@ -39,7 +39,7 @@ namespace Laz
             }
         }
 
-        public void Agro()
+        public void OnAgroUpdate()
         {
             if (_ai.reachedEndOfPath && !_ai.pathPending)
             {
@@ -97,7 +97,6 @@ namespace Laz
                 return _tempLazoPositions.GetRange(startingPosition, rangeOfPositions);
             }
             
-            Debug.LogWarning("Range Position :" + rangeOfPositions +  "|| Starting Position :" + startingPosition);
             return new List<Vector3>();
         }
 

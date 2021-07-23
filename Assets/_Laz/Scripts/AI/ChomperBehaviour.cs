@@ -88,10 +88,10 @@ namespace Laz
             {
                 case ChomperState.Idle:
                     _patrolBehaviour.PatrolCircularArea();
-                    _detectionBehaviour.Detect();
+                    _detectionBehaviour.OnDetectUpdate();
                     break;
                 case ChomperState.Agro:
-                    _aiChomperAgro.Agro();
+                    _aiChomperAgro.OnAgroUpdate();
                     break;
                 default:
                     _patrolBehaviour.PatrolCircularArea();
