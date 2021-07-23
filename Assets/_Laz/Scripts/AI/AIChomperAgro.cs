@@ -33,13 +33,14 @@ namespace Laz
 
         public void StartAgroAt(LazoPosition lazoPosition)
         {
+            _tempLazoPositions = new List<Vector3>();
             _ai.canSearch = false;
             _lazo.IsTimeToLiveFrozen = true;
             _positionIndex = _lazo.GetListOfLazoPositions.IndexOf(lazoPosition);
             if (lazoPosition != null)
             {
                 _ai.destination = lazoPosition.Position;
-                Debug.Log("Agro Destination");
+                _ai.SearchPath();
             }
         }
 
@@ -53,6 +54,7 @@ namespace Laz
                 SetAIPathWith(listOfPositions);
                 if (!CanStillCreateFakePath(listOfPositions))
                 {
+                    _ai.canSearch = true;
                     OnChomperReachedEndOfLazo?.Invoke();
                 }
             }
@@ -60,6 +62,7 @@ namespace Laz
 
         public void CleanUp()
         {
+            _tempLazoPositions = null;
             _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
         }
         
@@ -70,8 +73,8 @@ namespace Laz
             _positionIndex = 0;
             _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
         }
-        
-#region delegate
+
+        #region delegate
         private void HandleOnLazoDeactivated()
         {
             CopyLazoPositionsToTempLazoPositionsIfPossible();

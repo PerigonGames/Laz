@@ -100,6 +100,7 @@ namespace Laz
                     break;
                 case ChomperState.Return:
                     OnReturnUpdate();
+                    _detectionBehaviour.OnDetectUpdate();
                     break;
                 default:
                     _patrolBehaviour.PatrolCircularArea();
@@ -110,7 +111,6 @@ namespace Laz
         private void HandleOnAgroEnded()
         {
             _state = ChomperState.Return;
-            _ai.canSearch = true;
             _ai.destination = _originalPosition;
         }
 
