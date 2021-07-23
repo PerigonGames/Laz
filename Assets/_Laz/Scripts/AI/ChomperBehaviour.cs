@@ -34,6 +34,7 @@ namespace Laz
             _patrolBehaviour.Initialize(_ai, _chomperProperties.IdleRadius);
             _detectionBehaviour.Initialize(_chomperProperties.AgroDetectionRadius, this);
             _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel);
+            _aiChomperAgro.OnChomperReachedEndOfLazo += HandleOnAgroEnded;
             _ai.maxSpeed = _chomperProperties.Speed;
         }
 
@@ -41,6 +42,8 @@ namespace Laz
         {
             base.CleanUp();
             _patrolBehaviour.CleanUp();
+            _aiChomperAgro.CleanUp();
+            _aiChomperAgro.OnChomperReachedEndOfLazo -= HandleOnAgroEnded;
             _state = ChomperState.Idle;
         }
 
@@ -49,6 +52,7 @@ namespace Laz
             base.Reset();
             _patrolBehaviour.Reset();
             _aiChomperAgro.Reset();
+            _aiChomperAgro.OnChomperReachedEndOfLazo += HandleOnAgroEnded;
             _state = ChomperState.Idle;
         }
         
@@ -94,12 +98,29 @@ namespace Laz
                 case ChomperState.Agro:
                     _aiChomperAgro.OnAgroUpdate();
                     break;
+                case ChomperState.Return:
+                    OnReturnUpdate();
+                    break;
                 default:
                     _patrolBehaviour.PatrolCircularArea();
                     break;
             }
         }
 
+        private void HandleOnAgroEnded()
+        {
+            _state = ChomperState.Return;
+            _ai.canSearch = true;
+            _ai.destination = _originalPosition;
+        }
+
+        private void OnReturnUpdate()
+        {
+            if (_ai.reachedEndOfPath)
+            {
+                _state = ChomperState.Idle;
+            }
+        }
         
         #endregion
 

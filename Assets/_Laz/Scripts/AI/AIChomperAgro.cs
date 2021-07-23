@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathfinding;
@@ -17,6 +18,8 @@ namespace Laz
 
         private int _positionIndex = 0;
         private List<Vector3> _tempLazoPositions = new List<Vector3>();
+
+        public event Action OnChomperReachedEndOfLazo;
         
         private bool CanCreateCopyOfLazoPositions => _tempLazoPositions.Count <= _lazo.GetListOfLazoPositions.Count;
         
@@ -36,8 +39,10 @@ namespace Laz
             if (lazoPosition != null)
             {
                 _ai.destination = lazoPosition.Position;
+                Debug.Log("Agro Destination");
             }
         }
+
 
         public void OnAgroUpdate()
         {
@@ -46,7 +51,16 @@ namespace Laz
                 CopyLazoPositionsToTempLazoPositionsIfPossible();
                 var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
                 SetAIPathWith(listOfPositions);
+                if (!CanStillCreateFakePath(listOfPositions))
+                {
+                    OnChomperReachedEndOfLazo?.Invoke();
+                }
             }
+        }
+
+        public void CleanUp()
+        {
+            _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
         }
         
         public void Reset()
@@ -54,14 +68,17 @@ namespace Laz
             _ai.canSearch = true;
             _tempLazoPositions = new List<Vector3>();
             _positionIndex = 0;
+            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
         }
-
+        
+#region delegate
         private void HandleOnLazoDeactivated()
         {
             CopyLazoPositionsToTempLazoPositionsIfPossible();
             var extraLastPosition = CreateExtraLastPositionForAI();
             _tempLazoPositions.Add(extraLastPosition);
         }
+#endregion
 
         private Vector3 CreateExtraLastPositionForAI()
         {
@@ -89,13 +106,13 @@ namespace Laz
             }
         }
 
-        private List<Vector3> CreateListOfPositionsStartingFrom(int startingPosition)
+        private List<Vector3> CreateListOfPositionsStartingFrom(int fromPosition)
         {
-            var rangeOfPositions = _tempLazoPositions.Count - startingPosition;
+            var rangeOfPositions = _tempLazoPositions.Count - fromPosition;
             _positionIndex = _tempLazoPositions.Count - 1;
-            if (rangeOfPositions > 0 && startingPosition >= 0)
+            if (rangeOfPositions > 0 && fromPosition >= 0)
             {
-                return _tempLazoPositions.GetRange(startingPosition, rangeOfPositions);
+                return _tempLazoPositions.GetRange(fromPosition, rangeOfPositions);
             }
             
             return new List<Vector3>();
@@ -103,11 +120,16 @@ namespace Laz
 
         private void SetAIPathWith(List<Vector3> listOfPositions)
         {
-            if (listOfPositions.Count > MINIMUM_AMOUNT_OF_POINTS_IN_PATH)
+            if (CanStillCreateFakePath(listOfPositions))
             {
                 var aiPath = ABPath.FakePath(listOfPositions);
                 _ai.SetPath(aiPath);
             }
+        }
+
+        private bool CanStillCreateFakePath(List<Vector3> listOfPositions)
+        {
+            return listOfPositions.Count > MINIMUM_AMOUNT_OF_POINTS_IN_PATH;
         }
     }
 }
