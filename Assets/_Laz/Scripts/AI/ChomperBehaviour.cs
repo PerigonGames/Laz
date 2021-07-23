@@ -34,6 +34,7 @@ namespace Laz
             _patrolBehaviour.Initialize(_ai, _chomperProperties.IdleRadius);
             _detectionBehaviour.Initialize(_chomperProperties.AgroDetectionRadius, this);
             _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel);
+            _ai.maxSpeed = _chomperProperties.Speed;
         }
 
         public override void CleanUp()

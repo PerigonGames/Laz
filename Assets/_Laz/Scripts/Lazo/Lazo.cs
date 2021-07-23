@@ -54,6 +54,7 @@ namespace Laz
 
         public void CleanUp()
         {
+            IsTimeToLiveFrozen = false;
             _isLazoing = false;
             _rateOfRecordingTimerElapsed = 0;
             _travelledDistance = 0;
@@ -63,6 +64,7 @@ namespace Laz
 
         public void Reset()
         {
+            IsTimeToLiveFrozen = false;
             _isLazoing = false;
             _rateOfRecordingTimerElapsed = 0;
             CleanUpWall();

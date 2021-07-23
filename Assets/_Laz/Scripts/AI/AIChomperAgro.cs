@@ -51,6 +51,7 @@ namespace Laz
         
         public void Reset()
         {
+            _ai.canSearch = true;
             _tempLazoPositions = new List<Vector3>();
             _positionIndex = 0;
         }
