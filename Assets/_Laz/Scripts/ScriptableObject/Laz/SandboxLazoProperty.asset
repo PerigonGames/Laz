@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timeToLivePerPoint: 5
   _rateOfRecordingPosition: 0.05
-  _distanceLimitOfLazo: 149.63
+  _distanceLimitOfLazo: 140
   _coolDown: 2

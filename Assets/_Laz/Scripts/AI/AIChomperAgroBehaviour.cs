@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Pathfinding;
+using PerigonGames;
 using UnityEngine;
 
 namespace Laz
@@ -11,11 +12,16 @@ namespace Laz
         private IAstarAI _ai;
         private int _positionIndex = 0;
         private Lazo _lazo = null;
+        private float _extraDistance = 0;
+
+        private List<Vector3> _tempLazoPositions = new List<Vector3>();
         
-        public void Initialize(IAstarAI ai, Lazo lazo)
+        public void Initialize(IAstarAI ai, Lazo lazo, float extraDistance = 5f)
         {
             _ai = ai;
             _lazo = lazo;
+            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
+            _extraDistance = extraDistance;
         }
 
         public void StartAgroAt(LazoPosition lazoPosition)
@@ -33,23 +39,56 @@ namespace Laz
             if (_ai.reachedEndOfPath && !_ai.pathPending)
             {
                 _ai.canSearch = false;
+                CopyLazoPositionsToTempLazoPositions();
                 var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
+                if (listOfPositions.IsNullOrEmpty())
+                {
+                    // Go a bit further
+                }
                 SetAIPathWith(listOfPositions);
+            }
+        }
+
+        private void HandleOnLazoDeactivated()
+        {
+            CopyLazoPositionsToTempLazoPositions();
+            
+            var length = _tempLazoPositions.Count;
+            var last = _tempLazoPositions[length - 1];
+            var secondLast = _tempLazoPositions[length - 2];
+            var direction = NormalizedDirectionFromTwoPoints(last, secondLast);
+            var lastPosition = _tempLazoPositions[length - 1] + (direction * _extraDistance);
+            
+            _tempLazoPositions.Add(lastPosition);
+        }
+
+        private Vector3 NormalizedDirectionFromTwoPoints(Vector3 secondLastPosition, Vector3 lastPosition)
+        {
+            return (secondLastPosition - lastPosition).normalized;
+        }
+        
+        
+        private void CopyLazoPositionsToTempLazoPositions()
+        {
+            if (_tempLazoPositions.Count <= _lazo.GetListOfLazoPositions.Count)
+            {
+                var length = _lazo.GetListOfLazoPositions.Count;
+                Vector3[] temp = new Vector3[length];
+                var listOfPositions = _lazo.GetListOfLazoPositions.Select(lazo => lazo.Position).ToList();
+                listOfPositions.CopyTo(temp);
+                _tempLazoPositions = temp.ToList();
             }
         }
 
         private List<Vector3> CreateListOfPositionsStartingFrom(int startingPosition)
         {
-            var lazoPositions = _lazo.GetListOfLazoPositions;
-            var rangeOfPositions = lazoPositions.Count - startingPosition;
-            _positionIndex = lazoPositions.Count - 1;
-            if (rangeOfPositions > 1)
+            var rangeOfPositions = _tempLazoPositions.Count - startingPosition;
+            _positionIndex = _tempLazoPositions.Count - 1;
+            if (rangeOfPositions > 0 &&  startingPosition > 0)
             {
-                var listOfLazoPositionsToFollow = _lazo.GetListOfLazoPositions.GetRange(startingPosition, rangeOfPositions);
-                return listOfLazoPositionsToFollow.Select(lazoPosition => lazoPosition.Position).ToList();
+                return _tempLazoPositions.GetRange(startingPosition, rangeOfPositions);
             }
 
-            Debug.Log("Returned Empty List");
             return new List<Vector3>();
         }
 
@@ -61,5 +100,19 @@ namespace Laz
                 _ai.SetPath(aiPath);
             }
         }
+        
+        #region Mono
+
+        private void OnDestroy()
+        {
+            _lazo.OnLazoDeactivated -= CopyLazoPositionsToTempLazoPositions;
+        }
+
+        #endregion
+    }
+
+    public class AIChomperAgro
+    {
+        
     }
 }

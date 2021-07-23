@@ -91,11 +91,8 @@ namespace Laz
             }
             else
             {
+                OnLazoDeactivated?.Invoke();
                 Reset();
-                if (OnLazoDeactivated != null)
-                {
-                    OnLazoDeactivated();
-                }
             }
         }
 
@@ -112,12 +109,9 @@ namespace Laz
 
             if (TravelledDistance <= 0)
             {
+                OnLazoLimitReached?.Invoke();
                 SetLazoActive(false);
                 _lastPosition = null;
-                if (OnLazoLimitReached != null)
-                {
-                    OnLazoLimitReached();
-                }
             }
         }
 
