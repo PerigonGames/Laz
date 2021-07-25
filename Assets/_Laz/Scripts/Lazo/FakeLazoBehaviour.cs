@@ -18,6 +18,7 @@ namespace Laz
         public void SetLine(FakeLazo fakeLazo)
         {
             // Set the color as blue
+            SetLineFrozen();
             HandleOnListOfLazoPositionsChanged(fakeLazo.Positions);
             _fakeLazo = fakeLazo;
             _fakeLazo.OnListOfLazoPositionsChanged += HandleOnListOfLazoPositionsChanged;
@@ -48,8 +49,11 @@ namespace Laz
 
         private void CleanUp()
         {
-            _fakeLazo.OnListOfLazoPositionsChanged -= HandleOnListOfLazoPositionsChanged;
-            _fakeLazo = null;
+            if (_fakeLazo != null)
+            {
+                _fakeLazo.OnListOfLazoPositionsChanged -= HandleOnListOfLazoPositionsChanged;
+                _fakeLazo = null;
+            }
         }
 
         private void Awake()

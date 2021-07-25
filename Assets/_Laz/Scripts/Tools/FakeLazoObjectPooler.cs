@@ -8,7 +8,7 @@ namespace Laz
     {
         private const int SIZE_TO_SPAWN = 2;
 
-        public static int Key { get; } = 123;
+        public static int Key => 123;
 
         [SerializeField] private FakeLazoBehaviour _fakeLazoBehaviour = null;
 
