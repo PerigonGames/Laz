@@ -17,14 +17,15 @@ namespace Laz
         
         private Lazo _lazo;
         private float _elapsedCoolDown = 0;
-        private Tweener materialTween;
+        private ILazoColorProperties _lazoColors = null;
 
         public bool IsLazoing => _lazo.IsLazoing;
         public Lazo LazoModel => _lazo;
         
-        public void Initialize(Lazo lazo)
+        public void Initialize(Lazo lazo, ILazoColorProperties lazoColors)
         {            
             _lazo = lazo;
+            _lazoColors = lazoColors;
             _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
             _lazo.OnLoopClosed += HandleOnLoopClosed;
             _lazo.OnListOfLazoPositionsChanged += HandleOnListOfLazoPositionsChanged;
@@ -45,14 +46,21 @@ namespace Laz
 
         public void Reset()
         {
+            SetupLazoColors();
             SetWholeLazoLoopAlpha(1);
             _lazo.Reset();
+        }
+
+        private void SetupLazoColors()
+        {
+            _lazoLineRenderer.colorGradient = _lazoColors.NormalGradient;
         }
 
         private void TurnLazoing(bool active)
         {
             if (active)
             {
+                SetupLazoColors();
                 SetWholeLazoLoopAlpha(1);
                 _lazoSparkleParticleSystem.Play();
             }
@@ -73,8 +81,8 @@ namespace Laz
         {
             _lazoSparkleParticleSystem.Clear();
             
-            materialTween = _lazoLineRenderer.material.DOFloat(0, SHADER_PROPERTY_ALPHA, TRAIL_FADE_DURATION);
-            materialTween.OnComplete(() =>
+            var tween = _lazoLineRenderer.material.DOFloat(0, SHADER_PROPERTY_ALPHA, TRAIL_FADE_DURATION);
+            tween.OnComplete(() =>
             {
                 SetWholeLazoLoopAlpha(1);
                 _lazoLineRenderer.positionCount = 0;

@@ -26,6 +26,8 @@ namespace Laz
         private ParticleEffectsObjectPooler _particleEffectsObjectPooler = null;
         [SerializeField]
         private LazoWallObjectPooler _lazoWallObjectPooler = null;
+        [SerializeField] 
+        private FakeLazoObjectPooler _fakeLazoObjectPooler = null;
         private StateManager StateManagerInstance => StateManager.Instance;
 
         [Title("User Interface")]
@@ -113,6 +115,11 @@ namespace Laz
             if (_lazoWallObjectPooler != null)
             {
                 _lazoWallObjectPooler.Initialize();
+            }
+
+            if (_fakeLazoObjectPooler != null)
+            {
+                _fakeLazoObjectPooler.Initialize();
             }
         }
 

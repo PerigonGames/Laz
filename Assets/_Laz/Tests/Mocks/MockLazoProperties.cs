@@ -20,6 +20,8 @@ namespace Tests
         public float RateOfRecordingPosition { get; set; }
         public float DistanceLimitOfLazo { get; set; }
         public float CoolDown { get; set; }
+        
+        public ILazoColorProperties LazoColorProperties { get; }
     }
 }
 

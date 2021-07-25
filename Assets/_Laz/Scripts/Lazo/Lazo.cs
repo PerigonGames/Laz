@@ -22,7 +22,6 @@ namespace Laz
         public event Action OnLazoLimitReached;
         
         public float CoolDown => _lazoProperties.CoolDown;
-        public float TimeToLivePerPoint => _lazoProperties.TimeToLivePerPoint;
 
         private float TravelledDistance
         {
