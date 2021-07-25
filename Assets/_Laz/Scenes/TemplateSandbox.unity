@@ -788,7 +788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acd66b68d457c33478c90261605bf09d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fakeLazoBehaviour: {fileID: 0}
+  _fakeLazoBehaviour: {fileID: 329863097550498050, guid: 7c65dc22c6bfee54fa25a3a74b0592fc, type: 3}
 --- !u!1 &336609061
 GameObject:
   m_ObjectHideFlags: 0
@@ -3112,7 +3112,7 @@ MonoBehaviour:
   _enemyManager: {fileID: 1167222209}
   _particleEffectsObjectPooler: {fileID: 1458169075}
   _lazoWallObjectPooler: {fileID: 778001613}
-  _fakeLazoObjectPooler: {fileID: 0}
+  _fakeLazoObjectPooler: {fileID: 336259159}
   _lazoMeter: {fileID: 854015141}
   debugUIBehaviour: {fileID: 60719679}
 --- !u!4 &2042769655
