@@ -5,9 +5,9 @@ using UnityEditor.Build.Reporting;
 
 // Output the build size or a failure depending on BuildPlayer.
 
-public class BuildScript : MonoBehaviour
+public class ProdBuildScript : MonoBehaviour
 {
-    [MenuItem("Build/Build Windows")]
+    [MenuItem("Build/Prod Build Windows")]
     public static void MyBuild()
     {
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
@@ -20,9 +20,9 @@ public class BuildScript : MonoBehaviour
         }
 
         buildPlayerOptions.scenes = scenePaths.ToArray();
-        buildPlayerOptions.locationPathName = "C:/Users/Developer/OneDrive/_PerigonGames/new_build/windowsBuild.exe";
+        buildPlayerOptions.locationPathName = "C:/Users/Developer/OneDrive/_PerigonGames/new_prod_build/windowsBuild.exe";
         buildPlayerOptions.target = BuildTarget.StandaloneWindows64;
-        buildPlayerOptions.options = BuildOptions.Development;
+        buildPlayerOptions.options = BuildOptions.None;
 
         BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
         BuildSummary summary = report.summary;
