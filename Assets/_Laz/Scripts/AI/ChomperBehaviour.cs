@@ -2,7 +2,7 @@ using System;
 using Pathfinding;
 using UnityEngine;
 
-namespace Laz 
+namespace Laz
 {
     public enum ChomperState
     {
@@ -10,25 +10,40 @@ namespace Laz
         Agro,
         Return
     }
-    
+
     public class ChomperBehaviour : EnemyBehaviour, IAIDetectionDataSource
     {
         [Header("Scriptable Object")]
         [SerializeField]
         private ChomperPropertiesScriptableObject _chomperPropertiesScriptableObject = null;
-        
+
         // Dependencies
         private IChomperProperties _chomperProperties = null;
         private IAstarAI _ai = null;
         private AIPatrolBehaviour _patrolBehaviour = null;
         private AIDetectionBehaviour _detectionBehaviour = null;
-        
+
         private AIChomperAgro _aiChomperAgro = null;
         private ChomperState _state = ChomperState.Idle;
 
         public void Initialize(Lazo lazo,
             IChomperProperties chomperProperties = null)
-        {            
+        {
+            if (!TryGetComponent(out _ai))
+            {
+                Debug.LogError("ChomperBehaviour is missing AI Components - AIPath");
+            }
+
+            if (!TryGetComponent(out _patrolBehaviour))
+            {
+                Debug.LogError("Chomper is missing a AIPatrolBehaviour");
+            }
+            
+            if (!TryGetComponent(out _detectionBehaviour))
+            {
+                Debug.LogError("Chomper is missing a AIDetectionBehaviour");
+            }
+
             base.Initialize();
             _chomperProperties = chomperProperties ?? _chomperPropertiesScriptableObject;
             _patrolBehaviour.Initialize(_ai, _chomperProperties.IdleRadius);
@@ -55,7 +70,7 @@ namespace Laz
             _aiChomperAgro.OnChomperReachedEndOfLazo += HandleOnAgroEnded;
             _state = ChomperState.Idle;
         }
-        
+
         public void RayCastDidCollideWith(GameObject collidedGameObject)
         {
             var lazoWallBehaviour = collidedGameObject.GetComponent<LazoWallBehaviour>();
@@ -65,27 +80,8 @@ namespace Laz
                 _state = ChomperState.Agro;
             }
         }
-        
+
         #region Mono
-
-        protected override void Awake()
-        {
-            base.Awake();
-            if (!TryGetComponent(out _ai))
-            {
-                PanicHelper.Panic(new Exception("ChomperBehaviour is missing AI Components - AIPath"));
-            }
-
-            if (!TryGetComponent(out _patrolBehaviour))
-            {
-                PanicHelper.Panic(new Exception("Chomper is missing a AIPatrolBehaviour"));
-            }
-
-            if (!TryGetComponent(out _detectionBehaviour))
-            {
-                PanicHelper.Panic(new Exception("Chomper is missing an AIDetectionBehaviour script"));
-            }
-        }
 
         private void Update()
         {
@@ -121,7 +117,7 @@ namespace Laz
                 _state = ChomperState.Idle;
             }
         }
-        
+
         #endregion
 
 #if UNITY_EDITOR
