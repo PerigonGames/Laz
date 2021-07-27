@@ -8,20 +8,25 @@ namespace Laz
 {
     public partial class Lazo
     {
+        private readonly ILazoProperties _lazoProperties = null;
+        private readonly ILazoWrapped[] _wrappableObjects = null;
+        private readonly IBoost _boost = null;
         private List<LazoPosition> _listOfPositions = new List<LazoPosition>();
-        private ILazoProperties _lazoProperties = null;
-        private ILazoWrapped[] _wrappableObjects = null;
-        private IBoost _boost = null;
-        
+
         private bool _isLazoing = false;
         private float _rateOfRecordingTimerElapsed = 0;
         private float _travelledDistance = 0;
         private Vector3? _lastPosition = null;
-        
+
         public event Action<LazoPosition[]> OnLoopClosed;
         public event Action OnLazoLimitReached;
-        
+        public event Action<float> OnLazoLimitChanged;
+        public event Action OnLazoDeactivated;
+        public event Action<Vector3[]> OnListOfLazoPositionsChanged;
+
         public float CoolDown => _lazoProperties.CoolDown;
+        public List<LazoPosition> GetListOfLazoPositions => _listOfPositions;
+        public bool IsTimeToLiveFrozen { get; set; }
 
         private float TravelledDistance
         {
@@ -35,17 +40,12 @@ namespace Laz
                 }
             }
         }
-        
+
         public bool IsLazoing => _isLazoing;
 
-        public event Action<float> OnLazoLimitChanged;
-        public event Action OnLazoDeactivated;
-        public event Action<Vector3[]> OnListOfLazoPositionsChanged;
-
-        
         public Lazo(ILazoProperties properties, ILazoWrapped[] wrappableObjects, IBoost boost)
         {
-            _wrappableObjects = wrappableObjects ?? new ILazoWrapped[]{};
+            _wrappableObjects = wrappableObjects ?? new ILazoWrapped[] { };
             _lazoProperties = properties;
             _boost = boost;
             Reset();
@@ -53,6 +53,7 @@ namespace Laz
 
         public void CleanUp()
         {
+            IsTimeToLiveFrozen = false;
             _isLazoing = false;
             _rateOfRecordingTimerElapsed = 0;
             _travelledDistance = 0;
@@ -62,6 +63,7 @@ namespace Laz
 
         public void Reset()
         {
+            IsTimeToLiveFrozen = false;
             _isLazoing = false;
             _rateOfRecordingTimerElapsed = 0;
             CleanUpWall();
@@ -69,10 +71,6 @@ namespace Laz
             _lastPosition = null;
         }
 
-        /// <summary>
-        /// Storing new positions that player moved to if able to depending on timer
-        /// </summary>
-        /// <param name="position">position</param>
         public void RunLazoIfAble(Vector3 position, float deltaTime)
         {
             _rateOfRecordingTimerElapsed -= deltaTime;
@@ -84,7 +82,7 @@ namespace Laz
 
             RemoveOldestPointIfNeeded(deltaTime);
         }
-        
+
         public void SetLazoActive(bool activate)
         {
             _isLazoing = activate;
@@ -94,11 +92,8 @@ namespace Laz
             }
             else
             {
+                OnLazoDeactivated?.Invoke();
                 Reset();
-                if (OnLazoDeactivated != null)
-                {
-                    OnLazoDeactivated();
-                }
             }
         }
 
@@ -109,18 +104,15 @@ namespace Laz
                 _lastPosition = position;
                 return;
             }
-            
-            TravelledDistance -= DistanceBetweenV3ToV2((Vector3)_lastPosition, position);
+
+            TravelledDistance -= DistanceBetweenV3ToV2((Vector3) _lastPosition, position);
             _lastPosition = position;
-            
+
             if (TravelledDistance <= 0)
             {
+                OnLazoLimitReached?.Invoke();
                 SetLazoActive(false);
                 _lastPosition = null;
-                if (OnLazoLimitReached != null)
-                {
-                    OnLazoLimitReached();
-                }
             }
         }
 
@@ -128,7 +120,7 @@ namespace Laz
         {
             TravelledDistance = _lazoProperties.DistanceLimitOfLazo;
         }
-        
+
         private void RunLazo(Vector3 position)
         {
             if (_listOfPositions.Count > 0 &&
@@ -148,7 +140,7 @@ namespace Laz
                 }
 
                 KillOffTailEndOfLazoFrom(closedOffPosition, closedLoopPolygon);
-                
+
                 var objectOfInterests = GetObjectOfInterestsWithin(closedLoopPolygon);
                 if (!objectOfInterests.IsNullOrEmpty())
                 {
@@ -156,6 +148,7 @@ namespace Laz
                     {
                         interest.ActivateLazo();
                     }
+
                     ResetTravelledDistance();
                     _boost.SetBoostActive(true);
                 }
@@ -174,7 +167,7 @@ namespace Laz
 
             var centerPoint = GeometryUtilities.CenterPoint(new[] {p1, p2, p3, p4});
             var centerLazoPoint = new LazoPosition(_lazoProperties.TimeToLivePerPoint, centerPoint);
-            
+
             polygon.Add(centerLazoPoint);
             var polygonRange = _listOfPositions.GetRange(closedOffPosition + 1, length - 2);
             polygon.AddRange(polygonRange);
@@ -182,17 +175,24 @@ namespace Laz
         }
 
 
-        
+
         #region Helper
-        
+
+
         private void RemoveOldestPointIfNeeded(float deltaTime)
         {
             _listOfPositions = _listOfPositions.Select(lazoPosition =>
             {
-                lazoPosition.DecrementTimeToLiveBy(deltaTime);
+                var time = deltaTime * TimeToLiveMutator();
+                lazoPosition.DecrementTimeToLiveBy(time);
                 return lazoPosition;
             }).Where(lazoPosition => !lazoPosition.IsTimeBelowZero).ToList();
             OnLazoPositionsChanged();
+        }
+
+        private float TimeToLiveMutator()
+        {
+            return IsTimeToLiveFrozen ? 0 : 1;
         }
 
         private void AddToListOfLazoPositions(LazoPosition position)
@@ -214,7 +214,7 @@ namespace Laz
         {
             _rateOfRecordingTimerElapsed = _lazoProperties.RateOfRecordingPosition;
         }
-        
+
         private bool IsClosedLoop(out int closedOffPosition)
         {
             closedOffPosition = 0;
@@ -227,7 +227,7 @@ namespace Laz
             // Last Line
             var nMinusOnePosition = _listOfPositions[length - 2].Position;
             var lastPosition = _listOfPositions[length - 1].Position;
-        
+
             for (var i = 0; i < length - 3; i++)
             {
                 // First Line
@@ -240,14 +240,14 @@ namespace Laz
                     return true;
                 }
             }
-        
+
             return false;
         }
 
         private ILazoWrapped[] GetObjectOfInterestsWithin(LazoPosition[] lazoPolygon)
         {
-            List<ILazoWrapped> listOfObjects = new List<ILazoWrapped>();
-            Vector3[] arrayOfLazoPositions = lazoPolygon.Select(position => position.Position).ToArray();
+            var listOfObjects = new List<ILazoWrapped>();
+            var arrayOfLazoPositions = lazoPolygon.Select(position => position.Position).ToArray();
             var inactiveWrappableObjects = _wrappableObjects.Where(wrappable => !wrappable.IsActivated);
             foreach (var piece in inactiveWrappableObjects)
             {
@@ -267,5 +267,6 @@ namespace Laz
             return Vector2.Distance(posA, posB);
         }
         #endregion
+
     }
 }
