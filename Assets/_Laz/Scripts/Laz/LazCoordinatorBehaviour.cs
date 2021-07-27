@@ -59,7 +59,7 @@ namespace Laz
             
             _movementBehaviour.Initialize(_lazPlayer.Movement);
             _boostBehaviour.Initialize(_lazPlayer.Movement);
-            _lazoBehaviour.Initialize(_lazPlayer.LazoTool);
+            _lazoBehaviour.Initialize(_lazPlayer.LazoTool, _lazoProperties.LazoColorProperties);
             _modelBehaviour.Initialize(_lazPlayer.Movement);
         }
 

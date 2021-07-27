@@ -351,7 +351,7 @@ GameObject:
   - component: {fileID: 6916257338219551089}
   - component: {fileID: 6916257338219551093}
   m_Layer: 5
-  m_Name: LazoMeter
+  m_Name: LazoMeter.UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -437,7 +437,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 119
 --- !u!114 &6916257338219551093
 MonoBehaviour:
   m_ObjectHideFlags: 0

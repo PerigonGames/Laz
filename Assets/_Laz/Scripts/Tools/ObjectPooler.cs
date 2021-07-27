@@ -90,6 +90,39 @@ namespace PerigonGames
         }
 
         /// <summary>
+        /// Tries to pop an inactive object from queue, if it's still active, it will instantiate a new object
+        /// </summary>
+        /// <param name="poolKey">key</param>
+        /// <returns>inactive component</returns>
+        public T PopInActivePooledObject(int poolKey)
+        {
+            Queue<T> poolQueue = new Queue<T>();
+            if (!m_poolDictionary.TryGetValue(poolKey, out poolQueue))
+            {
+                Debug.LogWarning(message: $"{poolKey} does not exist");
+                return null;
+            }
+            
+            T pooledObj = poolQueue.Peek();
+            if (pooledObj.gameObject.activeSelf)
+            {
+                GameObject obj = Instantiate(pooledObj.gameObject, m_parent, true);
+                obj.SetActive(false);
+                T newlyCreatedComponent = obj.GetComponent<T>();
+                poolQueue.Enqueue(newlyCreatedComponent);
+                pooledObj = newlyCreatedComponent;
+            }
+            else
+            {
+                poolQueue.Dequeue();
+                poolQueue.Enqueue(pooledObj);
+            }
+            
+            
+            return pooledObj;
+        }
+
+        /// <summary>
         /// Gets an object from the stored key and place in specific position and rotation
         /// </summary>
         /// <param name="poolKey">key</param>

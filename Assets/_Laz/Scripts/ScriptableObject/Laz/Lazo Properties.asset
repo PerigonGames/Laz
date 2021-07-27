@@ -16,3 +16,4 @@ MonoBehaviour:
   _rateOfRecordingPosition: 0.05
   _distanceLimitOfLazo: 50
   _coolDown: 0.36
+  _lazoColors: {fileID: 11400000, guid: 67365da3ffedebe4ab7dda0fd9ba7d18, type: 2}

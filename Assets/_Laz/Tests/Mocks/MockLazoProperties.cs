@@ -1,4 +1,5 @@
 using Laz;
+using UnityEngine;
 
 namespace Tests
 {
@@ -20,6 +21,14 @@ namespace Tests
         public float RateOfRecordingPosition { get; set; }
         public float DistanceLimitOfLazo { get; set; }
         public float CoolDown { get; set; }
+
+        public ILazoColorProperties LazoColorProperties => new MockColorProperties();
+    }
+
+    public class MockColorProperties : ILazoColorProperties
+    {
+        public Gradient NormalGradient => new Gradient();
+        public Gradient FrozenColor => new Gradient();
     }
 }
 

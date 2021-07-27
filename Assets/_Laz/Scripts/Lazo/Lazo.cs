@@ -12,7 +12,7 @@ namespace Laz
         private readonly ILazoWrapped[] _wrappableObjects = null;
         private readonly IBoost _boost = null;
         private List<LazoPosition> _listOfPositions = new List<LazoPosition>();
-        
+
         private bool _isLazoing = false;
         private float _rateOfRecordingTimerElapsed = 0;
         private float _travelledDistance = 0;
@@ -25,7 +25,6 @@ namespace Laz
         public event Action<Vector3[]> OnListOfLazoPositionsChanged;
 
         public float CoolDown => _lazoProperties.CoolDown;
-        public float TimeToLivePerPoint => _lazoProperties.TimeToLivePerPoint;
         public List<LazoPosition> GetListOfLazoPositions => _listOfPositions;
         public bool IsTimeToLiveFrozen { get; set; }
 
@@ -43,7 +42,7 @@ namespace Laz
         }
 
         public bool IsLazoing => _isLazoing;
-        
+
         public Lazo(ILazoProperties properties, ILazoWrapped[] wrappableObjects, IBoost boost)
         {
             _wrappableObjects = wrappableObjects ?? new ILazoWrapped[] { };
@@ -179,7 +178,7 @@ namespace Laz
 
         #region Helper
 
-        
+
         private void RemoveOldestPointIfNeeded(float deltaTime)
         {
             _listOfPositions = _listOfPositions.Select(lazoPosition =>
@@ -190,7 +189,7 @@ namespace Laz
             }).Where(lazoPosition => !lazoPosition.IsTimeBelowZero).ToList();
             OnLazoPositionsChanged();
         }
-        
+
         private float TimeToLiveMutator()
         {
             return IsTimeToLiveFrozen ? 0 : 1;
