@@ -17,7 +17,7 @@ namespace Laz
 
         public void PatrolCircularArea()
         {
-            if (_ai.reachedDestination || _ai.isStopped)
+            if (_ai.reachedEndOfPath)
             {
                 var destination = _randomPosition.GetRandomPosition();
                 MoveTo(destination);

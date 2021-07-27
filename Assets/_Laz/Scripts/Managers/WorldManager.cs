@@ -81,7 +81,7 @@ namespace Laz
             _lazCoordinator.Initialize(laz, _wrappableManager.WrappableObjects);
 
             _puzzleManager?.Initialize();
-            _enemyManager?.Initialize();
+            _enemyManager?.Initialize(laz.LazoTool);
 
             SetupObjectPoolers(objectsOfInterest.Length);
 
