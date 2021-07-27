@@ -38,6 +38,11 @@ namespace Laz
             {
                 Debug.LogError("Chomper is missing a AIPatrolBehaviour");
             }
+            
+            if (!TryGetComponent(out _detectionBehaviour))
+            {
+                Debug.LogError("Chomper is missing a AIDetectionBehaviour");
+            }
 
             base.Initialize();
             _chomperProperties = chomperProperties ?? _chomperPropertiesScriptableObject;
