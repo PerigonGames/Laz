@@ -26,6 +26,16 @@ namespace Laz
         public void Initialize(
             IChomperProperties chomperProperties = null)
         {            
+            if (!TryGetComponent(out _ai))
+            {
+                Debug.LogError("ChomperBehaviour is missing AI Components - AIPath");
+            }
+
+            if (!TryGetComponent(out _patrolBehaviour))
+            {
+                Debug.LogError("Chomper is missing a AIPatrolBehaviour");
+            }
+            
             base.Initialize();
             _chomperProperties = chomperProperties ?? _chomperPropertiesScriptableObject;
             _patrolBehaviour.Initialize(_ai, _chomperProperties.IdleRadius);
@@ -44,20 +54,6 @@ namespace Laz
         }
         
         #region Mono
-
-        protected override void Awake()
-        {
-            base.Awake();
-            if (!TryGetComponent(out _ai))
-            {
-                Debug.LogError("ChomperBehaviour is missing AI Components - AIPath");
-            }
-
-            if (!TryGetComponent(out _patrolBehaviour))
-            {
-                Debug.LogError("Chomper is missing a AIPatrolBehaviour");
-            }
-        }
 
         private void Update()
         {
