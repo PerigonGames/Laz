@@ -15,8 +15,10 @@ namespace Laz
         private readonly Lazo _lazo = null;
         private readonly float _extraDistance = 0;
 
+        private FakeLazo _fakeLazo = null;
         private int _positionIndex = 0;
         private List<Vector3> _tempLazoPositions = new List<Vector3>();
+        private bool HasFrozenLazo => _lazo.IsTimeToLiveFrozen;
 
         public event Action OnChomperReachedEndOfLazo;
         
@@ -26,15 +28,14 @@ namespace Laz
         {
             _ai = ai;
             _lazo = lazo;
-            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
             _extraDistance = extraDistance;
         }
 
         public void StartAgroAt(LazoPosition lazoPosition)
         {
+            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
             _tempLazoPositions = new List<Vector3>();
             _ai.canSearch = false;
-            _lazo.IsTimeToLiveFrozen = true;
             _positionIndex = _lazo.GetListOfLazoPositions.IndexOf(lazoPosition);
             if (lazoPosition != null)
             {
@@ -48,12 +49,15 @@ namespace Laz
         {
             if (_ai.reachedEndOfPath && !_ai.pathPending)
             {
+                FreezeLazoIfNeeded();
                 CopyLazoPositionsToTempLazoPositionsIfPossible();
                 var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
                 SetAIPathWith(listOfPositions);
                 if (!CanStillCreateFakePath(listOfPositions))
                 {
                     _ai.canSearch = true;
+                    _fakeLazo.IsTimeToLiveFrozen = false;
+                    _fakeLazo = null;
                     OnChomperReachedEndOfLazo?.Invoke();
                 }
             }
@@ -70,17 +74,35 @@ namespace Laz
             _ai.canSearch = true;
             _tempLazoPositions = new List<Vector3>();
             _positionIndex = 0;
-            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
+            _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
         }
 
         #region delegate
         private void HandleOnLazoDeactivated()
         {
+            CreateFakeLazoLineForChomperToRideOn();
             CopyLazoPositionsToTempLazoPositionsIfPossible();
             var extraLastPosition = CreateExtraLastPositionForAI();
             _tempLazoPositions.Add(extraLastPosition);
+            _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
         }
-#endregion
+
+        private void CreateFakeLazoLineForChomperToRideOn()
+        {
+            var fakeLazoBehaviour = FakeLazoObjectPooler.Instance.PopInActivePooledObject(FakeLazoObjectPooler.Key);
+            _fakeLazo = new FakeLazo(_lazo.GetListOfLazoPositions, _lazo.IsTimeToLiveFrozen);
+            fakeLazoBehaviour.SetLine(_fakeLazo);
+            fakeLazoBehaviour.gameObject.SetActive(true);
+        }
+        #endregion
+
+        private void FreezeLazoIfNeeded()
+        {
+            if (_lazo != null && !HasFrozenLazo)
+            {
+                _lazo.IsTimeToLiveFrozen = true;
+            }
+        }
 
         private Vector3 CreateExtraLastPositionForAI()
         {

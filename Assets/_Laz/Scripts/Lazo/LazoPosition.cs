@@ -13,6 +13,7 @@ namespace Laz
 
         public float TimeToLive
         {
+            get => _timeToLive;
             set => _timeToLive = value;
         }
 

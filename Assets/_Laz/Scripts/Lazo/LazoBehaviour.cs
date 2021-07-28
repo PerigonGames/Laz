@@ -29,6 +29,7 @@ namespace Laz
             _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
             _lazo.OnLoopClosed += HandleOnLoopClosed;
             _lazo.OnListOfLazoPositionsChanged += HandleOnListOfLazoPositionsChanged;
+            _lazo.OnTimeToLiveStateChanged += HandleTimeToLiveStateChange;
             ClearLazoTrail();
         }
 
@@ -170,6 +171,11 @@ namespace Laz
         {
             _lazoLineRenderer.positionCount = positions.Length;
             _lazoLineRenderer.SetPositions(positions);
+        }
+
+        private void HandleTimeToLiveStateChange(bool isFrozen)
+        {
+            _lazoLineRenderer.colorGradient = isFrozen ? _lazoColors.FrozenColor : _lazoColors.NormalGradient;
         }
 
         private void SetWholeLazoLoopAlpha(float alpha)

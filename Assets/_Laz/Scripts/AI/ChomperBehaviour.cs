@@ -50,7 +50,7 @@ namespace Laz
             _detectionBehaviour.Initialize(_chomperProperties.AgroDetectionRadius, this);
             _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel);
             _aiChomperAgro.OnChomperReachedEndOfLazo += HandleOnAgroEnded;
-            _ai.maxSpeed = _chomperProperties.Speed;
+            _ai.maxSpeed = _chomperProperties.IdleSpeed;
         }
 
         public override void CleanUp()
@@ -69,6 +69,7 @@ namespace Laz
             _aiChomperAgro.Reset();
             _aiChomperAgro.OnChomperReachedEndOfLazo += HandleOnAgroEnded;
             _state = ChomperState.Idle;
+            _ai.maxSpeed = _chomperProperties.IdleSpeed;
         }
 
         public void RayCastDidCollideWith(GameObject collidedGameObject)
@@ -76,9 +77,15 @@ namespace Laz
             var lazoWallBehaviour = collidedGameObject.GetComponent<LazoWallBehaviour>();
             if (lazoWallBehaviour != null)
             {
-                _aiChomperAgro.StartAgroAt(lazoWallBehaviour.LazoWallPosition);
-                _state = ChomperState.Agro;
+                OnAgroStart(lazoWallBehaviour.LazoWallPosition);
             }
+        }
+
+        private void OnAgroStart(LazoPosition position)
+        {
+            _aiChomperAgro.StartAgroAt(position);
+            _state = ChomperState.Agro;
+            _ai.maxSpeed = _chomperProperties.AgroSpeed;
         }
 
         #region Mono
@@ -115,6 +122,7 @@ namespace Laz
             if (_ai.reachedEndOfPath)
             {
                 _state = ChomperState.Idle;
+                _ai.maxSpeed = _chomperProperties.IdleSpeed;
             }
         }
 
