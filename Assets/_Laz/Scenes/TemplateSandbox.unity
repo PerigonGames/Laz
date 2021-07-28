@@ -574,6 +574,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8830863841601990709, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
+      propertyPath: _lazoScriptableObject
+      value: 
+      objectReference: {fileID: 11400000, guid: a69a11a90a8ee0e469bd622f49cea14f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
 --- !u!4 &199378479 stripped

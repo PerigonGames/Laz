@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathfinding;
+using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Laz
@@ -29,11 +30,12 @@ namespace Laz
             _ai = ai;
             _lazo = lazo;
             _extraDistance = extraDistance;
+            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
+
         }
 
         public void StartAgroAt(LazoPosition lazoPosition)
         {
-            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
             _tempLazoPositions = new List<Vector3>();
             _ai.canSearch = false;
             _positionIndex = _lazo.GetListOfLazoPositions.IndexOf(lazoPosition);
@@ -58,6 +60,8 @@ namespace Laz
                     _ai.canSearch = true;
                     _fakeLazo.IsTimeToLiveFrozen = false;
                     _fakeLazo = null;
+                    _positionIndex = 0;
+                    _tempLazoPositions.Clear();
                     OnChomperReachedEndOfLazo?.Invoke();
                 }
             }
@@ -65,6 +69,11 @@ namespace Laz
 
         public void CleanUp()
         {
+            if (_fakeLazo != null)
+            {
+                _fakeLazo.CleanUp();
+                _fakeLazo = null;
+            }
             _tempLazoPositions = null;
             _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
         }
@@ -74,17 +83,19 @@ namespace Laz
             _ai.canSearch = true;
             _tempLazoPositions = new List<Vector3>();
             _positionIndex = 0;
-            _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
+            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
         }
 
         #region delegate
         private void HandleOnLazoDeactivated()
         {
-            CreateFakeLazoLineForChomperToRideOn();
-            CopyLazoPositionsToTempLazoPositionsIfPossible();
-            var extraLastPosition = CreateExtraLastPositionForAI();
-            _tempLazoPositions.Add(extraLastPosition);
-            _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
+            if (_fakeLazo == null)
+            {
+                CreateFakeLazoLineForChomperToRideOn();
+                CopyLazoPositionsToTempLazoPositionsIfPossible();
+                var extraLastPosition = CreateExtraLastPositionForAI();
+                _tempLazoPositions.Add(extraLastPosition);   
+            }
         }
 
         private void CreateFakeLazoLineForChomperToRideOn()
@@ -98,8 +109,9 @@ namespace Laz
 
         private void FreezeLazoIfNeeded()
         {
-            if (_lazo != null && !HasFrozenLazo)
+            if (_fakeLazo == null && _lazo != null && !HasFrozenLazo)
             {
+                Debug.Log("Freeze Lazo");
                 _lazo.IsTimeToLiveFrozen = true;
             }
         }

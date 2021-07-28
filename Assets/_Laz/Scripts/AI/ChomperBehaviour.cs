@@ -83,9 +83,13 @@ namespace Laz
 
         private void OnAgroStart(LazoPosition position)
         {
-            _aiChomperAgro.StartAgroAt(position);
-            _state = ChomperState.Agro;
-            _ai.maxSpeed = _chomperProperties.AgroSpeed;
+            Debug.Log("Idle -> Agro");
+            if (_state == ChomperState.Idle || _state == ChomperState.Return)
+            {
+                _aiChomperAgro.StartAgroAt(position);
+                _state = ChomperState.Agro;
+                _ai.maxSpeed = _chomperProperties.AgroSpeed;
+            }
         }
 
         #region Mono
@@ -103,7 +107,7 @@ namespace Laz
                     break;
                 case ChomperState.Return:
                     OnReturnUpdate();
-                    _detectionBehaviour.OnDetectUpdate();
+                    //_detectionBehaviour.OnDetectUpdate();
                     break;
                 default:
                     _patrolBehaviour.PatrolCircularArea();
@@ -113,14 +117,16 @@ namespace Laz
 
         private void HandleOnAgroEnded()
         {
+            Debug.Log("Agro -> Return");
             _state = ChomperState.Return;
             _ai.destination = _originalPosition;
         }
 
         private void OnReturnUpdate()
         {
-            if (_ai.reachedEndOfPath)
+            if (_ai.reachedDestination)
             {
+                Debug.Log("Return -> Idle");
                 _state = ChomperState.Idle;
                 _ai.maxSpeed = _chomperProperties.IdleSpeed;
             }

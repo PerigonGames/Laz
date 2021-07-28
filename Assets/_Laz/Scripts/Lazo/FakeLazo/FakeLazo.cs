@@ -29,9 +29,7 @@ namespace Laz
         public FakeLazo(List<LazoPosition> listOfPoints, bool isFrozen)
         {
             _isTimeToLiveFrozen = isFrozen;
-
             DeepCopy(listOfPoints);
-            
             Positions = _listOfPositions.Select(point => point.Position).ToArray();
         }
 
@@ -45,6 +43,13 @@ namespace Laz
             }
 
             _listOfPositions = tempCopy;
+        }
+
+        public void CleanUp()
+        {
+            IsTimeToLiveFrozen = false;
+            _listOfPositions.ForEach(point => point.ForceDeath());
+            OnLazoPositionsChanged();
         }
 
         public void RemoveOldestPointIfNeeded(float deltaTime)

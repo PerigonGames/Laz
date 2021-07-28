@@ -1,4 +1,3 @@
-using DG.Tweening;
 using PerigonGames;
 using UnityEngine;
 
@@ -43,6 +42,10 @@ namespace Laz
         {
             _lineRenderer.positionCount = positions.Length;
             _lineRenderer.SetPositions(positions);
+            if (positions.IsNullOrEmpty())
+            {
+                gameObject.SetActive(false);
+            }
         }
         
         private void HandleTimeToLiveStateChange(bool isFrozen)
@@ -58,6 +61,7 @@ namespace Laz
                 _fakeLazo.OnListOfLazoPositionsChanged -= HandleOnListOfLazoPositionsChanged;
                 _fakeLazo = null;
             }
+            _lineRenderer.positionCount = 0;
         }
 
         private void Awake()
