@@ -1,25 +1,31 @@
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace Laz
 {
-    public class DebugSceneChanger : MonoBehaviour
+    public class DebugSceneChanger
     {
         private const string SCENE_NAME_DELIMITER = "/";
         private const string SCENE_NAME_EXTENSION = ".unity";
-
-        [SerializeField] private Key _sceneChangeModifier = Key.LeftCtrl;
+        
         private List<string> _buildSceneNames = new List<string>();
+        
+        public List<string> BuildSceneNames => _buildSceneNames;
 
-        private void Awake()
+        public void Initialize()
         {
             GetBuildSceneNames();
             
 #if UNITY_EDITOR
             UnityEditor.EditorBuildSettings.sceneListChanged += GetBuildSceneNames;
+#endif
+        }
+
+        public void CleanUp()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorBuildSettings.sceneListChanged -= GetBuildSceneNames;
 #endif
         }
 
@@ -44,27 +50,6 @@ namespace Laz
                 .Replace(SCENE_NAME_EXTENSION, string.Empty);
             
             return appropriateName;
-        }
-
-        private void Update()
-        {
-            if (Keyboard.current[_sceneChangeModifier].wasPressedThisFrame)
-            {
-                //Show Scene Name UI and options
-            }
-
-            if (Keyboard.current[_sceneChangeModifier].wasReleasedThisFrame)
-            {
-                
-            }
-            
-        }
-
-        private void OnDestroy()
-        {
-#if UNITY_EDITOR
-            UnityEditor.EditorBuildSettings.sceneListChanged += GetBuildSceneNames;
-#endif
         }
     }
 }
