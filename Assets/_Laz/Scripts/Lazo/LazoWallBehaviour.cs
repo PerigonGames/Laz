@@ -6,6 +6,7 @@ namespace Laz
     {
         private LazoPosition _lazoPosition = null;
         private Collider _collider = null;
+        public LazoPosition LazoWallPosition => _lazoPosition;
         
         public void Initialize(LazoPosition lazoPosition)
         {

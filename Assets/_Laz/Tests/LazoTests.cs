@@ -17,7 +17,6 @@ namespace Tests
         public void Test_Lazo_Constructor()
         {
             // Arrange
-            _mockLazoProperties.TimeToLivePerPoint = 10f;
             _mockLazoProperties.CoolDown = 4f;
             
             // Act
@@ -25,7 +24,6 @@ namespace Tests
             
             // Assert
             Assert.IsFalse(lazo.IsLazoing, "Is lazoing should be false at init");
-            Assert.AreEqual(10, lazo.TimeToLivePerPoint, "Time to live should be 10");
             Assert.AreEqual(4, lazo.CoolDown, "Cooldown should be 4");
         }
         
