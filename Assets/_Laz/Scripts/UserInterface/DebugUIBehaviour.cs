@@ -1,4 +1,6 @@
-using System;
+using System.Collections.Generic;
+using System.Text;
+using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -23,10 +25,11 @@ namespace Laz
         
         public void Initialize(LazMovement movement)
         {
-            _sceneChanger = new DebugSceneChanger();
-            _sceneChanger.Initialize();
             _movement = movement;
             _movement.OnSpeedChanges += HandleVelocityChange;
+            _sceneChanger = new DebugSceneChanger();
+            _sceneChanger.BuildSceneNamesChanged += HandleBuildSceneChanges;
+            _sceneChanger.Initialize();
         }
 
         public void SetDebugText(string text)
@@ -47,6 +50,7 @@ namespace Laz
         private void OnDestroy()
         {
             _movement.OnSpeedChanges -= HandleVelocityChange;
+            _sceneChanger.BuildSceneNamesChanged -= HandleBuildSceneChanges;
             _sceneChanger.CleanUp();
         }
 
@@ -63,6 +67,24 @@ namespace Laz
                 _isModifierBeingPressed = false;
                 _sceneChangeDebugText.gameObject.SetActive(false);
             }
+        }
+
+        private void HandleBuildSceneChanges()
+        {
+            List<string> buildSceneNames = _sceneChanger.BuildSceneNames; 
+            if (buildSceneNames.IsNullOrEmpty() || _sceneChangeDebugText == null)
+            {
+                return;
+            }
+            
+            StringBuilder sceneNameStringBuilder = new StringBuilder();
+            
+            foreach (string buildSceneName in buildSceneNames)
+            {
+                sceneNameStringBuilder.AppendLine(buildSceneName);
+            }
+
+            _sceneChangeDebugText.text = sceneNameStringBuilder.ToString();
         }
 
         private void HandleVelocityChange(float velocity)

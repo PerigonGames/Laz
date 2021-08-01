@@ -1,4 +1,5 @@
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +11,9 @@ namespace Laz
         private const string SCENE_NAME_EXTENSION = ".unity";
         
         private List<string> _buildSceneNames = new List<string>();
-        
+
+        public Action BuildSceneNamesChanged;
+
         public List<string> BuildSceneNames => _buildSceneNames;
 
         public void Initialize()
@@ -37,6 +40,8 @@ namespace Laz
             {
                 _buildSceneNames.Add(GetAppropriateSceneName(SceneUtility.GetScenePathByBuildIndex(i)));
             }
+            
+            BuildSceneNamesChanged?.Invoke();
         }
 
         private string GetAppropriateSceneName(string buildPath)
