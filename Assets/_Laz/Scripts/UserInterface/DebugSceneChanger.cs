@@ -1,6 +1,7 @@
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Laz
@@ -30,6 +31,17 @@ namespace Laz
 #if UNITY_EDITOR
             UnityEditor.EditorBuildSettings.sceneListChanged -= GetBuildSceneNames;
 #endif
+        }
+
+        public void ChangeScene(int buildIndex)
+        {
+            if (buildIndex < 0 || buildIndex >= _buildSceneNames.Count)
+            {
+                Debug.LogWarning("Inappropriate Scene Index, unable to load scene");
+                return;
+            }
+
+            SceneManager.LoadScene(buildIndex, LoadSceneMode.Single);
         }
 
         private void GetBuildSceneNames()
