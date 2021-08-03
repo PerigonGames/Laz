@@ -1,4 +1,3 @@
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,6 +40,7 @@ namespace Laz
                 return;
             }
 
+            BuildSceneNamesChanged = null;
             SceneManager.LoadScene(buildIndex, LoadSceneMode.Single);
         }
 
@@ -70,4 +70,3 @@ namespace Laz
         }
     }
 }
-#endif

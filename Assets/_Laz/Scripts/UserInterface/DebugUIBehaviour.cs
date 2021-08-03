@@ -27,9 +27,6 @@ namespace Laz
         {
             _movement = movement;
             _movement.OnSpeedChanges += HandleVelocityChange;
-            _sceneChanger = new DebugSceneChanger();
-            _sceneChanger.BuildSceneNamesChanged += HandleBuildSceneChanges;
-            _sceneChanger.Initialize();
         }
 
         public void SetDebugText(string text)
@@ -40,6 +37,9 @@ namespace Laz
         private void Awake()
         {
             _instance = this;
+            _sceneChanger = new DebugSceneChanger();
+            _sceneChanger.BuildSceneNamesChanged += HandleBuildSceneChanges;
+            _sceneChanger.Initialize();
         }
 
         private void Update()
@@ -82,6 +82,8 @@ namespace Laz
             {
                 return;
             }
+
+            Debug.Log($"SceneChanger is {(_sceneChanger == null ? "Null" : "Not Null")}");
 
             int buildIndex = -1;
             
