@@ -73,7 +73,7 @@ namespace Laz
 
         public void Reset()
         {
-            IsTimeToLiveFrozen = false;
+            _isTimeToLiveFrozen = false;
             _isLazoing = false;
             _rateOfRecordingTimerElapsed = 0;
             CleanUpWall();

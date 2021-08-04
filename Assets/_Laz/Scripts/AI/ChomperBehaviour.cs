@@ -33,7 +33,7 @@ namespace Laz
             _lazo = lazo;
             if (!TryGetComponent(out _ai))
             {
-                Debug.LogError("ChomperBehaviour is missing AI Components - AIPath");
+                Debug.LogError("Chomper is missing AI Components - AIPath");
             }
 
             if (!TryGetComponent(out _patrolBehaviour))
@@ -87,7 +87,6 @@ namespace Laz
         {
             if (_state != ChomperState.Detection)
             {
-                Debug.Log("Idle -> Detected");
                 _state = ChomperState.Detection;
                 _aiChomperAgro.SetLazoPosition(lazoPosition);
                 _ai.destination = lazoPosition.Position;
@@ -135,7 +134,6 @@ namespace Laz
 
         private void HandleOnAgroEnded()
         {
-            Debug.Log("Agro -> Return");
             _state = ChomperState.Return;
             _ai.destination = _originalPosition;
         }
@@ -144,7 +142,6 @@ namespace Laz
         {
             if (_ai.reachedDestination)
             {
-                Debug.Log("Return -> Idle");
                 _state = ChomperState.Idle;
                 _ai.maxSpeed = _chomperProperties.IdleSpeed;
             }
@@ -167,7 +164,6 @@ namespace Laz
         {
             if (_state == ChomperState.Detection)
             {
-                Debug.Log("Detected -> Agro");
                 _state = ChomperState.Agro;
                 _aiChomperAgro.StartAgroAt();
                 _ai.maxSpeed = _chomperProperties.AgroSpeed;

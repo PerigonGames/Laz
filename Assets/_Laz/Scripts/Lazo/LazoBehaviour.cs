@@ -86,6 +86,7 @@ namespace Laz
             tween.OnComplete(() =>
             {
                 SetWholeLazoLoopAlpha(1);
+                SetupLazoColors();
                 _lazoLineRenderer.positionCount = 0;
             });
         }
@@ -175,6 +176,7 @@ namespace Laz
 
         private void HandleTimeToLiveStateChange(bool isFrozen)
         {
+            Debug.Log("Is Frozen: " + isFrozen);
             _lazoLineRenderer.colorGradient = isFrozen ? _lazoColors.FrozenColor : _lazoColors.NormalGradient;
         }
 

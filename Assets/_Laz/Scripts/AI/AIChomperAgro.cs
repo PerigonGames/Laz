@@ -105,7 +105,6 @@ namespace Laz
                 {
                     _tempLazoPositions.Add((Vector3) extraLastPosition);
                 }
-                _lazo.IsTimeToLiveFrozen = false;
             }
         }
 

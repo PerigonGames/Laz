@@ -6,7 +6,7 @@ namespace Laz
     public class LazoPosition
     {
         private float _timeToLive;
-        private Vector3 _position;
+        private readonly Vector3 _position;
 
         public bool IsTimeBelowZero => _timeToLive < 0;
         public Vector3 Position => _position;
