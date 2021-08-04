@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathfinding;
-using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Laz
@@ -19,7 +18,6 @@ namespace Laz
         private FakeLazo _fakeLazo = null;
         private int _positionIndex = 0;
         private List<Vector3> _tempLazoPositions = new List<Vector3>();
-        private bool HasFrozenLazo => _lazo.IsTimeToLiveFrozen;
 
         public event Action OnChomperReachedEndOfLazo;
         
@@ -34,32 +32,48 @@ namespace Laz
 
         }
 
-        public void StartAgroAt(LazoPosition lazoPosition)
+        public void SetLazoPosition(LazoPosition lazoPosition)
         {
-            _tempLazoPositions = new List<Vector3>();
-            _ai.canSearch = false;
             _positionIndex = _lazo.GetListOfLazoPositions.IndexOf(lazoPosition);
-            if (lazoPosition != null)
-            {
-                _ai.destination = lazoPosition.Position;
-                _ai.SearchPath();
-            }
         }
 
-
-        public void OnAgroUpdate()
+        public void StartAgroAt()
         {
+            _ai.canSearch = false;
+            
+            // Need to grab the position from Real lazo into Fake,
+            // or if Fake already exists (from early Deactivation, just use that)
+
+            if (_fakeLazo == null)
+            {
+                CopyLazoPositionsToTempLazoPositions();
+            }
+            
+            var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
+            SetAIPathWith(listOfPositions);
+        }
+        
+        public void OnAgroUpdate()
+        {                
             if (_ai.reachedEndOfPath && !_ai.pathPending)
             {
-                FreezeLazoIfNeeded();
-                CopyLazoPositionsToTempLazoPositionsIfPossible();
+                if (_fakeLazo == null)
+                {
+                    CopyLazoPositionsToTempLazoPositions();
+                }
+                
                 var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
                 SetAIPathWith(listOfPositions);
+
+
                 if (!CanStillCreateFakePath(listOfPositions))
                 {
                     _ai.canSearch = true;
-                    _fakeLazo.IsTimeToLiveFrozen = false;
-                    _fakeLazo = null;
+                    if (_fakeLazo != null)
+                    {
+                        _fakeLazo.IsTimeToLiveFrozen = false;
+                        _fakeLazo = null;
+                    }
                     _positionIndex = 0;
                     _tempLazoPositions.Clear();
                     OnChomperReachedEndOfLazo?.Invoke();
@@ -89,12 +103,16 @@ namespace Laz
         #region delegate
         private void HandleOnLazoDeactivated()
         {
-            if (_fakeLazo == null)
+            if (_lazo.IsTimeToLiveFrozen) // Test storing the state and checking detection
             {
                 CreateFakeLazoLineForChomperToRideOn();
-                CopyLazoPositionsToTempLazoPositionsIfPossible();
+                CopyLazoPositionsToTempLazoPositions();
                 var extraLastPosition = CreateExtraLastPositionForAI();
-                _tempLazoPositions.Add(extraLastPosition);   
+                if (extraLastPosition != null)
+                {
+                    _tempLazoPositions.Add((Vector3) extraLastPosition);
+                }
+                _lazo.IsTimeToLiveFrozen = false;
             }
         }
 
@@ -107,22 +125,18 @@ namespace Laz
         }
         #endregion
 
-        private void FreezeLazoIfNeeded()
-        {
-            if (_fakeLazo == null && _lazo != null && !HasFrozenLazo)
-            {
-                Debug.Log("Freeze Lazo");
-                _lazo.IsTimeToLiveFrozen = true;
-            }
-        }
-
-        private Vector3 CreateExtraLastPositionForAI()
+        private Vector3? CreateExtraLastPositionForAI()
         {
             var amountOfPositions = _tempLazoPositions.Count;
-            var lastPosition = _tempLazoPositions[amountOfPositions - 1];
-            var secondLastPosition = _tempLazoPositions[amountOfPositions - 2];
-            var direction = NormalizedDirectionFromTwoPoints(lastPosition, secondLastPosition);
-            return lastPosition + (direction * _extraDistance);
+            if (amountOfPositions > 1)
+            {
+                var lastPosition = _tempLazoPositions[amountOfPositions - 1];
+                var secondLastPosition = _tempLazoPositions[amountOfPositions - 2];
+                var direction = NormalizedDirectionFromTwoPoints(lastPosition, secondLastPosition);
+                return lastPosition + (direction * _extraDistance);
+            }
+
+            return null;
         }
 
         private Vector3 NormalizedDirectionFromTwoPoints(Vector3 secondLastPosition, Vector3 lastPosition)
@@ -130,16 +144,14 @@ namespace Laz
             return (secondLastPosition - lastPosition).normalized;
         }
         
-        private void CopyLazoPositionsToTempLazoPositionsIfPossible()
+        private void CopyLazoPositionsToTempLazoPositions()
         {
-            if (CanCreateCopyOfLazoPositions)
-            {
-                var length = _lazo.GetListOfLazoPositions.Count;
-                Vector3[] tempLazoPositionContainer = new Vector3[length];
-                var listOfPositions = _lazo.GetListOfLazoPositions.Select(lazo => lazo.Position).ToList();
-                listOfPositions.CopyTo(tempLazoPositionContainer);
-                _tempLazoPositions = tempLazoPositionContainer.ToList();
-            }
+            // Need to check if fake lazo or real lazo
+            var length = _lazo.GetListOfLazoPositions.Count;
+            Vector3[] tempLazoPositionContainer = new Vector3[length];
+            var listOfPositions = _lazo.GetListOfLazoPositions.Select(lazo => lazo.Position).ToList();
+            listOfPositions.CopyTo(tempLazoPositionContainer);
+            _tempLazoPositions = tempLazoPositionContainer.ToList();
         }
 
         private List<Vector3> CreateListOfPositionsStartingFrom(int fromPosition)
