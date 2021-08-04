@@ -33,11 +33,7 @@ namespace Laz
         [Title("User Interface")]
         [SerializeField]
         private LazoMeterBehaviour _lazoMeter = null;
-
-        [Title("Debug")]
-        [SerializeField]
-        private DebugUIBehaviour debugUIBehaviour = null;
-
+        
         private LazoWrappableManager _wrappableManager = null;
 
         public void CleanUp()
@@ -99,9 +95,14 @@ namespace Laz
                 _lazoMeter.Initialize(laz.LazoTool);
             }
 
-            if (debugUIBehaviour != null)
+            // if (debugUIBehaviour != null)
+            // {
+            //     debugUIBehaviour.Initialize(laz.Movement);
+            // }
+
+            if (DebugUIBehaviour.Instance != null)
             {
-                debugUIBehaviour.Initialize(laz.Movement);
+                DebugUIBehaviour.Instance.Initialize(laz.Movement);
             }
         }
 

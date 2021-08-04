@@ -32,7 +32,7 @@ namespace Laz
 #endif
         }
 
-        public void ChangeScene(int buildIndex)
+        public void ChangeScene(int buildIndex, Action onCallBack)
         {
             if (buildIndex < 0 || buildIndex >= _buildSceneNames.Count)
             {
@@ -40,7 +40,7 @@ namespace Laz
                 return;
             }
 
-            BuildSceneNamesChanged = null;
+            onCallBack?.Invoke();
             SceneManager.LoadScene(buildIndex, LoadSceneMode.Single);
         }
 

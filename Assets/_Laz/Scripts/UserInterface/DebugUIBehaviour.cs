@@ -36,7 +36,17 @@ namespace Laz
 
         private void Awake()
         {
-            _instance = this;
+            if (_instance != null && _instance != this)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                _instance = this;
+            }
+            
+            DontDestroyOnLoad(this);
+
             _sceneChanger = new DebugSceneChanger();
             _sceneChanger.BuildSceneNamesChanged += HandleBuildSceneChanges;
             _sceneChanger.Initialize();
@@ -46,12 +56,15 @@ namespace Laz
         {
             HandleModifierInput();
         }
-
-        private void OnDestroy()
+        
+        //Create Callback method to be called before SceneSwitches
+        //Because at the point where OnDestroy would be called,
+        //The references for _movement and _sceneChanger would be null
+        private void OnSceneSwitch()
         {
             _movement.OnSpeedChanges -= HandleVelocityChange;
-            _sceneChanger.BuildSceneNamesChanged -= HandleBuildSceneChanges;
             _sceneChanger.CleanUp();
+            _sceneChanger.BuildSceneNamesChanged -= HandleBuildSceneChanges;
         }
 
         private void HandleModifierInput()
@@ -130,7 +143,7 @@ namespace Laz
 
             if (buildIndex > -1)
             {
-                _sceneChanger.ChangeScene(buildIndex);
+                _sceneChanger.ChangeScene(buildIndex, OnSceneSwitch);
             }
         }
 
