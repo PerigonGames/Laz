@@ -707,7 +707,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movementPropertyScriptableObject: {fileID: 11400000, guid: bc8236426564215428efc6b63f0d2852, type: 2}
-  _lazoScriptableObject: {fileID: 11400000, guid: a07c0c312e58f624ab49166c5b206dcd, type: 2}
+  _lazoScriptableObject: {fileID: 11400000, guid: a69a11a90a8ee0e469bd622f49cea14f, type: 2}
 --- !u!114 &6610365341234808040
 MonoBehaviour:
   m_ObjectHideFlags: 0

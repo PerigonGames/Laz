@@ -29,6 +29,20 @@ namespace Tests
     {
         public Gradient NormalGradient => new Gradient();
         public Gradient FrozenColor => new Gradient();
+        public ILazoSplatter NormalSplatter => new MockNormalLazoSplatter();
+        public ILazoSplatter FrozenSplatter => new MockFrozenLazoSplatter();
+    }
+
+    public class MockNormalLazoSplatter : ILazoSplatter
+    {
+        public Color MinColor => Color.blue;
+        public Color MaxColor => Color.cyan;
+    }
+    
+    public class MockFrozenLazoSplatter : ILazoSplatter
+    {
+        public Color MinColor => Color.yellow;
+        public Color MaxColor => Color.red;
     }
 }
 

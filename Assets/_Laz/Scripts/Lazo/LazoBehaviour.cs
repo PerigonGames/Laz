@@ -55,6 +55,7 @@ namespace Laz
         private void SetupLazoColors()
         {
             _lazoLineRenderer.colorGradient = _lazoColors.NormalGradient;
+            SetSplatterColor(false);
         }
 
         private void TurnLazoing(bool active)
@@ -176,8 +177,20 @@ namespace Laz
 
         private void HandleTimeToLiveStateChange(bool isFrozen)
         {
-            Debug.Log("Is Frozen: " + isFrozen);
             _lazoLineRenderer.colorGradient = isFrozen ? _lazoColors.FrozenColor : _lazoColors.NormalGradient;
+            SetSplatterColor(isFrozen);
+        }
+
+        private void SetSplatterColor(bool isFrozen)
+        {
+            var splatterColor = _lazoSparkleParticleSystem.main;
+            splatterColor.startColor = GetSplatterColor(isFrozen);
+        }
+
+        private ParticleSystem.MinMaxGradient GetSplatterColor(bool isFrozen)
+        {
+            ILazoSplatter splatterColor = isFrozen ? _lazoColors.FrozenSplatter : _lazoColors.NormalSplatter;
+            return new ParticleSystem.MinMaxGradient(splatterColor.MinColor, splatterColor.MaxColor);
         }
 
         private void SetWholeLazoLoopAlpha(float alpha)
