@@ -21,15 +21,12 @@ namespace Laz
 
         public event Action OnChomperReachedEndOfLazo;
         
-        private bool CanCreateCopyOfLazoPositions => _tempLazoPositions.Count <= _lazo.GetListOfLazoPositions.Count;
-        
         public AIChomperAgro(IAstarAI ai, Lazo lazo, float extraDistance = 5f)
         {
             _ai = ai;
             _lazo = lazo;
             _extraDistance = extraDistance;
             _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
-
         }
 
         public void SetLazoPosition(LazoPosition lazoPosition)
@@ -40,10 +37,6 @@ namespace Laz
         public void StartAgroAt()
         {
             _ai.canSearch = false;
-            
-            // Need to grab the position from Real lazo into Fake,
-            // or if Fake already exists (from early Deactivation, just use that)
-
             if (_fakeLazo == null)
             {
                 CopyLazoPositionsToTempLazoPositions();
@@ -103,7 +96,7 @@ namespace Laz
         #region delegate
         private void HandleOnLazoDeactivated()
         {
-            if (_lazo.IsTimeToLiveFrozen) // Test storing the state and checking detection
+            if (_lazo.IsTimeToLiveFrozen)
             {
                 CreateFakeLazoLineForChomperToRideOn();
                 CopyLazoPositionsToTempLazoPositions();
@@ -146,7 +139,6 @@ namespace Laz
         
         private void CopyLazoPositionsToTempLazoPositions()
         {
-            // Need to check if fake lazo or real lazo
             var length = _lazo.GetListOfLazoPositions.Count;
             Vector3[] tempLazoPositionContainer = new Vector3[length];
             var listOfPositions = _lazo.GetListOfLazoPositions.Select(lazo => lazo.Position).ToList();
