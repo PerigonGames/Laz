@@ -106,7 +106,7 @@ namespace Laz
                     _detectionBehaviour.OnDetectUpdate();
                     break;
                 case ChomperState.Return:
-                    //_detectionBehaviour.OnDetectUpdate();
+                    _detectionBehaviour.OnDetectUpdate();
                     break;
             }
         }
