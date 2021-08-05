@@ -95,11 +95,6 @@ namespace Laz
                 _lazoMeter.Initialize(laz.LazoTool);
             }
 
-            // if (debugUIBehaviour != null)
-            // {
-            //     debugUIBehaviour.Initialize(laz.Movement);
-            // }
-
             if (DebugUIBehaviour.Instance != null)
             {
                 DebugUIBehaviour.Instance.Initialize(laz.Movement);

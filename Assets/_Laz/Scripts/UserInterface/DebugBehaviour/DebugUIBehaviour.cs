@@ -107,7 +107,7 @@ namespace Laz
         private void HandleBuildSceneChanges()
         {
             List<string> buildSceneNames = _sceneChanger.BuildSceneNames; 
-            if (buildSceneNames.IsNullOrEmpty() || _sceneChangeDebugText == null)
+            if (buildSceneNames.IsNullOrEmpty())
             {
                 return;
             }
@@ -117,6 +117,11 @@ namespace Laz
             
             foreach (string buildSceneName in buildSceneNames)
             {
+                if (string.IsNullOrEmpty(buildSceneName))
+                {
+                    continue;
+                }
+
                 sceneNameStringBuilder.Append(buildSceneName);
                 sceneNameStringBuilder.Append(" - ");
                 sceneNameStringBuilder.AppendLine($"LShift + {buildIndexUI}");

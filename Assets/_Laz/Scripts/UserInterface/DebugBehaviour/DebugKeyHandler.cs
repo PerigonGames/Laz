@@ -1,52 +1,35 @@
+using System.Collections.Generic;
 using UnityEngine.InputSystem;
 
 namespace Laz
 {
     public partial class DebugUIBehaviour
     {
+        private Dictionary<Key, int> _buildKeyIndexes = new Dictionary<Key, int>
+        {
+            {Key.Digit1,0},
+            {Key.Digit2,1},
+            {Key.Digit3,2},
+            {Key.Digit4,3},
+            {Key.Digit5,4},
+            {Key.Digit6,5},
+            {Key.Digit7,6},
+            {Key.Digit8,7},
+            {Key.Digit9,8},
+            {Key.Digit0,9}
+        };
+        
+        
         private int GetDebugBuildIndex()
         {
             int buildIndex = -1;
             
-            if (Keyboard.current[Key.Digit1].wasPressedThisFrame)
+            foreach (var buildKeyIndex in _buildKeyIndexes)
             {
-                buildIndex = 0;
-            }
-            else if (Keyboard.current[Key.Digit2].wasPressedThisFrame)
-            {
-                buildIndex = 1;
-            }
-            else if (Keyboard.current[Key.Digit3].wasPressedThisFrame)
-            {
-                buildIndex = 2;
-            }
-            else if (Keyboard.current[Key.Digit4].wasPressedThisFrame)
-            {
-                buildIndex = 3;
-            }
-            else if (Keyboard.current[Key.Digit5].wasPressedThisFrame)
-            {
-                buildIndex = 4;
-            }
-            else if (Keyboard.current[Key.Digit6].wasPressedThisFrame)
-            {
-                buildIndex = 5;
-            }
-            else if (Keyboard.current[Key.Digit7].wasPressedThisFrame)
-            {
-                buildIndex = 6;
-            }
-            else if (Keyboard.current[Key.Digit8].wasPressedThisFrame)
-            {
-                buildIndex = 7;
-            }
-            else if (Keyboard.current[Key.Digit9].wasPressedThisFrame)
-            {
-                buildIndex = 8;
-            }
-            else if (Keyboard.current[Key.Digit0].wasPressedThisFrame)
-            {
-                buildIndex = 9;
+                if (Keyboard.current[buildKeyIndex.Key].wasPressedThisFrame)
+                {
+                    buildIndex = buildKeyIndex.Value;
+                }
             }
 
             return buildIndex;

@@ -60,13 +60,14 @@ namespace Laz
         {
             if (string.IsNullOrEmpty(buildPath))
             {
+                Debug.LogError("Scene Build Name Not Available");
                 return string.Empty;
             }
 
-            string appropriateName = buildPath.Substring(buildPath.LastIndexOf(SCENE_NAME_DELIMITER) + 1)
-                .Replace(SCENE_NAME_EXTENSION, string.Empty);
+            string sceneNameWithExtension = buildPath.Substring(buildPath.LastIndexOf(SCENE_NAME_DELIMITER) + 1);
+            string sceneName = sceneNameWithExtension.Replace(SCENE_NAME_EXTENSION, string.Empty);
             
-            return appropriateName;
+            return sceneName;
         }
     }
 }
