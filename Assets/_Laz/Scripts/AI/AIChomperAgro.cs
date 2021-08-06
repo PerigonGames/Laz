@@ -130,6 +130,7 @@ namespace Laz
                 _fakeLazo = _lazo.FakeLazo;
                 _fakeLazo.AddChomperToList(this);
                 CopyLazoPositionsToTempLazoPositions();
+                
                 _lastPosition = CreateExtraLastPositionForAI();
                 if (_lastPosition != null)
                 {
@@ -147,10 +148,21 @@ namespace Laz
                 var lastPosition = _tempLazoPositions[amountOfPositions - 1];
                 var secondLastPosition = _tempLazoPositions[amountOfPositions - 2];
                 var direction = NormalizedDirectionFromTwoPoints(lastPosition, secondLastPosition);
+                if (DidHitWall(lastPosition, direction))
+                {
+                    Debug.Log($"{DEBUGKEY}: Hit a wall");
+                    return lastPosition;
+                }
+                
                 return lastPosition + (direction * _extraDistance);
             }
 
             return null;
+        }
+
+        private bool DidHitWall(Vector3 originPosition, Vector3 direction)
+        {
+            return Physics.Raycast(originPosition, direction, _extraDistance);
         }
 
         private Vector3 NormalizedDirectionFromTwoPoints(Vector3 secondLastPosition, Vector3 lastPosition)

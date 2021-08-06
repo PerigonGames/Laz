@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _idleSpeed: 5
   _idleRadius: 5
-  _agroSpeed: 5
+  _agroSpeed: 15
   _agroDetectionRadius: 5
   _extraDistanceToTravel: 5

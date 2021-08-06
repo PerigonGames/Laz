@@ -153,7 +153,7 @@ namespace Laz
             {
                 OnAgroStart();
             } 
-            else if (_ai.isStopped || _ai.reachedEndOfPath)
+            else if (_ai.isStopped)
             {
                 EmergencyExitBackToSpawn();
             }
@@ -171,6 +171,7 @@ namespace Laz
 
         private void EmergencyExitBackToSpawn()
         {
+            Debug.Log("Emergency exit");
             _state = ChomperState.Return;
             _ai.destination = _originalPosition;
             _lazo.IsTimeToLiveFrozen = false;
