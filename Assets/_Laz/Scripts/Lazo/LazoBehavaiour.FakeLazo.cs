@@ -5,12 +5,7 @@ namespace Laz
         private FakeLazo _fakeLazo = null;
 
         public FakeLazo FakeLazo => _fakeLazo;
-
-        public void ClearFakeLazo()
-        {
-            _fakeLazo = null;
-        }
-
+        
         private void CreateFakeLazoLineIfNeeded()
         {
             if (_isTimeToLiveFrozen)

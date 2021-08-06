@@ -28,7 +28,7 @@ namespace Laz
             _ai = ai;
             _lazo = lazo;
             _extraDistance = extraDistance;
-            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
+            
         }
 
         public void SetLazoPosition(LazoPosition lazoPosition)
@@ -39,7 +39,7 @@ namespace Laz
         public void StartAgroAt()
         {
             _ai.canSearch = false;
-            
+            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
             // If Lazo is on - copy Lazo
             // If Lazo is off no need to copy
             if (_lazo.IsLazoing)
@@ -75,6 +75,7 @@ namespace Laz
                     _positionIndex = 0;
                     _tempLazoPositions.Clear();
                     OnChomperReachedEndOfLazo?.Invoke();
+                    _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
                 }
             }
         }
@@ -91,16 +92,14 @@ namespace Laz
             _ai.canSearch = true;
             _tempLazoPositions = new List<Vector3>();
             _positionIndex = 0;
-            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
         }
 
         #region delegate
         private void HandleOnLazoDeactivated()
         {
-            if (_lazo.FakeLazo != null)
+            if (_fakeLazo == null)
             {
                 _fakeLazo = _lazo.FakeLazo;
-                _lazo.ClearFakeLazo();
                 _fakeLazo.AddChomperToList(this);
                 CopyLazoPositionsToTempLazoPositions();
                 _lastPosition = CreateExtraLastPositionForAI();

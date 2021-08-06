@@ -18,12 +18,13 @@ namespace Laz
         public event Action<Vector3[]> OnListOfLazoPositionsChanged;
         public event Action<bool> OnTimeToLiveStateChanged;
         public Vector3[] Positions { get; }
+        public bool IsListOfChompersEmpty => _listOfChompers.IsNullOrEmpty();
         
         
         public bool IsTimeToLiveFrozen
         {
             get => _isTimeToLiveFrozen;
-            set
+            private set
             {
                 _isTimeToLiveFrozen = value;
                 OnTimeToLiveStateChanged?.Invoke(value);
