@@ -21,6 +21,9 @@ namespace Laz
         private FakeLazo _fakeLazo = null;
         private Vector3? _lastPosition = null;
 
+        private bool _isAgroing = false;
+        private bool _hasDetected = false;
+
         public event Action OnChomperReachedEndOfLazo;
         
         public AIChomperAgro(IAstarAI ai, Lazo lazo, float extraDistance = 5f)
@@ -29,17 +32,20 @@ namespace Laz
             _lazo = lazo;
             _extraDistance = extraDistance;
             
+            // Should Detect Deactivation While in Detection State
+            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
         }
 
         public void SetLazoPosition(LazoPosition lazoPosition)
         {
+            _hasDetected = true;
             _positionIndex = _lazo.GetListOfLazoPositions.IndexOf(lazoPosition);
         }
 
         public void StartAgroAt()
         {
             _ai.canSearch = false;
-            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
+            _isAgroing = true;
             // If Lazo is on - copy Lazo
             // If Lazo is off no need to copy
             if (_lazo.IsLazoing)
@@ -73,15 +79,18 @@ namespace Laz
                         _fakeLazo = null;
                     }
                     _positionIndex = 0;
+                    _isAgroing = false;
+                    _hasDetected = false;
+                    _lastPosition = null;
                     _tempLazoPositions.Clear();
                     OnChomperReachedEndOfLazo?.Invoke();
-                    _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
                 }
             }
         }
 
         public void CleanUp()
         {
+            _isAgroing = false;
             _fakeLazo = null;
             _tempLazoPositions = null;
             _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
@@ -92,13 +101,18 @@ namespace Laz
             _ai.canSearch = true;
             _tempLazoPositions = new List<Vector3>();
             _positionIndex = 0;
+            _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
         }
 
         #region delegate
         private void HandleOnLazoDeactivated()
         {
-            if (_fakeLazo == null)
+            // 1. Fake Lazo is empty. (so that the 2nd fake lazo doesn't affect this
+            // 2. Cannot Check Frozen since lazo might deactivate before Reaching
+            // 3. Currently agroing
+            if (_fakeLazo == null && (_hasDetected ||  _isAgroing))
             {
+                Debug.Log("Full Copy");
                 _fakeLazo = _lazo.FakeLazo;
                 _fakeLazo.AddChomperToList(this);
                 CopyLazoPositionsToTempLazoPositions();
