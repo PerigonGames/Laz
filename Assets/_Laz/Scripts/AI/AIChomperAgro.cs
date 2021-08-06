@@ -15,6 +15,7 @@ namespace Laz
         private readonly IAstarAI _ai;
         private readonly Lazo _lazo = null;
         private readonly float _extraDistance = 0;
+        private readonly DebugPrint _debugPrint = null;
 
         private int _positionIndex = 0;
         private List<Vector3> _tempLazoPositions = new List<Vector3>();
@@ -24,7 +25,6 @@ namespace Laz
         private bool _isAgroing = false;
         private bool _hasDetected = false;
 
-        private DebugPrint _debugPrint = null;
         public event Action OnChomperReachedEndOfLazo;
         
         public AIChomperAgro(IAstarAI ai, Lazo lazo, float extraDistance = 5f, DebugPrint debugPrint = null)
@@ -34,7 +34,6 @@ namespace Laz
             _extraDistance = extraDistance;
             _debugPrint = debugPrint;
             
-            // Should Detect Deactivation While in Detection State
             _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
         }
 
@@ -54,7 +53,7 @@ namespace Laz
             }
             
             var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
-            SetAIPathWith(listOfPositions);
+            SetManualAIPathWith(listOfPositions);
         }
         
         public void OnAgroUpdate()
@@ -66,7 +65,7 @@ namespace Laz
                     CopyLazoPositionsToTempLazoPositions();
                 }
                 var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
-                SetAIPathWith(listOfPositions);
+                SetManualAIPathWith(listOfPositions);
                 
 
                 if (HasReachedLastPosition())
@@ -121,9 +120,6 @@ namespace Laz
         #region delegate
         private void HandleOnLazoDeactivated()
         {
-            // 1. Fake Lazo is empty. (so that the 2nd fake lazo doesn't affect this
-            // 2. Cannot Check Frozen since lazo might deactivate before Reaching
-            // 3. Currently agroing
             if (_fakeLazo == null && (_hasDetected ||  _isAgroing))
             {
                 _debugPrint.Log($"Full Copy");
@@ -191,7 +187,7 @@ namespace Laz
             return new List<Vector3>();
         }
 
-        private void SetAIPathWith(List<Vector3> listOfPositions)
+        private void SetManualAIPathWith(List<Vector3> listOfPositions)
         {
             if (CanStillCreateFakePath(listOfPositions))
             {

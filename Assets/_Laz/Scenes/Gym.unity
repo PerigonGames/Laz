@@ -761,6 +761,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3341551086205394945, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
+      propertyPath: _shouldPrintDebug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4236873772338707709, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
+      propertyPath: constrainInsideGraph
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4723101386897442654, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
       propertyPath: m_RootOrder
       value: 26
@@ -870,10 +878,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laz
       objectReference: {fileID: 0}
-    - target: {fileID: 8830863841601990709, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
-      propertyPath: _lazoScriptableObject
-      value: 
-      objectReference: {fileID: 11400000, guid: a07c0c312e58f624ab49166c5b206dcd, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74099a4a5dcdecb4c885b1802d86463e, type: 3}
 --- !u!4 &199378479 stripped
@@ -5988,6 +5992,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4236873772338707709, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
+      propertyPath: constrainInsideGraph
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4723101386897442654, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
       propertyPath: m_RootOrder
       value: 27

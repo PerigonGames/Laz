@@ -1,11 +1,9 @@
-using UnityEngine;
-
 namespace Laz
 {
     public partial class Lazo
     {
         private FakeLazo _fakeLazo = null;
-
+        
         public FakeLazo FakeLazo => _fakeLazo;
         
         private void CreateFakeLazoLineIfNeeded()
