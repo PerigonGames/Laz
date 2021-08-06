@@ -53,7 +53,7 @@ namespace Laz
 
         public void CleanUp()
         {
-            _listOfAgroChompers = null;
+            _listOfAgroChompers = new List<AIChomperAgro>();
             _isTimeToLiveFrozen = false;
             _listOfPositions.ForEach(point => point.ForceDeath());
             OnLazoPositionsChanged();
@@ -64,7 +64,6 @@ namespace Laz
             _listOfAgroChompers = new List<AIChomperAgro>();
             _listOfPositions = new List<LazoPosition>();
             _shrinkTime = RATE_OF_SHRINK;
-            _canStartShrinking = false;
         }
 
         public void RemoveOldestPointIfNeeded(float deltaTime)

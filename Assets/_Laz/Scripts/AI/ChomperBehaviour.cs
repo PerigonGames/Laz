@@ -153,10 +153,9 @@ namespace Laz
             {
                 OnAgroStart();
             } 
-            else if (_ai.isStopped)
+            else if (_ai.isStopped || _ai.reachedEndOfPath)
             {
-                _state = ChomperState.Return;
-                _ai.destination = _originalPosition;
+                EmergencyExitBackToSpawn();
             }
         }
         
@@ -168,6 +167,15 @@ namespace Laz
                 _aiChomperAgro.StartAgroAt();
                 _ai.maxSpeed = _chomperProperties.AgroSpeed;
             }
+        }
+
+        private void EmergencyExitBackToSpawn()
+        {
+            _state = ChomperState.Return;
+            _ai.destination = _originalPosition;
+            _lazo.IsTimeToLiveFrozen = false;
+            _aiChomperAgro.CleanUp();
+            _aiChomperAgro.Reset();
         }
 
         #endregion

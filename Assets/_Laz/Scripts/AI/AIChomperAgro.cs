@@ -48,8 +48,6 @@ namespace Laz
         {
             _ai.canSearch = false;
             _isAgroing = true;
-            // If Lazo is on - copy Lazo
-            // If Lazo is off no need to copy
             if (_lazo.IsLazoing)
             {
                 CopyLazoPositionsToTempLazoPositions();
@@ -61,8 +59,6 @@ namespace Laz
         
         public void OnAgroUpdate()
         {
-            // Check if Frozen - 
-            Debug.Log($"{DEBUGKEY}: Has Stopped : {_ai.isStopped}");
             if (_ai.reachedEndOfPath)
             {
                 if (_fakeLazo == null)
@@ -75,20 +71,7 @@ namespace Laz
 
                 if (HasReachedLastPosition())
                 {
-                    Debug.Log($"{DEBUGKEY}: Path Ended on {_fakeLazo.GetHashCode()}");
-                    _ai.canSearch = true;
-                    if (_fakeLazo != null)
-                    {
-                        Debug.Log($"{DEBUGKEY}: Removed Self from {_fakeLazo.GetHashCode()}");
-                        _fakeLazo.RemoveChomperFromList(this);
-                        _fakeLazo = null;
-                    }
-                    _positionIndex = 0;
-                    _isAgroing = false;
-                    _hasDetected = false;
-                    _lastPosition = null;
-                    _tempLazoPositions.Clear();
-                    OnChomperReachedEndOfLazo?.Invoke();
+                    StartReturnState();
                 }
             }
         }
@@ -98,11 +81,29 @@ namespace Laz
             return _lastPosition != null && Vector3.Distance((Vector3) _lastPosition, _ai.position) < 0.5f;
         }
 
+        private void StartReturnState()
+        {
+            Debug.Log($"{DEBUGKEY}: Path Ended on {_fakeLazo.GetHashCode()}");
+            _ai.canSearch = true;
+            if (_fakeLazo != null)
+            {
+                Debug.Log($"{DEBUGKEY}: Removed Self from {_fakeLazo.GetHashCode()}");
+                _fakeLazo.RemoveChomperFromList(this);
+                _fakeLazo = null;
+            }
+            _positionIndex = 0;
+            _isAgroing = false;
+            _hasDetected = false;
+            _lastPosition = null;
+            _tempLazoPositions.Clear();
+            OnChomperReachedEndOfLazo?.Invoke();
+        }
+
         public void CleanUp()
         {
             _isAgroing = false;
             _hasDetected = false;
-            _fakeLazo.CleanUp();
+            _fakeLazo?.CleanUp();
             _fakeLazo = null;
             _tempLazoPositions = null;
             _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
@@ -113,7 +114,7 @@ namespace Laz
             _ai.canSearch = true;
             _tempLazoPositions = new List<Vector3>();
             _positionIndex = 0;
-            _fakeLazo.Reset();
+            _fakeLazo?.Reset();
             _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
         }
 
