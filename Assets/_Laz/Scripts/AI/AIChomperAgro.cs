@@ -24,13 +24,15 @@ namespace Laz
         private bool _isAgroing = false;
         private bool _hasDetected = false;
 
+        private string DEBUGKEY = "";
         public event Action OnChomperReachedEndOfLazo;
         
-        public AIChomperAgro(IAstarAI ai, Lazo lazo, float extraDistance = 5f)
+        public AIChomperAgro(IAstarAI ai, Lazo lazo, float extraDistance = 5f, string key = "")
         {
             _ai = ai;
             _lazo = lazo;
             _extraDistance = extraDistance;
+            DEBUGKEY = key;
             
             // Should Detect Deactivation While in Detection State
             _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
@@ -67,14 +69,17 @@ namespace Laz
                 }
                 var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
                 SetAIPathWith(listOfPositions);
+                
+                // Check if Frozen - 
+                Debug.Log($"{DEBUGKEY}: Has Stopped : {_ai.isStopped}");
 
-
-                if (_lastPosition != null && Vector3.Distance((Vector3)_lastPosition, _ai.position) < 0.5f)
+                if (HasReachedLastPosition())
                 {
-                    Debug.Log("Path Ended");
+                    Debug.Log($"{DEBUGKEY}: Path Ended on {_fakeLazo.GetHashCode()}");
                     _ai.canSearch = true;
                     if (_fakeLazo != null)
                     {
+                        Debug.Log($"{DEBUGKEY}: Removed Self from {_fakeLazo.GetHashCode()}");
                         _fakeLazo.RemoveChomperFromList(this);
                         _fakeLazo = null;
                     }
@@ -86,6 +91,11 @@ namespace Laz
                     OnChomperReachedEndOfLazo?.Invoke();
                 }
             }
+        }
+
+        private bool HasReachedLastPosition()
+        {
+            return _lastPosition != null && Vector3.Distance((Vector3) _lastPosition, _ai.position) < 0.5f;
         }
 
         public void CleanUp()
@@ -112,7 +122,7 @@ namespace Laz
             // 3. Currently agroing
             if (_fakeLazo == null && (_hasDetected ||  _isAgroing))
             {
-                Debug.Log("Full Copy");
+                Debug.Log($"{DEBUGKEY}: Full Copy");
                 _fakeLazo = _lazo.FakeLazo;
                 _fakeLazo.AddChomperToList(this);
                 CopyLazoPositionsToTempLazoPositions();

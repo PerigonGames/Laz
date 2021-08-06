@@ -75,9 +75,9 @@ namespace Laz
         }
 
         public void AddChomperToList(AIChomperAgro chomper)
-        {
-            _listOfChompers.Add(chomper);
+        {            
             _canStartShrinking = true;
+            _listOfChompers.Add(chomper);
         }
 
         public void RemoveChomperFromList(AIChomperAgro chomper)

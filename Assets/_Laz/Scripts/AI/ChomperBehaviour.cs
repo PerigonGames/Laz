@@ -50,7 +50,7 @@ namespace Laz
             _chomperProperties = chomperProperties ?? _chomperPropertiesScriptableObject;
             _patrolBehaviour.Initialize(_ai, _chomperProperties.IdleRadius);
             _detectionBehaviour.Initialize(_chomperProperties.AgroDetectionRadius, this);
-            _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel);
+            _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel, gameObject.name);
             _aiChomperAgro.OnChomperReachedEndOfLazo += HandleOnAgroEnded;
             _ai.maxSpeed = _chomperProperties.IdleSpeed;
         }
