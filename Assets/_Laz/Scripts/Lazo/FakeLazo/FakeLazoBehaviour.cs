@@ -1,3 +1,4 @@
+using System.Linq;
 using PerigonGames;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace Laz
             HandleOnListOfLazoPositionsChanged(fakeLazo.Positions);
             _fakeLazo = fakeLazo;
             _fakeLazo.OnListOfLazoPositionsChanged += HandleOnListOfLazoPositionsChanged;
-            fakeLazo.OnTimeToLiveStateChanged += HandleTimeToLiveStateChange;
+            _fakeLazo.OnTimeToLiveStateChanged += HandleTimeToLiveStateChange;
         }
 
         private void SetLineFrozen()
@@ -41,7 +42,7 @@ namespace Laz
         private void HandleOnListOfLazoPositionsChanged(Vector3[] positions)
         {
             _lineRenderer.positionCount = positions.Length;
-            _lineRenderer.SetPositions(positions);
+            _lineRenderer.SetPositions(positions.Reverse().ToArray());
             if (positions.IsNullOrEmpty())
             {
                 gameObject.SetActive(false);

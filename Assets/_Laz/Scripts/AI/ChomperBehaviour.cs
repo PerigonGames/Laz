@@ -149,7 +149,7 @@ namespace Laz
 
         private void OnDetectionUpdate()
         {
-            if (_ai.remainingDistance < 0.05f)
+            if (_ai.reachedDestination)
             {
                 OnAgroStart();
             } 

@@ -102,6 +102,7 @@ namespace Laz
             }
             else
             {
+                CreateFakeLazoLineIfNeeded();
                 OnLazoDeactivated?.Invoke();
                 Reset();
             }
@@ -121,6 +122,7 @@ namespace Laz
             if (TravelledDistance <= 0)
             {
                 OnLazoLimitReached?.Invoke();
+                CreateFakeLazoLineIfNeeded();
                 SetLazoActive(false);
                 _lastPosition = null;
             }

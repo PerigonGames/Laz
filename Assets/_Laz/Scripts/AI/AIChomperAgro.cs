@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathfinding;
+using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Laz
@@ -15,9 +16,10 @@ namespace Laz
         private readonly Lazo _lazo = null;
         private readonly float _extraDistance = 0;
 
-        private FakeLazo _fakeLazo = null;
         private int _positionIndex = 0;
         private List<Vector3> _tempLazoPositions = new List<Vector3>();
+        private FakeLazo _fakeLazo = null;
+        private Vector3? _lastPosition = null;
 
         public event Action OnChomperReachedEndOfLazo;
         
@@ -37,7 +39,10 @@ namespace Laz
         public void StartAgroAt()
         {
             _ai.canSearch = false;
-            if (_fakeLazo == null)
+            
+            // If Lazo is on - copy Lazo
+            // If Lazo is off no need to copy
+            if (_lazo.IsLazoing)
             {
                 CopyLazoPositionsToTempLazoPositions();
             }
@@ -48,23 +53,23 @@ namespace Laz
         
         public void OnAgroUpdate()
         {                
-            if (_ai.reachedEndOfPath && !_ai.pathPending)
+            if (_ai.reachedEndOfPath)
             {
                 if (_fakeLazo == null)
                 {
                     CopyLazoPositionsToTempLazoPositions();
                 }
-                
                 var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
                 SetAIPathWith(listOfPositions);
 
 
-                if (!CanStillCreateFakePath(listOfPositions))
+                if (_lastPosition != null && Vector3.Distance((Vector3)_lastPosition, _ai.position) < 0.5f)
                 {
+                    Debug.Log("Path Ended");
                     _ai.canSearch = true;
                     if (_fakeLazo != null)
                     {
-                        _fakeLazo.IsTimeToLiveFrozen = false;
+                        _fakeLazo.RemoveChomperFromList(this);
                         _fakeLazo = null;
                     }
                     _positionIndex = 0;
@@ -76,11 +81,7 @@ namespace Laz
 
         public void CleanUp()
         {
-            if (_fakeLazo != null)
-            {
-                _fakeLazo.CleanUp();
-                _fakeLazo = null;
-            }
+            _fakeLazo = null;
             _tempLazoPositions = null;
             _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
         }
@@ -96,24 +97,18 @@ namespace Laz
         #region delegate
         private void HandleOnLazoDeactivated()
         {
-            if (_lazo.IsTimeToLiveFrozen)
+            if (_lazo.FakeLazo != null)
             {
-                CreateFakeLazoLineForChomperToRideOn();
+                _fakeLazo = _lazo.FakeLazo;
+                _lazo.ClearFakeLazo();
+                _fakeLazo.AddChomperToList(this);
                 CopyLazoPositionsToTempLazoPositions();
-                var extraLastPosition = CreateExtraLastPositionForAI();
-                if (extraLastPosition != null)
+                _lastPosition = CreateExtraLastPositionForAI();
+                if (_lastPosition != null)
                 {
-                    _tempLazoPositions.Add((Vector3) extraLastPosition);
+                    _tempLazoPositions.Add((Vector3) _lastPosition);
                 }
             }
-        }
-
-        private void CreateFakeLazoLineForChomperToRideOn()
-        {
-            var fakeLazoBehaviour = FakeLazoObjectPooler.Instance.PopInActivePooledObject(FakeLazoObjectPooler.Key);
-            _fakeLazo = new FakeLazo(_lazo.GetListOfLazoPositions, _lazo.IsTimeToLiveFrozen);
-            fakeLazoBehaviour.SetLine(_fakeLazo);
-            fakeLazoBehaviour.gameObject.SetActive(true);
         }
         #endregion
 

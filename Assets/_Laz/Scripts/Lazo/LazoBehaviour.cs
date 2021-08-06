@@ -60,6 +60,7 @@ namespace Laz
 
         private void TurnLazoing(bool active)
         {
+            _lazo.SetLazoActive(active);
             if (active)
             {
                 SetupLazoColors();
@@ -70,8 +71,6 @@ namespace Laz
             {
                 ClearLazoTrail();
             }
-            
-            _lazo.SetLazoActive(active);
         }
         
         private bool CanActivateLaz()
@@ -180,7 +179,10 @@ namespace Laz
             _lazoLineRenderer.colorGradient = isFrozen ? _lazoColors.FrozenColor : _lazoColors.NormalGradient;
             SetSplatterColor(isFrozen);
         }
-
+        #endregion
+        
+        #region Setting Appearance
+        
         private void SetSplatterColor(bool isFrozen)
         {
             var splatterColor = _lazoSparkleParticleSystem.main;
@@ -197,6 +199,8 @@ namespace Laz
         {
             _lazoLineRenderer.material.SetFloat(SHADER_PROPERTY_ALPHA, alpha);
         }
+        
+
         #endregion
 
     }
