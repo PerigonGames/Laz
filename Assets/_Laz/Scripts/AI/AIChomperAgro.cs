@@ -24,15 +24,15 @@ namespace Laz
         private bool _isAgroing = false;
         private bool _hasDetected = false;
 
-        private string DEBUGKEY = "";
+        private DebugPrint _debugPrint = null;
         public event Action OnChomperReachedEndOfLazo;
         
-        public AIChomperAgro(IAstarAI ai, Lazo lazo, float extraDistance = 5f, string key = "")
+        public AIChomperAgro(IAstarAI ai, Lazo lazo, float extraDistance = 5f, DebugPrint debugPrint = null)
         {
             _ai = ai;
             _lazo = lazo;
             _extraDistance = extraDistance;
-            DEBUGKEY = key;
+            _debugPrint = debugPrint;
             
             // Should Detect Deactivation While in Detection State
             _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
@@ -83,11 +83,11 @@ namespace Laz
 
         private void StartReturnState()
         {
-            Debug.Log($"{DEBUGKEY}: Path Ended on {_fakeLazo.GetHashCode()}");
+            _debugPrint.Log($"Path Ended on {_fakeLazo.GetHashCode()}");
             _ai.canSearch = true;
             if (_fakeLazo != null)
             {
-                Debug.Log($"{DEBUGKEY}: Removed Self from {_fakeLazo.GetHashCode()}");
+                _debugPrint.Log($"Removed Self from {_fakeLazo.GetHashCode()}");
                 _fakeLazo.RemoveChomperFromList(this);
                 _fakeLazo = null;
             }
@@ -126,7 +126,7 @@ namespace Laz
             // 3. Currently agroing
             if (_fakeLazo == null && (_hasDetected ||  _isAgroing))
             {
-                Debug.Log($"{DEBUGKEY}: Full Copy");
+                _debugPrint.Log($"Full Copy");
                 _fakeLazo = _lazo.FakeLazo;
                 _fakeLazo.AddChomperToList(this);
                 CopyLazoPositionsToTempLazoPositions();
@@ -150,7 +150,7 @@ namespace Laz
                 var direction = NormalizedDirectionFromTwoPoints(lastPosition, secondLastPosition);
                 if (DidHitWall(lastPosition, direction))
                 {
-                    Debug.Log($"{DEBUGKEY}: Hit a wall");
+                    _debugPrint.Log($" Hit a wall");
                     return lastPosition;
                 }
                 

@@ -16,7 +16,7 @@ namespace Laz
         [Header("Scriptable Object")]
         [SerializeField]
         private ChomperPropertiesScriptableObject _chomperPropertiesScriptableObject = null;
-
+        
         // Dependencies
         private IChomperProperties _chomperProperties = null;
         private IAstarAI _ai = null;
@@ -27,9 +27,11 @@ namespace Laz
         private ChomperState _state = ChomperState.Idle;
         private Lazo _lazo = null;
 
+
         public void Initialize(Lazo lazo,
             IChomperProperties chomperProperties = null)
         {
+            
             _lazo = lazo;
             if (!TryGetComponent(out _ai))
             {
@@ -45,12 +47,13 @@ namespace Laz
             {
                 Debug.LogError("Chomper is missing a AIDetectionBehaviour");
             }
+            
 
             base.Initialize();
             _chomperProperties = chomperProperties ?? _chomperPropertiesScriptableObject;
             _patrolBehaviour.Initialize(_ai, _chomperProperties.IdleRadius);
             _detectionBehaviour.Initialize(_chomperProperties.AgroDetectionRadius, this);
-            _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel, gameObject.name);
+            _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel, _debugPrint);
             _aiChomperAgro.OnChomperReachedEndOfLazo += HandleOnAgroEnded;
             _ai.maxSpeed = _chomperProperties.IdleSpeed;
         }
@@ -171,7 +174,7 @@ namespace Laz
 
         private void EmergencyExitBackToSpawn()
         {
-            Debug.Log("Emergency exit");
+            _debugPrint.Log("Emergency exit");
             _state = ChomperState.Return;
             _ai.destination = _originalPosition;
             _lazo.IsTimeToLiveFrozen = false;
