@@ -42,11 +42,6 @@ namespace Laz
                 OnTimeBelowZero();
             }
         }
-
-        public void TriggeredPosition()
-        {
-            //TODO - For future usage
-        }
     }
 }
 

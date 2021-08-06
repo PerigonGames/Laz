@@ -35,17 +35,17 @@ namespace Laz
             _lazo = lazo;
             if (!TryGetComponent(out _ai))
             {
-                Debug.LogError("Chomper is missing AI Components - AIPath");
+                Debug.LogError("ChomperBehaviour is missing AI Components - AIPath");
             }
 
             if (!TryGetComponent(out _patrolBehaviour))
             {
-                Debug.LogError("Chomper is missing a AIPatrolBehaviour");
+                Debug.LogError("ChomperBehaviour is missing a AIPatrolBehaviour");
             }
             
             if (!TryGetComponent(out _detectionBehaviour))
             {
-                Debug.LogError("Chomper is missing a AIDetectionBehaviour");
+                Debug.LogError("ChomperBehaviour is missing a AIDetectionBehaviour");
             }
             
 
@@ -53,7 +53,7 @@ namespace Laz
             _chomperProperties = chomperProperties ?? _chomperPropertiesScriptableObject;
             _patrolBehaviour.Initialize(_ai, _chomperProperties.IdleRadius);
             _detectionBehaviour.Initialize(_chomperProperties.AgroDetectionRadius, this);
-            _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel, _debugPrint);
+            _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel, debugLog);
             _aiChomperAgro.OnChomperReachedEndOfLazo += HandleOnAgroEnded;
             _ai.maxSpeed = _chomperProperties.IdleSpeed;
         }
@@ -156,7 +156,7 @@ namespace Laz
             {
                 OnAgroStart();
             } 
-            else if (_ai.isStopped)
+            else if (_ai.isStopped || _ai.reachedEndOfPath)
             {
                 EmergencyExitBackToSpawn();
             }
@@ -174,7 +174,7 @@ namespace Laz
 
         private void EmergencyExitBackToSpawn()
         {
-            _debugPrint.Log("Emergency exit");
+            debugLog.Log("Emergency exit");
             _state = ChomperState.Return;
             _ai.destination = _originalPosition;
             _lazo.IsTimeToLiveFrozen = false;

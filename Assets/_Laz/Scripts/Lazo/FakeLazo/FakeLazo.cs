@@ -20,15 +20,7 @@ namespace Laz
         public event Action<bool> OnTimeToLiveStateChanged;
         public Vector3[] Positions { get; }
 
-        public bool IsTimeToLiveFrozen
-        {
-            get => _isTimeToLiveFrozen;
-            private set
-            {
-                _isTimeToLiveFrozen = value;
-                OnTimeToLiveStateChanged?.Invoke(value);
-            }
-        }
+        public bool IsTimeToLiveFrozen => _isTimeToLiveFrozen;
 
         public FakeLazo(List<LazoPosition> listOfPoints, bool isFrozen)
         {

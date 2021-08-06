@@ -2,12 +2,12 @@ using UnityEngine;
 
 namespace Laz
 {
-    public class DebugPrint
+    public class DebugLog
     {
         private readonly string _uniqueName;
         private bool _enablePrint = false;
 
-        public DebugPrint(string name, bool enablePrint)
+        public DebugLog(string name, bool enablePrint)
         {
             _uniqueName = name;
             _enablePrint = enablePrint;

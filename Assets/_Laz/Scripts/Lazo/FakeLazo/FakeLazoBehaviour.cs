@@ -22,7 +22,7 @@ namespace Laz
             {
                 SetLineNormal();
             }
-            HandleOnListOfLazoPositionsChanged(fakeLazo.Positions);
+            HandleOnListOfLazoPositionsChanged(fakeLazo.Positions.Reverse().ToArray());
             _fakeLazo = fakeLazo;
             _fakeLazo.OnListOfLazoPositionsChanged += HandleOnListOfLazoPositionsChanged;
             _fakeLazo.OnTimeToLiveStateChanged += HandleTimeToLiveStateChange;
@@ -42,7 +42,7 @@ namespace Laz
         private void HandleOnListOfLazoPositionsChanged(Vector3[] positions)
         {
             _lineRenderer.positionCount = positions.Length;
-            _lineRenderer.SetPositions(positions.Reverse().ToArray());
+            _lineRenderer.SetPositions(positions);
             if (positions.IsNullOrEmpty())
             {
                 gameObject.SetActive(false);

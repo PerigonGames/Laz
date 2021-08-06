@@ -11,11 +11,11 @@ namespace Laz
     {
         // Dependencies
         private const int MINIMUM_AMOUNT_OF_POINTS_IN_PATH = 2;
-        
+
         private readonly IAstarAI _ai;
         private readonly Lazo _lazo = null;
         private readonly float _extraDistance = 0;
-        private readonly DebugPrint _debugPrint = null;
+        private readonly DebugLog _debugLog = null;
 
         private int _positionIndex = 0;
         private List<Vector3> _tempLazoPositions = new List<Vector3>();
@@ -27,12 +27,12 @@ namespace Laz
 
         public event Action OnChomperReachedEndOfLazo;
         
-        public AIChomperAgro(IAstarAI ai, Lazo lazo, float extraDistance = 5f, DebugPrint debugPrint = null)
+        public AIChomperAgro(IAstarAI ai, Lazo lazo, float extraDistance = 5f, DebugLog debugLog = null)
         {
             _ai = ai;
             _lazo = lazo;
             _extraDistance = extraDistance;
-            _debugPrint = debugPrint;
+            _debugLog = debugLog;
             
             _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
         }
@@ -67,7 +67,6 @@ namespace Laz
                 var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
                 SetManualAIPathWith(listOfPositions);
                 
-
                 if (HasReachedLastPosition())
                 {
                     StartReturnState();
@@ -82,11 +81,11 @@ namespace Laz
 
         private void StartReturnState()
         {
-            _debugPrint.Log($"Path Ended on {_fakeLazo.GetHashCode()}");
+            _debugLog.Log($"Path Ended on {_fakeLazo.GetHashCode()}");
             _ai.canSearch = true;
             if (_fakeLazo != null)
             {
-                _debugPrint.Log($"Removed Self from {_fakeLazo.GetHashCode()}");
+                _debugLog.Log($"Removed Self from {_fakeLazo.GetHashCode()}");
                 _fakeLazo.RemoveChomperFromList(this);
                 _fakeLazo = null;
             }
@@ -122,7 +121,7 @@ namespace Laz
         {
             if (_fakeLazo == null && (_hasDetected ||  _isAgroing))
             {
-                _debugPrint.Log($"Full Copy");
+                _debugLog.Log($"Full Copy");
                 _fakeLazo = _lazo.FakeLazo;
                 _fakeLazo.AddChomperToList(this);
                 CopyLazoPositionsToTempLazoPositions();
@@ -139,14 +138,14 @@ namespace Laz
         private Vector3? CreateExtraLastPositionForAI()
         {
             var amountOfPositions = _tempLazoPositions.Count;
-            if (amountOfPositions > 1)
+            if (amountOfPositions >= MINIMUM_AMOUNT_OF_POINTS_IN_PATH)
             {
                 var lastPosition = _tempLazoPositions[amountOfPositions - 1];
                 var secondLastPosition = _tempLazoPositions[amountOfPositions - 2];
                 var direction = NormalizedDirectionFromTwoPoints(lastPosition, secondLastPosition);
                 if (DidHitWall(lastPosition, direction))
                 {
-                    _debugPrint.Log($" Hit a wall");
+                    _debugLog.Log($" Hit a wall");
                     return lastPosition;
                 }
                 
