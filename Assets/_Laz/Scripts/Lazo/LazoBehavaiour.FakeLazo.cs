@@ -12,7 +12,6 @@ namespace Laz
         {
             if (_isTimeToLiveFrozen)
             {
-                Debug.Log("Fake Lazo Creation");
                 CreateFakeLazo();
             }
         }

@@ -12,7 +12,7 @@ namespace Laz
         private List<LazoPosition> _listOfPositions;
         private bool _isTimeToLiveFrozen = false;
         private float _shrinkTime = 0f;
-        private List<AIChomperAgro> _listOfChompers = new List<AIChomperAgro>();
+        private List<AIChomperAgro> _listOfAgroChompers = new List<AIChomperAgro>();
         private bool _canStartShrinking = false;
         
         
@@ -53,15 +53,23 @@ namespace Laz
 
         public void CleanUp()
         {
-            _listOfChompers = new List<AIChomperAgro>();
-            IsTimeToLiveFrozen = false;
+            _listOfAgroChompers = null;
+            _isTimeToLiveFrozen = false;
             _listOfPositions.ForEach(point => point.ForceDeath());
             OnLazoPositionsChanged();
         }
 
+        public void Reset()
+        {
+            _listOfAgroChompers = new List<AIChomperAgro>();
+            _listOfPositions = new List<LazoPosition>();
+            _shrinkTime = RATE_OF_SHRINK;
+            _canStartShrinking = false;
+        }
+
         public void RemoveOldestPointIfNeeded(float deltaTime)
         {
-            if (_listOfChompers.Count > 0 || !_canStartShrinking)
+            if (_listOfAgroChompers.Count > 0 || !_canStartShrinking)
             {
                 return;
             }
@@ -77,12 +85,12 @@ namespace Laz
         public void AddChomperToList(AIChomperAgro chomper)
         {            
             _canStartShrinking = true;
-            _listOfChompers.Add(chomper);
+            _listOfAgroChompers.Add(chomper);
         }
 
         public void RemoveChomperFromList(AIChomperAgro chomper)
         {
-            _listOfChompers.Remove(chomper);
+            _listOfAgroChompers.Remove(chomper);
         }
 
         private void KillAndRemoveFirstLazoPosition()

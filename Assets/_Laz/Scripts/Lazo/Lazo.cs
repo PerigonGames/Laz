@@ -68,6 +68,7 @@ namespace Laz
             _rateOfRecordingTimerElapsed = 0;
             _travelledDistance = 0;
             _lastPosition = null;
+            _fakeLazo.CleanUp();
             CleanUpWall();
         }
 
@@ -76,6 +77,7 @@ namespace Laz
             _isTimeToLiveFrozen = false;
             _isLazoing = false;
             _rateOfRecordingTimerElapsed = 0;
+            _fakeLazo.Reset();
             CleanUpWall();
             ResetTravelledDistance();
             _lastPosition = null;

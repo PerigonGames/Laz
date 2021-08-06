@@ -60,7 +60,9 @@ namespace Laz
         }
         
         public void OnAgroUpdate()
-        {                
+        {
+            // Check if Frozen - 
+            Debug.Log($"{DEBUGKEY}: Has Stopped : {_ai.isStopped}");
             if (_ai.reachedEndOfPath)
             {
                 if (_fakeLazo == null)
@@ -70,8 +72,6 @@ namespace Laz
                 var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
                 SetAIPathWith(listOfPositions);
                 
-                // Check if Frozen - 
-                Debug.Log($"{DEBUGKEY}: Has Stopped : {_ai.isStopped}");
 
                 if (HasReachedLastPosition())
                 {
@@ -101,6 +101,8 @@ namespace Laz
         public void CleanUp()
         {
             _isAgroing = false;
+            _hasDetected = false;
+            _fakeLazo.CleanUp();
             _fakeLazo = null;
             _tempLazoPositions = null;
             _lazo.OnLazoDeactivated -= HandleOnLazoDeactivated;
@@ -111,6 +113,7 @@ namespace Laz
             _ai.canSearch = true;
             _tempLazoPositions = new List<Vector3>();
             _positionIndex = 0;
+            _fakeLazo.Reset();
             _lazo.OnLazoDeactivated += HandleOnLazoDeactivated;
         }
 
