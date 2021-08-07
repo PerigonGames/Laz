@@ -97,7 +97,7 @@ namespace Laz
             }
 
             int buildIndex = GetDebugBuildIndex();
-            
+
             if (buildIndex > -1)
             {
                 _sceneChanger.ChangeScene(buildIndex, OnSceneSwitch);
@@ -117,14 +117,13 @@ namespace Laz
             
             foreach (string buildSceneName in buildSceneNames)
             {
-                if (string.IsNullOrEmpty(buildSceneName))
+                if (!string.IsNullOrEmpty(buildSceneName))
                 {
-                    continue;
+                    sceneNameStringBuilder.Append(buildSceneName);
+                    sceneNameStringBuilder.Append(" - ");
+                    sceneNameStringBuilder.AppendLine($"LShift + {buildIndexUI}");
                 }
-
-                sceneNameStringBuilder.Append(buildSceneName);
-                sceneNameStringBuilder.Append(" - ");
-                sceneNameStringBuilder.AppendLine($"LShift + {buildIndexUI}");
+                
                 buildIndexUI++;
             }
 
