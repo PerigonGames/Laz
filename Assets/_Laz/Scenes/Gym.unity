@@ -645,14 +645,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3341551086205394945, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
-      propertyPath: _shouldPrintDebug
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4236873772338707709, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
-      propertyPath: constrainInsideGraph
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4723101386897442654, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
       propertyPath: m_RootOrder
       value: 28
@@ -5899,10 +5891,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4236873772338707709, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
-      propertyPath: constrainInsideGraph
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4723101386897442654, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
       propertyPath: m_RootOrder
       value: 29
@@ -5950,10 +5938,6 @@ PrefabInstance:
     - target: {fileID: 6187784087072409016, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
       propertyPath: m_Name
       value: Chomper_Agent
-      objectReference: {fileID: 0}
-    - target: {fileID: 6187784087072409016, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e7528db48d0d3f409a5db17056bf394, type: 3}
