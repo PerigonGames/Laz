@@ -132,6 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5314f6514fcd81d4ea4b51e12ee3a0ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _shouldPrintDebug: 0
   _chomperPropertiesScriptableObject: {fileID: 11400000, guid: 221f883cd9551e84c986b89ace59811f, type: 2}
 --- !u!114 &7778563938912844872
 MonoBehaviour:
