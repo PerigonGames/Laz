@@ -4,7 +4,10 @@ namespace Laz
 {
     public abstract class EnemyBehaviour : MonoBehaviour
     {
+        [Header("Debug")] 
+        [SerializeField] private bool _shouldPrintDebug = false;
         protected Vector3 _originalPosition;
+        protected DebugLog debugLog = null;
         
         #region Mono
 
@@ -17,7 +20,7 @@ namespace Laz
 
         protected virtual void Initialize()
         {
-            
+            debugLog = new DebugLog(gameObject.name, _shouldPrintDebug);
         }
 
         public virtual void CleanUp()

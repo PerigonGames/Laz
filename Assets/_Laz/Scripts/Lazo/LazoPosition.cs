@@ -6,13 +6,14 @@ namespace Laz
     public class LazoPosition
     {
         private float _timeToLive;
-        private Vector3 _position;
+        private readonly Vector3 _position;
 
         public bool IsTimeBelowZero => _timeToLive < 0;
         public Vector3 Position => _position;
 
         public float TimeToLive
         {
+            get => _timeToLive;
             set => _timeToLive = value;
         }
 
@@ -40,11 +41,6 @@ namespace Laz
             {
                 OnTimeBelowZero();
             }
-        }
-
-        public void TriggeredPosition()
-        {
-            //TODO - For future usage
         }
     }
 }

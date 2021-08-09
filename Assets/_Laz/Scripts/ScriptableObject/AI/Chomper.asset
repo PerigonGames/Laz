@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 979f757a46d735e4e8b525a9f55ebfcb, type: 3}
   m_Name: Chomper
   m_EditorClassIdentifier: 
-  _speed: 5
+  _idleSpeed: 5
   _idleRadius: 5
+  _agroSpeed: 15
   _agroDetectionRadius: 5
-  _extraDistanceToTravel: 10
+  _extraDistanceToTravel: 5

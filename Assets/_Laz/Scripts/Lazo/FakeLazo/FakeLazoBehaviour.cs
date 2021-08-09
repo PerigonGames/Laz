@@ -1,5 +1,5 @@
+using System.Linq;
 using PerigonGames;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Laz
@@ -11,38 +11,50 @@ namespace Laz
         private LineRenderer _lineRenderer = null;
         [SerializeField]
         private LazoColorPropertiesScriptableObject _lazoColors = null;
-        
+
         public void SetLine(FakeLazo fakeLazo)
         {
-            SetLineFrozen();
-            HandleOnListOfLazoPositionsChanged(fakeLazo.Positions);
+            if (fakeLazo.IsTimeToLiveFrozen)
+            {
+                SetLineFrozen();
+            }
+            else
+            {
+                SetLineNormal();
+            }
+            HandleOnListOfLazoPositionsChanged(fakeLazo.Positions.Reverse().ToArray());
             _fakeLazo = fakeLazo;
             _fakeLazo.OnListOfLazoPositionsChanged += HandleOnListOfLazoPositionsChanged;
+            _fakeLazo.OnTimeToLiveStateChanged += HandleTimeToLiveStateChange;
         }
 
-        [Button]
         private void SetLineFrozen()
         {
             _lineRenderer.colorGradient = _lazoColors.FrozenColor;
         }
 
-        [Button]
         private void SetLineNormal()
         {
             _lineRenderer.colorGradient = _lazoColors.NormalGradient;
         }
         
+        #region Delegate
         private void HandleOnListOfLazoPositionsChanged(Vector3[] positions)
         {
+            _lineRenderer.positionCount = positions.Length;
+            _lineRenderer.SetPositions(positions);
             if (positions.IsNullOrEmpty())
             {
                 gameObject.SetActive(false);
             }
-            
-            _lineRenderer.positionCount = positions.Length;
-            _lineRenderer.SetPositions(positions);
         }
-
+        
+        private void HandleTimeToLiveStateChange(bool isFrozen)
+        {
+            _lineRenderer.colorGradient = isFrozen ? _lazoColors.FrozenColor : _lazoColors.NormalGradient;
+        }
+        #endregion
+        
         private void CleanUp()
         {
             if (_fakeLazo != null)
@@ -50,11 +62,17 @@ namespace Laz
                 _fakeLazo.OnListOfLazoPositionsChanged -= HandleOnListOfLazoPositionsChanged;
                 _fakeLazo = null;
             }
+            _lineRenderer.positionCount = 0;
         }
 
         private void Awake()
         {
             _lineRenderer = GetComponent<LineRenderer>();
+        }
+
+        private void Update()
+        {
+            _fakeLazo.RemoveOldestPointIfNeeded(Time.deltaTime);
         }
 
         private void OnDisable()

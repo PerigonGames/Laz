@@ -38,16 +38,6 @@ namespace Laz
                 _lazoPosition = null;
             }
         }
-        
-        private void OnTriggerEnter(Collider other)
-        {
-            /// TODO -  This will be used in the future, this is placeholder for testing purposes
-            if (_lazoPosition != null && other.CompareTag(Tags.LazoInterest))
-            {
-                _lazoPosition.TriggeredPosition();
-                DebugUIBehaviour.Instance.SetDebugText("Lazo Collided Position: " + _lazoPosition.Position);
-            }
-        }
 
         #endregion
         

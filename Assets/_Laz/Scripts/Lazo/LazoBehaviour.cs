@@ -29,6 +29,7 @@ namespace Laz
             _lazo.OnLazoLimitReached += HandleOnLazoLimitReached;
             _lazo.OnLoopClosed += HandleOnLoopClosed;
             _lazo.OnListOfLazoPositionsChanged += HandleOnListOfLazoPositionsChanged;
+            _lazo.OnTimeToLiveStateChanged += HandleTimeToLiveStateChange;
             ClearLazoTrail();
         }
 
@@ -54,10 +55,12 @@ namespace Laz
         private void SetupLazoColors()
         {
             _lazoLineRenderer.colorGradient = _lazoColors.NormalGradient;
+            SetSplatterColor(false);
         }
 
         private void TurnLazoing(bool active)
         {
+            _lazo.SetLazoActive(active);
             if (active)
             {
                 SetupLazoColors();
@@ -68,8 +71,6 @@ namespace Laz
             {
                 ClearLazoTrail();
             }
-            
-            _lazo.SetLazoActive(active);
         }
         
         private bool CanActivateLaz()
@@ -85,6 +86,7 @@ namespace Laz
             tween.OnComplete(() =>
             {
                 SetWholeLazoLoopAlpha(1);
+                SetupLazoColors();
                 _lazoLineRenderer.positionCount = 0;
             });
         }
@@ -172,10 +174,33 @@ namespace Laz
             _lazoLineRenderer.SetPositions(positions);
         }
 
+        private void HandleTimeToLiveStateChange(bool isFrozen)
+        {
+            _lazoLineRenderer.colorGradient = isFrozen ? _lazoColors.FrozenColor : _lazoColors.NormalGradient;
+            SetSplatterColor(isFrozen);
+        }
+        #endregion
+        
+        #region Setting Appearance
+        
+        private void SetSplatterColor(bool isFrozen)
+        {
+            var splatterColor = _lazoSparkleParticleSystem.main;
+            splatterColor.startColor = GetSplatterColor(isFrozen);
+        }
+
+        private ParticleSystem.MinMaxGradient GetSplatterColor(bool isFrozen)
+        {
+            ILazoSplatter splatterColor = isFrozen ? _lazoColors.FrozenSplatter : _lazoColors.NormalSplatter;
+            return new ParticleSystem.MinMaxGradient(splatterColor.MinColor, splatterColor.MaxColor);
+        }
+
         private void SetWholeLazoLoopAlpha(float alpha)
         {
             _lazoLineRenderer.material.SetFloat(SHADER_PROPERTY_ALPHA, alpha);
         }
+        
+
         #endregion
 
     }
