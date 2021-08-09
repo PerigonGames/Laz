@@ -1,4 +1,3 @@
-using System;
 using Pathfinding;
 using UnityEngine;
 
@@ -7,6 +6,7 @@ namespace Laz
     public enum ChomperState
     {
         Idle,
+        Detection,
         Agro,
         Return
     }
@@ -16,7 +16,7 @@ namespace Laz
         [Header("Scriptable Object")]
         [SerializeField]
         private ChomperPropertiesScriptableObject _chomperPropertiesScriptableObject = null;
-
+        
         // Dependencies
         private IChomperProperties _chomperProperties = null;
         private IAstarAI _ai = null;
@@ -25,10 +25,14 @@ namespace Laz
 
         private AIChomperAgro _aiChomperAgro = null;
         private ChomperState _state = ChomperState.Idle;
+        private Lazo _lazo = null;
+
 
         public void Initialize(Lazo lazo,
             IChomperProperties chomperProperties = null)
         {
+            
+            _lazo = lazo;
             if (!TryGetComponent(out _ai))
             {
                 Debug.LogError("ChomperBehaviour is missing AI Components - AIPath");
@@ -36,21 +40,22 @@ namespace Laz
 
             if (!TryGetComponent(out _patrolBehaviour))
             {
-                Debug.LogError("Chomper is missing a AIPatrolBehaviour");
+                Debug.LogError("ChomperBehaviour is missing a AIPatrolBehaviour");
             }
             
             if (!TryGetComponent(out _detectionBehaviour))
             {
-                Debug.LogError("Chomper is missing a AIDetectionBehaviour");
+                Debug.LogError("ChomperBehaviour is missing a AIDetectionBehaviour");
             }
+            
 
             base.Initialize();
             _chomperProperties = chomperProperties ?? _chomperPropertiesScriptableObject;
             _patrolBehaviour.Initialize(_ai, _chomperProperties.IdleRadius);
             _detectionBehaviour.Initialize(_chomperProperties.AgroDetectionRadius, this);
-            _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel);
+            _aiChomperAgro = new AIChomperAgro(_ai, lazo, _chomperProperties.ExtraDistanceToTravel, debugLog);
             _aiChomperAgro.OnChomperReachedEndOfLazo += HandleOnAgroEnded;
-            _ai.maxSpeed = _chomperProperties.Speed;
+            _ai.maxSpeed = _chomperProperties.IdleSpeed;
         }
 
         public override void CleanUp()
@@ -69,6 +74,7 @@ namespace Laz
             _aiChomperAgro.Reset();
             _aiChomperAgro.OnChomperReachedEndOfLazo += HandleOnAgroEnded;
             _state = ChomperState.Idle;
+            _ai.maxSpeed = _chomperProperties.IdleSpeed;
         }
 
         public void RayCastDidCollideWith(GameObject collidedGameObject)
@@ -76,27 +82,52 @@ namespace Laz
             var lazoWallBehaviour = collidedGameObject.GetComponent<LazoWallBehaviour>();
             if (lazoWallBehaviour != null)
             {
-                _aiChomperAgro.StartAgroAt(lazoWallBehaviour.LazoWallPosition);
-                _state = ChomperState.Agro;
+                OnDetected(lazoWallBehaviour.LazoWallPosition);
             }
         }
 
-        #region Mono
+        private void OnDetected(LazoPosition lazoPosition)
+        {
+            if (_state != ChomperState.Detection)
+            {
+                _state = ChomperState.Detection;
+                _aiChomperAgro.SetLazoPosition(lazoPosition);
+                _ai.destination = lazoPosition.Position;
+                _lazo.IsTimeToLiveFrozen = true;
+            }
+        }
 
+
+        #region Mono
         private void Update()
+        {
+            DebugUIBehaviour.Instance.SetDebugText("State :"+_state);
+            switch (_state)
+            {
+                case ChomperState.Idle:
+                    _detectionBehaviour.OnDetectUpdate();
+                    break;
+                case ChomperState.Return:
+                    _detectionBehaviour.OnDetectUpdate();
+                    break;
+            }
+        }
+
+        private void FixedUpdate()
         {
             switch (_state)
             {
                 case ChomperState.Idle:
                     _patrolBehaviour.PatrolCircularArea();
-                    _detectionBehaviour.OnDetectUpdate();
+                    break;
+                case ChomperState.Detection:
+                    OnDetectionUpdate();
                     break;
                 case ChomperState.Agro:
                     _aiChomperAgro.OnAgroUpdate();
                     break;
                 case ChomperState.Return:
                     OnReturnUpdate();
-                    _detectionBehaviour.OnDetectUpdate();
                     break;
                 default:
                     _patrolBehaviour.PatrolCircularArea();
@@ -112,10 +143,43 @@ namespace Laz
 
         private void OnReturnUpdate()
         {
-            if (_ai.reachedEndOfPath)
+            if (_ai.reachedDestination)
             {
                 _state = ChomperState.Idle;
+                _ai.maxSpeed = _chomperProperties.IdleSpeed;
             }
+        }
+
+        private void OnDetectionUpdate()
+        {
+            if (_ai.reachedDestination)
+            {
+                OnAgroStart();
+            } 
+            else if (_ai.isStopped || _ai.reachedEndOfPath)
+            {
+                EmergencyExitBackToSpawn();
+            }
+        }
+        
+        private void OnAgroStart()
+        {
+            if (_state == ChomperState.Detection)
+            {
+                _state = ChomperState.Agro;
+                _aiChomperAgro.StartAgroAt();
+                _ai.maxSpeed = _chomperProperties.AgroSpeed;
+            }
+        }
+
+        private void EmergencyExitBackToSpawn()
+        {
+            debugLog.Log("Emergency exit");
+            _state = ChomperState.Return;
+            _ai.destination = _originalPosition;
+            _lazo.IsTimeToLiveFrozen = false;
+            _aiChomperAgro.CleanUp();
+            _aiChomperAgro.Reset();
         }
 
         #endregion

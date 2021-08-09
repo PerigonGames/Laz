@@ -6,7 +6,8 @@ namespace Laz
         
         private void SpawnWall(LazoPosition lazoPosition)
         {
-            var wall = LazoWallObjectPooler.Instance.SpawnAt(LazoWallObjectPooler.Key, lazoPosition.Position);
+            var wall = LazoWallObjectPooler.Instance.PopInActivePooledObject(LazoWallObjectPooler.Key);
+            wall.gameObject.SetActive(true);
             wall.Initialize(lazoPosition);
         }
         
@@ -28,7 +29,6 @@ namespace Laz
                 _listOfPositions[i].TimeToLive = positionDeathTimeToLive;
             }
             
-            //TODO - Placeholder, but it should disappear after the tail disappears
             foreach (var position in closedLoop)
             {
                 position.ForceDeath();

@@ -17,16 +17,26 @@ namespace Laz
         private float _rateOfRecordingTimerElapsed = 0;
         private float _travelledDistance = 0;
         private Vector3? _lastPosition = null;
+        private bool _isTimeToLiveFrozen = false;
 
         public event Action<LazoPosition[]> OnLoopClosed;
         public event Action OnLazoLimitReached;
         public event Action<float> OnLazoLimitChanged;
         public event Action OnLazoDeactivated;
         public event Action<Vector3[]> OnListOfLazoPositionsChanged;
+        public event Action<bool> OnTimeToLiveStateChanged;
 
         public float CoolDown => _lazoProperties.CoolDown;
         public List<LazoPosition> GetListOfLazoPositions => _listOfPositions;
-        public bool IsTimeToLiveFrozen { get; set; }
+        public bool IsTimeToLiveFrozen
+        {
+            get => _isTimeToLiveFrozen;
+            set
+            {
+                _isTimeToLiveFrozen = value;
+                OnTimeToLiveStateChanged?.Invoke(value);
+            }
+        }
 
         private float TravelledDistance
         {
@@ -63,7 +73,7 @@ namespace Laz
 
         public void Reset()
         {
-            IsTimeToLiveFrozen = false;
+            _isTimeToLiveFrozen = false;
             _isLazoing = false;
             _rateOfRecordingTimerElapsed = 0;
             CleanUpWall();
@@ -92,6 +102,7 @@ namespace Laz
             }
             else
             {
+                CreateFakeLazoLineIfNeeded();
                 OnLazoDeactivated?.Invoke();
                 Reset();
             }
@@ -139,7 +150,10 @@ namespace Laz
                     OnLoopClosed(closedLoopPolygon);
                 }
 
-                KillOffTailEndOfLazoFrom(closedOffPosition, closedLoopPolygon);
+                if (!_isTimeToLiveFrozen)
+                {
+                    KillOffTailEndOfLazoFrom(closedOffPosition, closedLoopPolygon);
+                } 
 
                 var objectOfInterests = GetObjectOfInterestsWithin(closedLoopPolygon);
                 if (!objectOfInterests.IsNullOrEmpty())

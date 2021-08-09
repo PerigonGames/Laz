@@ -70,3 +70,9 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
+  _normalSplatter:
+    _minColor: {r: 1, g: 0.9529412, b: 0, a: 1}
+    _maxColor: {r: 1, g: 0.5137255, b: 0, a: 1}
+  _frozenSplatter:
+    _minColor: {r: 0, g: 0.3529412, b: 1, a: 1}
+    _maxColor: {r: 0.6745098, g: 0.78823537, b: 1, a: 1}

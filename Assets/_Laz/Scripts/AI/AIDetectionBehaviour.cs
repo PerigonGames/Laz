@@ -20,10 +20,10 @@ namespace Laz
 
         public void OnDetectUpdate()
         {
-            RaycastHit hit;
-            if (Physics.SphereCast(transform.position, _detectionRadius, transform.forward, out hit))
+            var hitColliders = Physics.OverlapSphere(transform.position, _detectionRadius);
+            foreach(var hit in hitColliders)
             {
-                _dataSource.RayCastDidCollideWith(hit.collider.gameObject);
+                _dataSource.RayCastDidCollideWith(hit.gameObject);
             }
         }
         

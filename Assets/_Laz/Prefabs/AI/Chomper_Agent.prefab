@@ -132,6 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5314f6514fcd81d4ea4b51e12ee3a0ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _shouldPrintDebug: 0
   _chomperPropertiesScriptableObject: {fileID: 11400000, guid: 221f883cd9551e84c986b89ace59811f, type: 2}
 --- !u!114 &7778563938912844872
 MonoBehaviour:
@@ -226,15 +227,15 @@ MonoBehaviour:
   orientation: 0
   enableRotation: 1
   targetCompatibility: {fileID: 0}
-  maxAcceleration: -2.5
-  rotationSpeed: 360
-  slowdownDistance: 0.6
+  maxAcceleration: 30
+  rotationSpeed: 3600000
+  slowdownDistance: 3
   pickNextWaypointDist: 2
-  endReachedDistance: 0.2
+  endReachedDistance: 1
   alwaysDrawGizmos: 1
   slowWhenNotFacingTarget: 1
   whenCloseToDestination: 0
-  constrainInsideGraph: 0
+  constrainInsideGraph: 1
 --- !u!114 &2959441398572837214
 MonoBehaviour:
   m_ObjectHideFlags: 0
