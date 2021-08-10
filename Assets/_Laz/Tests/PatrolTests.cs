@@ -2,7 +2,7 @@ using Laz;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Tests
+namespace Tests.Patrolling
 {
     public class PatrolTests
     {
