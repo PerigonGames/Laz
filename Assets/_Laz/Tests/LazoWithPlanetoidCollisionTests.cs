@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace Tests.LazoTool
 {
     public class LazoWithPlanetoidCollisionTests : InputTestFixture
     {

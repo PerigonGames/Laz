@@ -1,7 +1,7 @@
 using Laz;
 using NUnit.Framework;
 
-namespace Tests
+namespace Tests.Planets
 {
     public class PlanetoidTests
     {
