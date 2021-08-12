@@ -67,7 +67,7 @@ namespace Laz
                 var listOfPositions = CreateListOfPositionsStartingFrom(_positionIndex);
                 SetManualAIPathWith(listOfPositions);
                 
-                if (HasReachedLastPosition())
+                if (HasReachedLastPosition() || !CanStillCreateFakePath(listOfPositions))
                 {
                     StartReturnState();
                 }
@@ -81,7 +81,6 @@ namespace Laz
 
         private void StartReturnState()
         {
-            _debugLog.Log($"Path Ended on {_fakeLazo.GetHashCode()}");
             _ai.canSearch = true;
             if (_fakeLazo != null)
             {
