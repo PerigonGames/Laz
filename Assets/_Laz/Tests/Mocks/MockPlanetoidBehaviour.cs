@@ -6,6 +6,7 @@ namespace Tests
     public class MockPlanetoidBehaviour : IPlanetoidBehaviour
     {
         public int ResetCount = 0;
+        public int CleanUpCount = 0;
         
         public void Reset()
         {
@@ -14,6 +15,7 @@ namespace Tests
 
         public void CleanUp()
         {
+            CleanUpCount++;
         }
 
         public Planetoid PlanetoidModel { get; set; }
