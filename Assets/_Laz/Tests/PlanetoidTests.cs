@@ -53,7 +53,7 @@ namespace Tests.Planets
 
             // Act
             planetoid.Reset();
-            
+           
             //Assert
             Assert.AreEqual(mockPlanetoidBehaviour.ResetCount, 1, "Reset should be called once");
         }
