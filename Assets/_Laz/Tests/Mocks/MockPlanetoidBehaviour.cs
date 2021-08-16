@@ -16,7 +16,7 @@ namespace Tests
         {
         }
 
-        public Planetoid PlanetoidModel { get; }
+        public Planetoid PlanetoidModel { get; set; }
 
         public void Initialize()
         {
