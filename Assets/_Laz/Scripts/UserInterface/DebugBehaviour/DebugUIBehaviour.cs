@@ -34,7 +34,7 @@ namespace Laz
             _genericDebugTextOnWall.text = text;
         }
 
-        private void Awake()
+        private void OnEnable()
         {
             if (_instance != null && _instance != this)
             {

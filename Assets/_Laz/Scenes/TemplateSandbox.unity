@@ -2895,6 +2895,7 @@ MonoBehaviour:
   _lazoWallObjectPooler: {fileID: 778001613}
   _fakeLazoObjectPooler: {fileID: 336259159}
   _lazoMeter: {fileID: 854015141}
+  _debugUI: {fileID: 2060693706839644508, guid: 66c976ac8094f694ca90893ff97b63c7, type: 3}
 --- !u!4 &2042769655
 Transform:
   m_ObjectHideFlags: 0

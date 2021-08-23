@@ -36,6 +36,9 @@ namespace Laz
         
         private LazoWrappableManager _wrappableManager = null;
 
+        [Title("DebugUI")]
+        [SerializeField] private GameObject _debugUI = null;
+
         public void CleanUp()
         {
             _wrappableManager.CleanUp();
@@ -95,10 +98,17 @@ namespace Laz
                 _lazoMeter.Initialize(laz.LazoTool);
             }
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (DebugUIBehaviour.Instance != null)
             {
                 DebugUIBehaviour.Instance.Initialize(laz.Movement);
             }
+            else
+            {
+                GameObject debugUI = GameObject.Instantiate(_debugUI, Vector3.zero, Quaternion.identity);
+                debugUI.GetComponent<DebugUIBehaviour>().Initialize(laz.Movement);
+            }
+#endif
         }
 
         private void SetupObjectPoolers(int particleEffectsAmount)
