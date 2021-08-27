@@ -144,17 +144,11 @@ MonoBehaviour:
   _gateWidth: 3
   _leftPost: {fileID: 753577903316192672}
   _rightPost: {fileID: 753577903861675444}
-  _gate: {fileID: 753577902478782856}
+  _gateTransform: {fileID: 753577902478782856}
   _gateRenderer: {fileID: 753577902478782857}
   _flickering: 0
   _onTime: 0.5
   _offTime: 0.5
-  _gateFlickerOn:
-    m_PersistentCalls:
-      m_Calls: []
-  _gateFlickerOff:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &753577903316192675
 GameObject:
   m_ObjectHideFlags: 0
