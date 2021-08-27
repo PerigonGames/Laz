@@ -9,11 +9,15 @@ namespace Laz
     [RequireComponent(typeof(BoxCollider))]
     public class ElectricGateBehaviour : MonoBehaviour
     {
+
+        private const float HALF = 0.5f;
+        private const float DISABLED_ALPHA = 0.2f;
+
 #if UNITY_EDITOR
         [SerializeField, Range(0f, 50f), Tooltip("Proxy for gate's z scale. Adjust this to increase the width of the gate")] 
         private float _gateWidth = 10f;
         [SerializeField] 
-        private Transform _leftPost, _rightPost, _gate = default;
+        private Transform _leftPost, _rightPost, _gateTransform = default;
 #endif
         [SerializeField] private Renderer _gateRenderer = null;
 
@@ -25,63 +29,65 @@ namespace Laz
         [SerializeField] private float _onTime = 0.5f, _offTime = 0.5f;
 
         private BoxCollider _gateCollider = null;
-        private Material _gateMat = null;
+        private Material _gateMaterial = null;
         private Color _gateColor;
 
-        private bool _flickeringState = true;
+        private ElectricGate _gate;
 
-        private float _time = 0.0f;
-        private const float HALF = 0.5f;
-        private const float DISABLED_ALPHA = 0.2f;
-
-        private void Awake()
+        public void Initialize()
         {
-            _gateCollider = GetComponent<BoxCollider>();
-            if (!_gateCollider) Debug.LogError($"{name} is missing a box collider!");
-            if (!_gateRenderer) Debug.LogError($"{name} has an unset renderer!");
+            _gate = new ElectricGate(_onTime, _offTime, _flickering);
+            _gate.OnGateFlickerChange += HandleGateStateChange;
         }
 
-        private void Update()
+        public void CleanUp()
         {
-            if (_flickering)
-            {
-                _time += Time.deltaTime;
-                if(_flickeringState && _time > _onTime)
-                {
-                    GateFlickerOff();
-                }
-                else if(!_flickeringState && _time > _offTime)
-                {
-                    GateFlickerOn();
-                }
-            }
+            _gate.CleanUp();
+            _gate.OnGateFlickerChange -= HandleGateStateChange;
+        }
+
+        public void Reset()
+        {
+            _gate.Reset();
+            _gate.OnGateFlickerChange += HandleGateStateChange;
         }
 
         private void GateFlickerOff()
         {
-            _time -= _onTime;
-            _flickeringState = false;
             SetMaterialAlpha(DISABLED_ALPHA);
             _gateCollider.enabled = false;
         }
 
         private void GateFlickerOn()
         {
-            _time -= _offTime;
-            _flickeringState = true;
             SetMaterialAlpha(1f);
             _gateCollider.enabled = true;
         }
 
         private void SetMaterialAlpha(float alpha)
         {
-            if (_gateMat == null)
+            if (_gateMaterial == null)
             {
-                _gateMat = _gateRenderer.material;
-                _gateColor = _gateMat.color;
+                _gateMaterial = _gateRenderer.material;
+                _gateColor = _gateMaterial.color;
             }
             _gateColor.a = alpha;
-            _gateMat.color = _gateColor;
+            _gateMaterial.color = _gateColor;
+        }
+
+        #region MONOBEHAVIOUR_METHODS
+        private void Awake()
+        {
+            _gateCollider = GetComponent<BoxCollider>();
+            if (!_gateCollider) Debug.LogError($"{name} is missing a box collider!");
+            if (!_gateRenderer) Debug.LogError($"{name} has an unset renderer!");
+
+            Initialize(); // Calling this here temporarily, once this is integrated into a puzzle this will be removed
+        }
+
+        private void Update()
+        {
+            _gate.Update();
         }
 
         private void OnCollisionEnter(Collision other)
@@ -96,13 +102,32 @@ namespace Laz
                 }
             }
         }
+        #endregion
+
+        #region DELEGATE
+        private void HandleGateStateChange(GateState state)
+        {
+            switch (state)
+            {
+                case GateState.on:
+                    GateFlickerOn();
+                    break;
+                case GateState.flicker_off:
+                    GateFlickerOff();
+                    break;
+                case GateState.off:
+                default:
+                    break;
+            }
+        }
+        #endregion
 
 #if UNITY_EDITOR
         private void SetUpGate()
         {
-            var scale = _gate.transform.localScale;
+            var scale = _gateTransform.transform.localScale;
             scale.z = _gateWidth;
-            _gate.transform.localScale = scale;
+            _gateTransform.transform.localScale = scale;
 
             var size = _gateCollider.size;
             size.z = _gateWidth;
@@ -131,7 +156,7 @@ namespace Laz
         {
             if (_gateCollider == null) _gateCollider = GetComponent<BoxCollider>();
 
-            if (_gate == null || _gateCollider == null || _leftPost == null || _rightPost == null)
+            if (_gateTransform == null || _gateCollider == null || _leftPost == null || _rightPost == null)
             {
                 Debug.LogWarning("Electric gate needs to be configured");
                 return;
