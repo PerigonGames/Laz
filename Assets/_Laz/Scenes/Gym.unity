@@ -3779,8 +3779,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 753577903270397734, guid: 8ed4a94e52cd4e349ab92578dc51f930, type: 3}
+      propertyPath: _onTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 753577903270397734, guid: 8ed4a94e52cd4e349ab92578dc51f930, type: 3}
+      propertyPath: _offTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 753577903270397734, guid: 8ed4a94e52cd4e349ab92578dc51f930, type: 3}
       propertyPath: _gateWidth
       value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 753577903270397734, guid: 8ed4a94e52cd4e349ab92578dc51f930, type: 3}
+      propertyPath: _flickering
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 753577903270397735, guid: 8ed4a94e52cd4e349ab92578dc51f930, type: 3}
       propertyPath: m_Size.z
@@ -8873,6 +8885,10 @@ PrefabInstance:
     - target: {fileID: 753577903270397734, guid: 8ed4a94e52cd4e349ab92578dc51f930, type: 3}
       propertyPath: _gateWidth
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 753577903270397734, guid: 8ed4a94e52cd4e349ab92578dc51f930, type: 3}
+      propertyPath: _flickering
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 753577903270397735, guid: 8ed4a94e52cd4e349ab92578dc51f930, type: 3}
       propertyPath: m_Size.z
