@@ -30,12 +30,12 @@ namespace Laz
 
         private void FixedUpdate()
         {
-            if (_patrol.CurrentDestination == null)
+            if (_patrol == null || _patrol.CurrentDestination == null)
             {
                 return;
             }
 
-            transform.position = _patrol.MoveTowards(transform.position, Time.deltaTime);
+            transform.position = _patrol.MoveTowards(transform.position, Time.fixedDeltaTime);
         }
     }
 }
