@@ -2,31 +2,30 @@ using UnityEngine;
 
 namespace Laz
 {
-    [RequireComponent(typeof(Rect))]
-    public class DebugMovementObjectEditor : MonoBehaviour
+    public class DebugMovementParametersEditor : MonoBehaviour
     {
         private const float HEADER_HEIGHT_MULTIPLIER = 0.2f;
         private const float FOOTER_HEIGHT_MULTIPLIER = 0.1f;
         private const float HEADER_PADDING_MULTIPLIER = 0.03f;
         private const float FOOTER_PADDING_MULTIPLIER = 0.03f;
-        
+
         [SerializeField] private Rect _rect;
-        
+
         private string _fileName = string.Empty;
         private LazMovementPropertyScriptableObject _movementProperty;
 
         private Vector2 _scrollPosition;
-        
+
         //GUIStyles
         private GUIStyle _headerGUIStyle;
         private GUIStyle _footerGUIStyle;
-        
+
         //GUIParameters
         private float _headerHeight;
         private float _headerPadding;
         private float _footerHeight;
         private float _footerPadding;
-        
+
         public void OpenWindow()
         {
             Initialize();
@@ -36,7 +35,7 @@ namespace Laz
         {
             gameObject.SetActive(false);
         }
-        
+
         private void Awake()
         {
             CreateGUIStyles();
@@ -56,13 +55,13 @@ namespace Laz
             using (new GUILayout.VerticalScope())
             {
                 DisplayHeader();
-                
+
                 GUILayout.FlexibleSpace();
-                
+
                 DisplayElements();
-                
+
                 GUILayout.FlexibleSpace();
-                
+
                 DisplayFooter();
             }
         }
@@ -83,9 +82,14 @@ namespace Laz
             {
                 _scrollPosition = scrollScope.scrollPosition;
                 
+                GUI.changed = false;
+                
                 // Display Properties - Discuss With Marin about changing private to Public
-                
-                
+
+                if (GUI.changed)
+                {
+                    UpdateMovementProperties();
+                }
             }
         }
 
@@ -116,12 +120,12 @@ namespace Laz
             _movementProperty = ScriptableObject.CreateInstance<LazMovementPropertyScriptableObject>();
             _fileName = string.Empty;
         }
-        
+
         private bool DoesfileExist(string fileName)
         {
             return false;
         }
-        
+
         private void SaveMovementProperty()
         {
             if (string.IsNullOrEmpty(_fileName))
@@ -129,7 +133,7 @@ namespace Laz
                 Debug.LogWarning("Please fill in file name before attempting to Save");
                 return;
             }
-            
+
             string fileName = _fileName;
             int fileDuplicateIndex = 1;
 
@@ -138,16 +142,21 @@ namespace Laz
                 fileName = $"{fileName}_{fileDuplicateIndex}";
                 fileDuplicateIndex++;
             }
-            
+
             TextWriter.WriteToFile(_movementProperty, fileName);
 
             Debug.Log($"{fileName}.json Has been Created!");
         }
 
+        private void UpdateMovementProperties()
+        {
+            
+        }
+
         private void CreateGUIStyles()
         {
             GUIStyle helpBoxStyle = GUI.skin.FindStyle("HelpBox") ?? GUIStyle.none;
-            
+
             _headerGUIStyle = new GUIStyle(helpBoxStyle)
             {
                 fontStyle = FontStyle.Bold,
