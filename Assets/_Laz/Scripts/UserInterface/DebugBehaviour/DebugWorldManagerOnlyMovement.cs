@@ -7,6 +7,7 @@ namespace Laz
     public class DebugWorldManagerOnlyMovement : MonoBehaviour
     {
         [SerializeField] private LazCoordinatorBehaviour _lazCoordinator;
+        [SerializeField] private LazoWallObjectPooler _lazoWallObjectPooler;
         
         [Title("DebugUI")]
         [SerializeField] private GameObject _debugUI = null;
@@ -35,6 +36,11 @@ namespace Laz
             
             _wrappableManager = new LazoWrappableManager(objectsOfInterest, StateManager.Instance);
             _lazCoordinator.Initialize(laz, _wrappableManager.WrappableObjects);
+
+            if (_lazoWallObjectPooler != null)
+            {
+                _lazoWallObjectPooler.Initialize();
+            }
             
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (DebugUIBehaviour.Instance != null)
