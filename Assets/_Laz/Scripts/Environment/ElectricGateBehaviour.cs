@@ -7,7 +7,7 @@ using UnityEngine.Events;
 namespace Laz
 {
     [RequireComponent(typeof(BoxCollider))]
-    public class ElectricGateBehaviour : MonoBehaviour
+    public class ElectricGateBehaviour : BaseCompletedPuzzleActivationBehaviour
     {
 
         private const float HALF = 0.5f;
@@ -17,9 +17,12 @@ namespace Laz
         [SerializeField, Range(0f, 50f), Tooltip("Proxy for gate's z scale. Adjust this to increase the width of the gate")] 
         private float _gateWidth = 10f;
         [SerializeField] 
-        private Transform _leftPost, _rightPost, _gateTransform = default;
+        private Transform _leftPost, _rightPost = default;
 #endif
+        [SerializeField] private Transform _gateTransform = default;
         [SerializeField] private Renderer _gateRenderer = null;
+
+        [SerializeField, Tooltip("Initial state for the gate. If true, gate will start as on and puzzles will deactivate gate.")] private bool _initialState = true;
 
         [SerializeField, Tooltip("If true, gate will flicker on and off. If false, gate is always on")]
         private bool _flickering = false;
@@ -34,22 +37,50 @@ namespace Laz
 
         private ElectricGate _gate;
 
-        public void Initialize()
+        public override void Initialize()
         {
-            _gate = new ElectricGate(_onTime, _offTime, _flickering);
-            _gate.OnGateFlickerChange += HandleGateStateChange;
+            Reset();
         }
 
-        public void CleanUp()
+        public override void CleanUp()
         {
-            _gate.CleanUp();
             _gate.OnGateFlickerChange -= HandleGateStateChange;
+            _gate = null;
         }
 
-        public void Reset()
+        public override void Reset()
         {
-            _gate.Reset();
-            _gate.OnGateFlickerChange += HandleGateStateChange;
+            if (_initialState)
+            {
+                _gateTransform.gameObject.SetActive(true);
+                _gateCollider.enabled = true;
+                _gate = new ElectricGate(_onTime, _offTime, _flickering);
+                _gate.OnGateFlickerChange += HandleGateStateChange;
+            }
+            else
+            {
+                _gateTransform.gameObject.SetActive(false);
+                _gateCollider.enabled = false;
+            }
+        }
+
+
+
+        public override void OnActivated()
+        {
+            if (_initialState)
+            {
+                _gateTransform.gameObject.SetActive(false);
+                _gateCollider.enabled = false;
+                CleanUp();
+            }
+            else
+            {
+                _gateTransform.gameObject.SetActive(true);
+                _gateCollider.enabled = true;
+                _gate = new ElectricGate(_onTime, _offTime, _flickering);
+                _gate.OnGateFlickerChange += HandleGateStateChange;
+            }
         }
 
         private void GateFlickerOff()
@@ -81,8 +112,7 @@ namespace Laz
             _gateCollider = GetComponent<BoxCollider>();
             if (!_gateCollider) Debug.LogError($"{name} is missing a box collider!");
             if (!_gateRenderer) Debug.LogError($"{name} has an unset renderer!");
-
-            Initialize(); // Calling this here temporarily, once this is integrated into a puzzle this will be removed
+            if (!_gateTransform) Debug.LogError($"{name} needs to have the gate transform set!");
         }
 
         private void Update()
@@ -105,20 +135,12 @@ namespace Laz
         #endregion
 
         #region DELEGATE
-        private void HandleGateStateChange(GateState state)
+        private void HandleGateStateChange(bool gateOn)
         {
-            switch (state)
-            {
-                case GateState.on:
-                    GateFlickerOn();
-                    break;
-                case GateState.flicker_off:
-                    GateFlickerOff();
-                    break;
-                case GateState.off:
-                default:
-                    break;
-            }
+            if(gateOn)
+                GateFlickerOn();
+            else  
+                GateFlickerOff();
         }
         #endregion
 

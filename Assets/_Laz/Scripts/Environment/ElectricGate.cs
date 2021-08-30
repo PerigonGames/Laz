@@ -7,7 +7,7 @@ namespace Laz
 {
     public class ElectricGate
     {
-        public event Action<GateState> OnGateFlickerChange;
+        public event Action<bool> OnGateFlickerChange;
 
         private bool _flickering;
         private bool _flickeringState = true;
@@ -31,30 +31,20 @@ namespace Laz
                 {
                     _flickeringState = false;
                     _elapsedTime -= _onTime;
-                    OnGateFlickerChange?.Invoke(GateState.flicker_off);
+                    OnGateFlickerChange?.Invoke(false);
                 }
                 else if (!_flickeringState && _elapsedTime > _offTime)
                 {
                     _flickeringState = true;
                     _elapsedTime -= _offTime;
-                    OnGateFlickerChange?.Invoke(GateState.on);
+                    OnGateFlickerChange?.Invoke(true);
                 }
             }
-        }
-
-        public void CleanUp()
-        {
-
         }
 
         public void Reset()
         {
             _elapsedTime = 0f;
         }
-    }
-
-    public enum GateState
-    {
-        on, flicker_off, off
     }
 }
