@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Laz
 {
+    [RequireComponent(typeof(RectTransform))]
     public class DebugMovementParametersEditor : MonoBehaviour
     {
         private const float HEADER_HEIGHT_MULTIPLIER = 0.2f;
@@ -9,23 +11,29 @@ namespace Laz
         private const float HEADER_PADDING_MULTIPLIER = 0.03f;
         private const float FOOTER_PADDING_MULTIPLIER = 0.03f;
 
-        [SerializeField] private Rect _rect;
+        //private const Key DEBUG_KEY = Key.Backslash;
 
+        [SerializeField] private RectTransform _rectTransform;
+
+        private Rect _rect;
         private string _fileName = string.Empty;
+        
         private LazMovementPropertyScriptableObject _movementProperty;
 
+        private bool _isPanelOpen = false;
+        
         private Vector2 _scrollPosition;
 
         //GUIStyles
-        private GUIStyle _headerGUIStyle;
-        private GUIStyle _footerGUIStyle;
+        private GUIStyle _headerGUIStyle = GUIStyle.none;
+        private GUIStyle _footerGUIStyle = GUIStyle.none;
 
         //GUIParameters
         private float _headerHeight;
         private float _headerPadding;
         private float _footerHeight;
         private float _footerPadding;
-
+        
         public void OpenWindow()
         {
             Initialize();
@@ -35,11 +43,11 @@ namespace Laz
         {
             gameObject.SetActive(false);
         }
-
+        
         private void Awake()
         {
-            CreateGUIStyles();
             CreateGUIParameters();
+            gameObject.SetActive(false);
         }
 
         private void Initialize()
@@ -47,11 +55,13 @@ namespace Laz
             ResetContent();
             gameObject.SetActive(true);
         }
-
+        
         #region GUICalls
 
         private void OnGUI()
         {
+            CreateGUIStyles();
+            
             using (new GUILayout.VerticalScope())
             {
                 DisplayHeader();
@@ -68,10 +78,10 @@ namespace Laz
 
         private void DisplayHeader()
         {
-            using (new GUILayout.HorizontalScope(GUILayout.Height(_headerHeight)))
+            using (new GUILayout.HorizontalScope(GUI.skin.window, GUILayout.Height(_headerHeight)))
             {
                 GUILayout.Space(_headerPadding);
-                GUILayout.Label("Create Movement Property", GUILayout.ExpandWidth(true));
+                GUILayout.Label("Create Movement Property", _headerGUIStyle, GUILayout.ExpandWidth(true));
                 GUILayout.Space(_headerPadding);
             }
         }
@@ -95,7 +105,7 @@ namespace Laz
 
         private void DisplayFooter()
         {
-            using (new GUILayout.HorizontalScope(GUILayout.Height(_footerHeight)))
+            using (new GUILayout.HorizontalScope(GUI.skin.box,GUILayout.Height(_footerHeight)))
             {
                 GUILayout.FlexibleSpace();
 
@@ -112,6 +122,43 @@ namespace Laz
                 }
             }
         }
+        
+        //Can only create GUIStyles on GUICalls
+        //So Create GUIStyles on first call
+        private void CreateGUIStyles()
+        {
+            if (_headerGUIStyle != GUIStyle.none)
+            {
+                return;
+            }
+            
+            _headerGUIStyle = new GUIStyle(GUI.skin.label)
+            {
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter,
+                normal = new GUIStyleState
+                {
+                    textColor = Color.black
+                }
+            };
+        }
+
+        private void CreateGUIParameters()
+        {
+            if (_rectTransform == null)
+            {
+                _rectTransform = GetComponent<RectTransform>();
+            }
+
+            _rect = new Rect(_rectTransform.anchorMin.x * Screen.width, _rectTransform.anchorMin.y * Screen.height,
+                _rectTransform.rect.width, _rectTransform.rect.height);
+
+            _headerHeight = _rect.height * HEADER_HEIGHT_MULTIPLIER;
+            _headerPadding = _rect.width * HEADER_PADDING_MULTIPLIER;
+
+            _footerHeight = _rect.height * FOOTER_HEIGHT_MULTIPLIER;
+            _footerPadding = _rect.width * FOOTER_PADDING_MULTIPLIER;
+        }
 
         #endregion
 
@@ -119,11 +166,6 @@ namespace Laz
         {
             _movementProperty = ScriptableObject.CreateInstance<LazMovementPropertyScriptableObject>();
             _fileName = string.Empty;
-        }
-
-        private bool DoesfileExist(string fileName)
-        {
-            return false;
         }
 
         private void SaveMovementProperty()
@@ -134,18 +176,7 @@ namespace Laz
                 return;
             }
 
-            string fileName = _fileName;
-            int fileDuplicateIndex = 1;
-
-            while (DoesfileExist(fileName))
-            {
-                fileName = $"{fileName}_{fileDuplicateIndex}";
-                fileDuplicateIndex++;
-            }
-
-            TextWriter.WriteToFile(_movementProperty, fileName);
-
-            Debug.Log($"{fileName}.json Has been Created!");
+            TextWriter.WriteToFile(_movementProperty, _fileName);
         }
 
         private void UpdateMovementProperties()
@@ -153,32 +184,9 @@ namespace Laz
             
         }
 
-        private void CreateGUIStyles()
+        private void OnRectTransformDimensionsChange()
         {
-            GUIStyle helpBoxStyle = GUI.skin.FindStyle("HelpBox") ?? GUIStyle.none;
-
-            _headerGUIStyle = new GUIStyle(helpBoxStyle)
-            {
-                fontStyle = FontStyle.Bold,
-                normal = new GUIStyleState
-                {
-                    textColor = Color.black
-                }
-            };
-        }
-
-        private void CreateGUIParameters()
-        {
-            if (_rect == Rect.zero)
-            {
-                _rect = GetComponent<Rect>();
-            }
-
-            _headerHeight = _rect.height * HEADER_HEIGHT_MULTIPLIER;
-            _headerPadding = _rect.width * HEADER_PADDING_MULTIPLIER;
-
-            _footerHeight = _rect.height * FOOTER_HEIGHT_MULTIPLIER;
-            _footerPadding = _rect.width * FOOTER_PADDING_MULTIPLIER;
+            CreateGUIParameters();
         }
     }
 }
