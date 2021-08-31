@@ -1,17 +1,18 @@
 using Laz;
 using NUnit.Framework;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.TestTools;
 
-namespace Tests.LazCharacter
+namespace Tests.CheckPoints
 {
     public class CheckPointManagerTests : InputTestFixture
     {
+        private Vector3 _initialCheckpointPosition = new Vector3(-5f, 0f, 0f);
+        private Vector3 _newCheckPointPosition = new Vector3(5f, 0f, 0f);
 
         private LazPlayer _player = new LazPlayer();
         private CheckPointManager _checkPointManager = null;
@@ -47,9 +48,9 @@ namespace Tests.LazCharacter
             _checkPointManager.Initialize(_player);
 
             // Therefore
-            Vector3 _initialPosition = new Vector3(-10f, 0f, 0f);
+            
             var actualSpawnPosition = _player.SpawnPosition;
-            Assert.AreEqual(_initialPosition, actualSpawnPosition, "Spawn position is not set to initial checkpoint position!");
+            Assert.AreEqual(_initialCheckpointPosition, actualSpawnPosition, "Spawn position is not set to initial checkpoint position!");
         }
 
         [UnityTest]
@@ -72,14 +73,45 @@ namespace Tests.LazCharacter
 
             // Then
             Press(_keyboard.dKey);
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(1.5f);
             Release(_keyboard.dKey);
             yield return new WaitForSeconds(0);
 
             // Therefore
-            Vector3 _initialPosition = new Vector3(10f, 0f, 0f);
             var actualSpawnPosition = _player.SpawnPosition;
-            Assert.AreEqual(_initialPosition, actualSpawnPosition, "Spawn position is not set to new checkpoint position!");
+            Assert.AreEqual(_newCheckPointPosition, actualSpawnPosition, "Spawn position is not set to new checkpoint position!");
+        }
+
+        [UnityTest]
+        public IEnumerator Test_CheckPointManager_TestResetOldCheckpoint()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            // When
+            _lazCoordinatorBehaviour = GameObject.FindObjectOfType<LazCoordinatorBehaviour>();
+            _checkPointManager = GameObject.FindObjectOfType<CheckPointManager>();
+            _lazCoordinatorBehaviour.gameObject.transform.position = Vector3.zero;
+
+            _lazoProperties.DistanceLimitOfLazo = float.MaxValue;
+            _lazoProperties.TimeToLivePerPoint = float.MaxValue;
+            _lazCoordinatorBehaviour.Initialize(_player, new ILazoWrapped[] { }, _mockMovement, _lazoProperties);
+            _checkPointManager.Initialize(_player);
+
+            // Then
+            Press(_keyboard.dKey);
+            yield return new WaitForSeconds(1.5f);
+            Release(_keyboard.dKey);
+            yield return new WaitForSeconds(0);
+            Press(_keyboard.aKey);
+            yield return new WaitForSeconds(3f);
+            Release(_keyboard.aKey);
+
+            // Therefore
+            var actualSpawnPosition = _player.SpawnPosition;
+            Assert.AreEqual(_initialCheckpointPosition, actualSpawnPosition, "Spawn position is not returning to the old checkpoint position!");
         }
     }
 }
