@@ -11,6 +11,7 @@ namespace Tests
         [SerializeField] private PlanetoidBehaviour _planetoidBehaviour = null;
         [SerializeField] private LazoWallObjectPooler _wallObjectPool = null;
         [SerializeField] private PuzzleManager _puzzleManager = null;
+        [SerializeField] private CheckPointManager _checkPointManager = null;
         
         public ILazoWrapped Wrappable => _planetoidBehaviour.PlanetoidModel;
         
@@ -44,6 +45,11 @@ namespace Tests
             if (_puzzleManager != null)
             {
                 _puzzleManager.Initialize();
+            }
+
+            if(_checkPointManager != null)
+            {
+                _checkPointManager.Initialize(player);
             }
         }
     }
