@@ -22,7 +22,7 @@ namespace Laz
         [SerializeField] private Transform _gateTransform = default;
         [SerializeField] private Renderer _gateRenderer = null;
 
-        [SerializeField, Tooltip("Initial state for the gate. If true, gate will start as on and puzzles will deactivate gate.")] private bool _initialState = true;
+        [SerializeField, Tooltip("Initial state for the gate, if its set up with a puzzle. If true, gate will start as on and puzzles will deactivate gate.")] private bool _initialState = true;
 
         [SerializeField, Tooltip("If true, gate will flicker on and off. If false, gate is always on")]
         private bool _flickering = false;
@@ -37,50 +37,42 @@ namespace Laz
 
         private ElectricGate _gate;
 
+        private bool _isActive = true;
+
         public override void Initialize()
         {
+            //Only called by puzzle manager. If this isn't set up with a puzzle, Initialize won't be called
             Reset();
         }
 
         public override void CleanUp()
         {
             _gate.OnGateFlickerChange -= HandleGateStateChange;
-            _gate = null;
         }
 
         public override void Reset()
         {
+            _gate.Reset();
+            _gate.OnGateFlickerChange += HandleGateStateChange;
             if (_initialState)
-            {
-                _gateTransform.gameObject.SetActive(true);
-                _gateCollider.enabled = true;
-                _gate = new ElectricGate(_onTime, _offTime, _flickering);
-                _gate.OnGateFlickerChange += HandleGateStateChange;
-            }
+                SetGateActive(true);
             else
-            {
-                _gateTransform.gameObject.SetActive(false);
-                _gateCollider.enabled = false;
-            }
+                SetGateActive(false);
         }
-
-
 
         public override void OnActivated()
         {
             if (_initialState)
-            {
-                _gateTransform.gameObject.SetActive(false);
-                _gateCollider.enabled = false;
-                CleanUp();
-            }
+                SetGateActive(false);
             else
-            {
-                _gateTransform.gameObject.SetActive(true);
-                _gateCollider.enabled = true;
-                _gate = new ElectricGate(_onTime, _offTime, _flickering);
-                _gate.OnGateFlickerChange += HandleGateStateChange;
-            }
+                SetGateActive(true);
+        }
+
+        private void SetGateActive(bool active)
+        {
+            _gateTransform.gameObject.SetActive(active);
+            _gateCollider.enabled = active;
+            _isActive = active;
         }
 
         private void GateFlickerOff()
@@ -113,11 +105,15 @@ namespace Laz
             if (!_gateCollider) Debug.LogError($"{name} is missing a box collider!");
             if (!_gateRenderer) Debug.LogError($"{name} has an unset renderer!");
             if (!_gateTransform) Debug.LogError($"{name} needs to have the gate transform set!");
+
+            _gate = new ElectricGate(_onTime, _offTime, _flickering);
+            _gate.OnGateFlickerChange += HandleGateStateChange;
         }
 
         private void Update()
         {
-            _gate.Update();
+            if(_isActive)
+                _gate.Update();
         }
 
         private void OnCollisionEnter(Collision other)
