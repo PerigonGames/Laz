@@ -1,9 +1,10 @@
+using System.IO;
+using Laz;
 using UnityEngine;
-using Object = System.Object;
 
 public static class TextWriter
 {
-    public static void WriteToFile(Object fileToConvert ,string fileName)
+    public static void WriteToFile(LazMovementPropertyScriptableObject file ,string fileName)
     {
         int fileDuplicateIndex = 1;
 
@@ -12,12 +13,14 @@ public static class TextWriter
             fileName = $"{fileName}_{fileDuplicateIndex}";
             fileDuplicateIndex++;
         }
+
+        string json = JsonUtility.ToJson(file);
         
-        Debug.Log($"{fileName}.json Has been Created!");
+        File.WriteAllText($"{Application.dataPath}/{fileName}.txt", json);
     }
 
     private static bool DoesFileExist(string fileName)
     {
-        return false;
+        return File.Exists($"{Application.dataPath}/{fileName}.txt");
     }
 }

@@ -1,5 +1,6 @@
+using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using System.Reflection;
 
 namespace Laz
 {
@@ -11,14 +12,25 @@ namespace Laz
         private const float HEADER_PADDING_MULTIPLIER = 0.03f;
         private const float FOOTER_PADDING_MULTIPLIER = 0.03f;
 
+        private const float MIN_CURVATURE_RATE = 0.005f;
+        private const float MAX_CURVATURE_RATE = 0.1f;
+
         //private const Key DEBUG_KEY = Key.Backslash;
 
         [SerializeField] private RectTransform _rectTransform;
+        [SerializeField] private LazMovementPropertyScriptableObject _movementProperty;
 
         private Rect _rect;
         private string _fileName = string.Empty;
-        
-        private LazMovementPropertyScriptableObject _movementProperty;
+        private Type _movementPropertyType = typeof(LazMovementPropertyScriptableObject);
+
+        private float _acceleration = 1f;
+        private float _deceleration = 1f;
+        private float _baseMaxSpeed = 5f;
+        private float _curvatureRate = 0.1f;
+        private float _lazMaxSpeed = 10f;
+        private float _boostTimeLimit = 2f;
+        private float _boostSpeed = 20f;
 
         private bool _isPanelOpen = false;
         
@@ -26,6 +38,9 @@ namespace Laz
 
         //GUIStyles
         private GUIStyle _headerGUIStyle = GUIStyle.none;
+        private GUIStyle _labelGUIStyle = GUIStyle.none;
+        private GUIStyle _valueGUIStyle = GUIStyle.none;
+        private GUIStyle _fileNameStyle = GUIStyle.none;
         private GUIStyle _footerGUIStyle = GUIStyle.none;
 
         //GUIParameters
@@ -94,12 +109,51 @@ namespace Laz
                 
                 GUI.changed = false;
                 
-                // Display Properties - Discuss With Marin about changing private to Public
-
+                GUILayout.Space(5f);
+                // Display Properties - Discuss about using Reflection
+                DisplayFloatElement(ref _acceleration, "Acceleration");
+                GUILayout.Space(5f);
+                DisplayFloatElement(ref _deceleration, "Deceleration");
+                GUILayout.Space(5f);
+                DisplayFloatElement(ref _baseMaxSpeed, "Base Max Speed");
+                GUILayout.Space(5f);
+                DisplayFloatElement(ref _curvatureRate, "Curvature Rate", MIN_CURVATURE_RATE, MAX_CURVATURE_RATE);
+                GUILayout.Space(5f);
+                DisplayFloatElement(ref _lazMaxSpeed, "Laz Max Speed");
+                GUILayout.Space(5f);
+                DisplayFloatElement(ref _boostTimeLimit, "Boost Time Limit");
+                GUILayout.Space(5f);
+                DisplayFloatElement(ref _boostSpeed, "Boost Speed");
+                
+                GUILayout.Space(10f);
+                DisplayFileName();
+                
                 if (GUI.changed)
                 {
                     UpdateMovementProperties();
                 }
+            }
+        }
+
+        private void DisplayFloatElement(ref float element, string label, float minValue = 0f, float maxValue = 100f)
+        {
+            using (new GUILayout.HorizontalScope())
+            {
+                GUILayout.Label(label, _labelGUIStyle, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
+                GUILayout.Space(2f);
+                element = GUILayout.HorizontalSlider(element, minValue, maxValue);
+                GUILayout.Space(2f);
+                GUILayout.Label(element.ToString("n2"), _valueGUIStyle);
+            }
+        }
+
+        private void DisplayFileName()
+        {
+            using (new GUILayout.HorizontalScope())
+            {
+                GUILayout.Label("File Name", _labelGUIStyle, GUILayout.ExpandHeight(false), GUILayout.ExpandWidth(false));
+                GUILayout.Space(2f);
+                _fileName = GUILayout.TextField(_fileName);
             }
         }
 
@@ -127,7 +181,8 @@ namespace Laz
         //So Create GUIStyles on first call
         private void CreateGUIStyles()
         {
-            if (_headerGUIStyle != GUIStyle.none)
+            if (_headerGUIStyle != GUIStyle.none && _labelGUIStyle != GUIStyle.none &&
+                _valueGUIStyle != GUIStyle.none && _fileNameStyle != GUIStyle.none)
             {
                 return;
             }
@@ -139,7 +194,39 @@ namespace Laz
                 normal = new GUIStyleState
                 {
                     textColor = Color.black
+                },
+            };
+
+            RectOffset labelPadding = GUI.skin.label.padding;
+            labelPadding.top = -3;
+            
+            _labelGUIStyle = new GUIStyle(GUI.skin.label)
+            {
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter,
+                padding = labelPadding,
+                normal =  new GUIStyleState
+                {
+                    textColor = Color.white
                 }
+            };
+
+            RectOffset valuePadding = GUI.skin.button.padding;
+            valuePadding.top = -4;
+            valuePadding.bottom = -2;
+
+            _valueGUIStyle = new GUIStyle(GUI.skin.button)
+            {
+                stretchWidth = false,
+                padding = valuePadding
+            };
+
+            RectOffset fileNamePadding = GUI.skin.textField.padding;
+            fileNamePadding.top = -2;
+            
+            _fileNameStyle = new GUIStyle(GUI.skin.textField)
+            {
+                padding = fileNamePadding
             };
         }
 
@@ -181,7 +268,7 @@ namespace Laz
 
         private void UpdateMovementProperties()
         {
-            
+            Debug.Log("Wishy Washy");
         }
 
         private void OnRectTransformDimensionsChange()
