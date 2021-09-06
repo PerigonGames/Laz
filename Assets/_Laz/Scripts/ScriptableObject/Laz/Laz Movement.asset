@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59cc5f105eccf3c4fa57aec9b5f8ceed, type: 3}
   m_Name: Laz Movement
   m_EditorClassIdentifier: 
-  _acceleration: 3.1
-  _deceleration: 0.58
-  _baseMaxSpeed: 7
-  _curvatureRate: 0.049
-  _lazMaxSpeed: 13
-  _boostTimeLimit: 0.7
-  _boostSpeed: 18
+  acceleration: 3.1
+  deceleration: 0.58
+  baseMaxSpeed: 7
+  curvatureRate: 0.049
+  lazMaxSpeed: 13
+  boostTimeLimit: 0.7
+  boostSpeed: 18

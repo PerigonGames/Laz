@@ -7,7 +7,7 @@ namespace Laz
     {
         private const float HEADER_HEIGHT_MULTIPLIER = 0.1f;
         private const float BODY_HEIGHT_MULTIPLIER = 0.7f;
-        private const float FOOTER_HEIGHT_MULTIPLIER = 0.1f;
+        private const float FOOTER_HEIGHT_MULTIPLIER = 0.15f;
         private const float HEADER_PADDING_MULTIPLIER = 0.03f;
 
         private const float MIN_CURVATURE_RATE = 0.005f;
@@ -15,7 +15,7 @@ namespace Laz
 
         [SerializeField] private RectTransform _rectTransform;
         [SerializeField] private LazMovementPropertyScriptableObject _movementProperty;
-
+        
         private Rect _rect;
         private string _fileName = string.Empty;
 
@@ -138,29 +138,22 @@ namespace Laz
                 using (var scrollScope = new GUILayout.ScrollViewScope(_scrollPosition, false, false))
                 {
                     _scrollPosition = scrollScope.scrollPosition;
-                
-                    GUI.changed = false;
-                
+                    
                     GUILayout.FlexibleSpace();
-                    DisplayFloatElement(ref _acceleration, "Acceleration");
+                    DisplayFloatElement(ref _movementProperty.acceleration, "Acceleration");
                     GUILayout.FlexibleSpace();
-                    DisplayFloatElement(ref _deceleration, "Deceleration");
+                    DisplayFloatElement(ref _movementProperty.deceleration, "Deceleration");
                     GUILayout.FlexibleSpace();
-                    DisplayFloatElement(ref _baseMaxSpeed, "Base Max Speed");
+                    DisplayFloatElement(ref _movementProperty.baseMaxSpeed, "Base Max Speed");
                     GUILayout.FlexibleSpace();
-                    DisplayFloatElement(ref _curvatureRate,  "Curvature Rate", MIN_CURVATURE_RATE, MAX_CURVATURE_RATE);
+                    DisplayFloatElement(ref _movementProperty.curvatureRate,  "Curvature Rate", MIN_CURVATURE_RATE, MAX_CURVATURE_RATE);
                     GUILayout.FlexibleSpace();
-                    DisplayFloatElement(ref _lazMaxSpeed, "Laz Max Speed");
+                    DisplayFloatElement(ref _movementProperty.lazMaxSpeed, "Laz Max Speed");
                     GUILayout.FlexibleSpace();
-                    DisplayFloatElement(ref _boostTimeLimit, "Boost Time Limit");
+                    DisplayFloatElement(ref _movementProperty.boostTimeLimit, "Boost Time Limit");
                     GUILayout.FlexibleSpace();
-                    DisplayFloatElement(ref _boostSpeed, "Boost Speed");
+                    DisplayFloatElement(ref _movementProperty.boostSpeed, "Boost Speed");
                     GUILayout.FlexibleSpace();
-
-                    if (GUI.changed)
-                    {
-                        UpdateMovementProperties();
-                    }
                 }
             }
         }
@@ -175,12 +168,12 @@ namespace Laz
             }
         }
 
-        private void DisplayFileName()
+        private void DisplayFileName(float height)
         {
-            using (new GUILayout.HorizontalScope())
+            using (new GUILayout.HorizontalScope(GUILayout.Height(0.3f * height)))
             {
-                GUILayout.Label("File Name", _labelGUIStyle, GUILayout.ExpandHeight(false), GUILayout.ExpandWidth(false));
-                _fileName = GUILayout.TextField(_fileName, GUILayout.ExpandHeight(false));
+                GUILayout.Label("File Name", _labelGUIStyle, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(false));
+                _fileName = GUILayout.TextField(_fileName, _fileNameStyle, GUILayout.ExpandHeight(true));
             }
         }
 
@@ -190,22 +183,22 @@ namespace Laz
             {
                 GUILayout.FlexibleSpace();
                 
-                DisplayFileName();
+                DisplayFileName(_footerHeight);
                 
                 GUILayout.FlexibleSpace();
                 
-                using (new GUILayout.HorizontalScope(GUI.skin.box, GUILayout.Height(0.75f * _footerHeight)))
+                using (new GUILayout.HorizontalScope(GUI.skin.box, GUILayout.Height(0.6f * _footerHeight)))
                 {
                     GUILayout.FlexibleSpace();
 
-                    if (GUILayout.Button("Reset Movement", GUILayout.ExpandHeight(true)))
+                    if (GUILayout.Button("Reset Movement", GUILayout.ExpandHeight(true), GUILayout.Width(0.45f*_rect.width)))
                     {
                         ResetContent();
                     }
 
                     GUILayout.FlexibleSpace();
 
-                    if (GUILayout.Button("Save Movement", GUILayout.ExpandHeight(true)))
+                    if (GUILayout.Button("Save Movement", GUILayout.ExpandHeight(true), GUILayout.Width(0.45f*_rect.width)))
                     {
                         SaveMovementProperty();
                     }
@@ -261,7 +254,7 @@ namespace Laz
             };
 
             RectOffset fileNamePadding = GUI.skin.textField.padding;
-            fileNamePadding.top = -2;
+            fileNamePadding.top = 4;
             
             _fileNameStyle = new GUIStyle(GUI.skin.textField)
             {
@@ -304,11 +297,6 @@ namespace Laz
             }
 
             TextWriter.WriteToFile(_movementProperty, _fileName);
-        }
-
-        private void UpdateMovementProperties()
-        {
-            Debug.Log("Wishy Washy");
         }
 
         private void OnRectTransformDimensionsChange()
