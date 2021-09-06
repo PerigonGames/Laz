@@ -296,7 +296,7 @@ namespace Laz
                 return;
             }
 
-            TextWriter.WriteToFile(_movementProperty, _fileName);
+            Writer.WriteToFile(_fileName, _movementProperty);
         }
 
         private void OnRectTransformDimensionsChange()
