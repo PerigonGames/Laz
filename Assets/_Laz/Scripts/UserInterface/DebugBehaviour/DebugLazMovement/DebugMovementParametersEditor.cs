@@ -1,28 +1,23 @@
-using System;
 using UnityEngine;
-using System.Reflection;
 
 namespace Laz
 {
     [RequireComponent(typeof(RectTransform))]
     public class DebugMovementParametersEditor : MonoBehaviour
     {
-        private const float HEADER_HEIGHT_MULTIPLIER = 0.2f;
+        private const float HEADER_HEIGHT_MULTIPLIER = 0.1f;
+        private const float BODY_HEIGHT_MULTIPLIER = 0.7f;
         private const float FOOTER_HEIGHT_MULTIPLIER = 0.1f;
         private const float HEADER_PADDING_MULTIPLIER = 0.03f;
-        private const float FOOTER_PADDING_MULTIPLIER = 0.03f;
 
         private const float MIN_CURVATURE_RATE = 0.005f;
         private const float MAX_CURVATURE_RATE = 0.1f;
-
-        //private const Key DEBUG_KEY = Key.Backslash;
 
         [SerializeField] private RectTransform _rectTransform;
         [SerializeField] private LazMovementPropertyScriptableObject _movementProperty;
 
         private Rect _rect;
         private string _fileName = string.Empty;
-        private Type _movementPropertyType = typeof(LazMovementPropertyScriptableObject);
 
         private float _acceleration = 1f;
         private float _deceleration = 1f;
@@ -46,9 +41,9 @@ namespace Laz
         //GUIParameters
         private float _headerHeight;
         private float _headerPadding;
+        private float _bodyHeight;
         private float _footerHeight;
-        private float _footerPadding;
-        
+
         public void OpenWindow()
         {
             Initialize();
@@ -68,7 +63,30 @@ namespace Laz
         private void Initialize()
         {
             ResetContent();
+            GetMovementProperty();
             gameObject.SetActive(true);
+        }
+
+        private void GetMovementProperty()
+        {
+            LazCoordinatorBehaviour coordinator = FindObjectOfType<LazCoordinatorBehaviour>();
+
+            if (coordinator == null)
+            {
+                Debug.LogError("No LazCoordinatorBehaviour found in scene, unable to process Movement Property");
+                CloseWindow();
+            }
+
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+            _movementProperty = coordinator.LazMovementPropertyScriptableObject;
+#endif
+
+            if (_movementProperty == null)
+            {
+                Debug.LogError("No LazMovementPropertyScriptableObject found, unable to process");
+                CloseWindow();
+            }
+
         }
         
         #region GUICalls
@@ -76,18 +94,30 @@ namespace Laz
         private void OnGUI()
         {
             CreateGUIStyles();
-            
-            using (new GUILayout.VerticalScope())
+
+            using (new GUILayout.AreaScope(_rect))
             {
-                DisplayHeader();
+                using (new GUILayout.HorizontalScope())
+                {
+                    GUILayout.FlexibleSpace();
+                    
+                    using (new GUILayout.VerticalScope())
+                    {
+                        DisplayHeader();
 
-                GUILayout.FlexibleSpace();
+                        GUILayout.FlexibleSpace();
 
-                DisplayElements();
+                        DisplayElements();
 
-                GUILayout.FlexibleSpace();
+                        GUILayout.FlexibleSpace();
 
-                DisplayFooter();
+                        DisplayFooter();
+                    
+                        GUILayout.FlexibleSpace();
+                    }
+                    
+                    GUILayout.FlexibleSpace();
+                }
             }
         }
 
@@ -103,34 +133,34 @@ namespace Laz
 
         private void DisplayElements()
         {
-            using (var scrollScope = new GUILayout.ScrollViewScope(_scrollPosition, false, false))
+            using (new GUILayout.VerticalScope(GUI.skin.box, GUILayout.Height(_bodyHeight)))
             {
-                _scrollPosition = scrollScope.scrollPosition;
-                
-                GUI.changed = false;
-                
-                GUILayout.Space(5f);
-                // Display Properties - Discuss about using Reflection
-                DisplayFloatElement(ref _acceleration, "Acceleration");
-                GUILayout.Space(5f);
-                DisplayFloatElement(ref _deceleration, "Deceleration");
-                GUILayout.Space(5f);
-                DisplayFloatElement(ref _baseMaxSpeed, "Base Max Speed");
-                GUILayout.Space(5f);
-                DisplayFloatElement(ref _curvatureRate, "Curvature Rate", MIN_CURVATURE_RATE, MAX_CURVATURE_RATE);
-                GUILayout.Space(5f);
-                DisplayFloatElement(ref _lazMaxSpeed, "Laz Max Speed");
-                GUILayout.Space(5f);
-                DisplayFloatElement(ref _boostTimeLimit, "Boost Time Limit");
-                GUILayout.Space(5f);
-                DisplayFloatElement(ref _boostSpeed, "Boost Speed");
-                
-                GUILayout.Space(10f);
-                DisplayFileName();
-                
-                if (GUI.changed)
+                using (var scrollScope = new GUILayout.ScrollViewScope(_scrollPosition, false, false))
                 {
-                    UpdateMovementProperties();
+                    _scrollPosition = scrollScope.scrollPosition;
+                
+                    GUI.changed = false;
+                
+                    GUILayout.FlexibleSpace();
+                    DisplayFloatElement(ref _acceleration, "Acceleration");
+                    GUILayout.FlexibleSpace();
+                    DisplayFloatElement(ref _deceleration, "Deceleration");
+                    GUILayout.FlexibleSpace();
+                    DisplayFloatElement(ref _baseMaxSpeed, "Base Max Speed");
+                    GUILayout.FlexibleSpace();
+                    DisplayFloatElement(ref _curvatureRate,  "Curvature Rate", MIN_CURVATURE_RATE, MAX_CURVATURE_RATE);
+                    GUILayout.FlexibleSpace();
+                    DisplayFloatElement(ref _lazMaxSpeed, "Laz Max Speed");
+                    GUILayout.FlexibleSpace();
+                    DisplayFloatElement(ref _boostTimeLimit, "Boost Time Limit");
+                    GUILayout.FlexibleSpace();
+                    DisplayFloatElement(ref _boostSpeed, "Boost Speed");
+                    GUILayout.FlexibleSpace();
+
+                    if (GUI.changed)
+                    {
+                        UpdateMovementProperties();
+                    }
                 }
             }
         }
@@ -140,9 +170,7 @@ namespace Laz
             using (new GUILayout.HorizontalScope())
             {
                 GUILayout.Label(label, _labelGUIStyle, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
-                GUILayout.Space(2f);
-                element = GUILayout.HorizontalSlider(element, minValue, maxValue);
-                GUILayout.Space(2f);
+                element = GUILayout.HorizontalSlider(element, minValue, maxValue, GUI.skin.horizontalSlider, GUI.skin.horizontalScrollbarThumb);
                 GUILayout.Label(element.ToString("n2"), _valueGUIStyle);
             }
         }
@@ -152,29 +180,42 @@ namespace Laz
             using (new GUILayout.HorizontalScope())
             {
                 GUILayout.Label("File Name", _labelGUIStyle, GUILayout.ExpandHeight(false), GUILayout.ExpandWidth(false));
-                GUILayout.Space(2f);
-                _fileName = GUILayout.TextField(_fileName);
+                _fileName = GUILayout.TextField(_fileName, GUILayout.ExpandHeight(false));
             }
         }
 
         private void DisplayFooter()
         {
-            using (new GUILayout.HorizontalScope(GUI.skin.box,GUILayout.Height(_footerHeight)))
+            using (new GUILayout.VerticalScope(GUILayout.Height(_footerHeight)))
             {
                 GUILayout.FlexibleSpace();
-
-                if (GUILayout.Button("Create New Movement Property"))
-                {
-                    ResetContent();
-                }
-
+                
+                DisplayFileName();
+                
                 GUILayout.FlexibleSpace();
-
-                if (GUILayout.Button("Save Movement Property"))
+                
+                using (new GUILayout.HorizontalScope(GUI.skin.box, GUILayout.Height(0.75f * _footerHeight)))
                 {
-                    SaveMovementProperty();
+                    GUILayout.FlexibleSpace();
+
+                    if (GUILayout.Button("Reset Movement", GUILayout.ExpandHeight(true)))
+                    {
+                        ResetContent();
+                    }
+
+                    GUILayout.FlexibleSpace();
+
+                    if (GUILayout.Button("Save Movement", GUILayout.ExpandHeight(true)))
+                    {
+                        SaveMovementProperty();
+                    }
+                    
+                    GUILayout.FlexibleSpace();
                 }
+                
+                GUILayout.FlexibleSpace();
             }
+            
         }
         
         //Can only create GUIStyles on GUICalls
@@ -195,30 +236,28 @@ namespace Laz
                 {
                     textColor = Color.black
                 },
+                stretchWidth = true,
+                fontSize =  20
             };
 
-            RectOffset labelPadding = GUI.skin.label.padding;
-            labelPadding.top = -3;
-            
             _labelGUIStyle = new GUIStyle(GUI.skin.label)
             {
                 fontStyle = FontStyle.Bold,
                 alignment = TextAnchor.MiddleCenter,
-                padding = labelPadding,
                 normal =  new GUIStyleState
                 {
                     textColor = Color.white
                 }
             };
 
-            RectOffset valuePadding = GUI.skin.button.padding;
-            valuePadding.top = -4;
-            valuePadding.bottom = -2;
-
-            _valueGUIStyle = new GUIStyle(GUI.skin.button)
+            _valueGUIStyle = new GUIStyle()
             {
                 stretchWidth = false,
-                padding = valuePadding
+                stretchHeight = true,
+                normal = new GUIStyleState
+                {
+                    textColor = Color.white
+                }
             };
 
             RectOffset fileNamePadding = GUI.skin.textField.padding;
@@ -243,8 +282,9 @@ namespace Laz
             _headerHeight = _rect.height * HEADER_HEIGHT_MULTIPLIER;
             _headerPadding = _rect.width * HEADER_PADDING_MULTIPLIER;
 
+            _bodyHeight = _rect.height * BODY_HEIGHT_MULTIPLIER;
+            
             _footerHeight = _rect.height * FOOTER_HEIGHT_MULTIPLIER;
-            _footerPadding = _rect.width * FOOTER_PADDING_MULTIPLIER;
         }
 
         #endregion

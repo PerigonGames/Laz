@@ -83,5 +83,9 @@ namespace Laz
         {
             _lazPlayer.KillLaz();
         }
+
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+        public LazMovementPropertyScriptableObject LazMovementPropertyScriptableObject => _movementPropertyScriptableObject;
+#endif
     }
 }
