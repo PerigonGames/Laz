@@ -6,11 +6,12 @@ public static class Writer
 {
     public static void WriteToFile(string fileName, object data)
     {
+        string originalFileName = fileName;
         int fileDuplicateIndex = 1;
 
         while (DoesFileExist(fileName))
         {
-            fileName = $"{fileName}_{fileDuplicateIndex}";
+            fileName = $"{originalFileName}_{fileDuplicateIndex}";
             fileDuplicateIndex++;
         }
 
