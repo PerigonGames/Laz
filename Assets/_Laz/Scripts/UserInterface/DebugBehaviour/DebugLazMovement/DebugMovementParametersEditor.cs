@@ -14,7 +14,7 @@ namespace Laz
         private const float MAX_CURVATURE_RATE = 0.1f;
 
         [SerializeField] private RectTransform _rectTransform;
-        [SerializeField] private LazMovementPropertyScriptableObject _movementProperty;
+        private LazMovementPropertyScriptableObject _movementProperty;
         
         private Rect _rect;
         private string _fileName = string.Empty;
@@ -230,7 +230,7 @@ namespace Laz
                     textColor = Color.black
                 },
                 stretchWidth = true,
-                fontSize =  20
+                stretchHeight = true,
             };
 
             _labelGUIStyle = new GUIStyle(GUI.skin.label)
@@ -302,6 +302,11 @@ namespace Laz
         private void OnRectTransformDimensionsChange()
         {
             CreateGUIParameters();
+        }
+
+        private void OnApplicationQuit()
+        {
+            _movementProperty = ScriptableObject.CreateInstance<LazMovementPropertyScriptableObject>();
         }
     }
 }

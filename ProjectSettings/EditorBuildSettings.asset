@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Laz/Scenes/TemplateSandbox.unity
     guid: 9f0152bcad47d21409821a5552a00aeb
+  - enabled: 1
+    path: Assets/_Laz/Scenes/LazPlayerMovementAdjustment.unity
+    guid: f01bbddab7fb804478d3746e066a6eda
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 5eb1441859adc18458b4b7ba206f2980, type: 2}
     xr.sdk.mock-hmd.settings: {fileID: 11400000, guid: 4b46ab7a81ef4e04e88c26bb6ad6f136, type: 2}
