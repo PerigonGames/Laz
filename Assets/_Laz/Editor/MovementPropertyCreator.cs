@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -8,8 +9,11 @@ namespace Laz
     {
         private static MovementPropertyCreator _window;
         
+        public List<TextAsset> jsonFiles = new List<TextAsset>();
+        
         private string _movementPropertyDirectory;
-        private TextAsset _movementPropertyJson = null;
+        private LazMovementPropertyScriptableObject _movementProperty;
+        
         
         [MenuItem("LazTools/Utility/Create Movement Properties")]
         public static void CreateWizard()
@@ -27,46 +31,45 @@ namespace Laz
 
             if (!Directory.Exists(_movementPropertyDirectory))
             {
-                Debug.LogError($"Directory \" {_movementPropertyDirectory} \" does not exist. Closing Window");
+                Debug.LogError($"Directory \"{_movementPropertyDirectory}\" does not exist. Closing Window");
                 Close();
             }
-            
         }
         
         protected override bool DrawWizardGUI()
         {
-            _movementPropertyJson =
-                (TextAsset) EditorGUILayout.ObjectField("Json File", _movementPropertyJson, typeof(TextAsset), false);
-            
-            isValid = _movementPropertyJson != null;
-            
+            isValid = jsonFiles.Count > 0;
             return base.DrawWizardGUI();
         }
 
-
         private void OnWizardUpdate()
         {
-            helpString = "Place Json file that you would like to convert into LazMovementScriptableObjects";
+            helpString = "Place Json files that you would like to convert into LazMovementScriptableObjects";
         }
 
         private void OnWizardCreate()
         {
-            LazMovementPropertyScriptableObject movementProperty = ScriptableObject.CreateInstance<LazMovementPropertyScriptableObject>();
-            JsonUtility.FromJsonOverwrite(_movementPropertyJson.text, movementProperty);
-
-            int fileDuplicateIndex = 1;
-            string originalFileName = _movementPropertyJson.name;
-            string fileName = _movementPropertyJson.name;
-
-            while (DoesPathExist(fileName))
+            foreach (TextAsset textAsset in jsonFiles)
             {
-                fileName = $"{originalFileName}_{fileDuplicateIndex}";
-                fileDuplicateIndex++;
+                LazMovementPropertyScriptableObject movementProperty = ScriptableObject.CreateInstance<LazMovementPropertyScriptableObject>();
+                JsonUtility.FromJsonOverwrite(textAsset.text, movementProperty);
+                
+                int fileDuplicateIndex = 1;
+                string originalFileName = textAsset.name;
+                string fileName = textAsset.name;
+                
+                while (DoesPathExist(fileName))
+                {
+                    fileName = $"{originalFileName}_{fileDuplicateIndex}";
+                    fileDuplicateIndex++;
+                }
+                
+                AssetDatabase.CreateAsset(movementProperty, $"{_movementPropertyDirectory}/{fileName}.asset");
+                AssetDatabase.SaveAssets();
+                _movementProperty = movementProperty;
             }
             
-            AssetDatabase.CreateAsset(movementProperty, $"{_movementPropertyDirectory}/{fileName}.asset");
-            AssetDatabase.SaveAssets();
-            EditorGUIUtility.PingObject(movementProperty);
+            EditorGUIUtility.PingObject(_movementProperty);
         }
 
         private bool DoesPathExist(string fileName)
